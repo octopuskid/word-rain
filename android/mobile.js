@@ -51,6 +51,7 @@ hud=function(){
 };
 const originalMobileStart=start;
 start=function(){
+ if(!$('mobile-stats-panel').hidden)return;
  const resuming=state==='paused';originalMobileStart();
  if(!resuming){recordWordMet();renderMobileRecords();}
 };
@@ -64,11 +65,17 @@ finishWord=function(){
  const healed=originalMobileFinishWord();
  mobileNextWordPending=true;saveMobileRecords();return healed;
 };
+const originalMobilePause=pause;
+pause=function(){
+ if(!$('mobile-stats-panel').hidden)return;
+ originalMobilePause();
+};
 function selectMobileTab(tab){
  const stats=tab==='stats';
  if(stats&&state==='playing')pause();
  keys.clear();
  $('mobile-game-panel').hidden=stats;$('mobile-stats-panel').hidden=!stats;
+ $('pause').hidden=stats;
  for(const name of ['game','stats']){
   const selected=(name==='stats')===stats;const button=$('mobile-'+name+'-tab');
   button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;
@@ -84,4 +91,5 @@ $('mobile-tabs').addEventListener('keydown',event=>{
 });
 // The original button received a function reference before this extension loaded.
 $('start').onclick=start;
+$('pause').onclick=pause;
 renderMobileRecords();
