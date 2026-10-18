@@ -38,7 +38,7 @@ A word is perfect if it is completed without a disqualifying catch during that w
 
 ### Purple ✦ wildcard
 
-One perfect word unlocks wildcard mode. Each non-× drop has a 2.5% chance of being a wildcard while the mode is active. A wildcard fills the next blank and behaves like a normal correct catch, including scoring-pause recovery. It preserves perfection. Hearts turn purple while this mode is active. Catching a wrong letter removes the mode; another perfect word restores it.
+One perfect word unlocks wildcard mode. Each non-× drop has a 1.5% chance of being a wildcard while the mode is active. A wildcard fills the next blank and behaves like a normal correct catch, including scoring-pause recovery. It preserves perfection. Hearts turn purple while this mode is active. Catching an unshielded wrong letter removes the mode; shielded wrong catches keep it, including the catch that breaks the shield. Another perfect word restores a lost mode.
 
 ### Blue 🛡️ shield
 
@@ -47,15 +47,15 @@ Each non-× drop has a 3% chance of being a shield, without unlock conditions. P
 | Event | Result |
 | --- | --- |
 | Pick up a shield with no shield | Equip a full shield; no heart loss; preserve perfection |
-| Pick up a shield with a full shield | Lose two hearts; equip a full shield; preserve perfection |
-| Pick up a shield with a half shield | Lose one heart; equip a full shield; preserve perfection |
+| Pick up a shield with a full shield | Lose two hearts; remove all shield; preserve perfection |
+| Pick up a shield with a half shield | Lose one heart; remove all shield; preserve perfection |
 | Catch × with a full shield | Shield shatters; no heart loss; lose perfection |
 | Catch × with a half shield | Shield shatters; lose one heart; preserve perfection |
 | Catch a wrong letter while shielded | Consume half a shield; preserve perfection, including the catch that shatters it |
 | Catch × without a shield | Lose one heart and perfection |
 | Catch a wrong letter without a shield | Lose perfection |
 
-Scoring, word-progress, speed, and wildcard-mode penalties still apply during shielding. Shield pickups do not restore perfection already lost for the current word. Shield pickup damage can end the game immediately.
+Scoring, word-progress and speed penalties still apply during shielding. Any wrong letter or × also ends the Hard-mode score bonus. Shield pickups do not restore perfection already lost for the current word. Shield pickup damage can end the game immediately.
 
 ## Letter generation
 
@@ -65,8 +65,20 @@ Letter drop density is reduced by 35% relative to the initial spawning schedule;
 
 ## Source and privacy
 
-The complete game is in `index.html`. It contains no analytics, tracking, account login, database, or high-score storage. The shield emoji is rendered by the browser/system font; no third-party image or font files are bundled.
+The complete game is in `index.html`. The browser game contains no analytics, tracking, account login, database, or high-score storage. It saves theme/settings and the Rick unlock locally. The APK additionally saves the personal best and word records on the device. The shield emoji is rendered by the browser/system font; no third-party image or font files are bundled.
 
 ## License
 
 MIT. See [LICENSE](LICENSE). This permits modification, redistribution, and commercial reuse with the required notices retained. No warranty is provided.
+
+## Word sets and Perfect bonus (v1.2.0)
+
+Open **Word set & difficulty** to choose any of the four freely available sets: Classic (lime), Nature (mint), Space (blue), or Tricky (coral). Each palette works with both light and dark mode. Normal uses 4–7 letter words; Hard uses the 6–7 letter words from your chosen set. Apply & start new game begins a fresh round and keeps saved records. Choices are saved locally.
+
+On Hard, six consecutive perfect word completions activate 2× scoring for subsequent correct catches (+20) and word completions (+100). The sixth word itself earns normal points. The target word becomes yellow, and a text indicator shows the bonus. Any wrong letter or × ends the bonus and resets its streak, even if a shield preserves perfection or a heart. Wildcards count as correct catches. Bonus points never stack beyond 2×. Normal scoring, shield exceptions, regeneration and speed rules otherwise stay the same.
+
+## Rick challenge and giving up
+
+Completing **RICK** in Classic / Normal clears all ordinary drops and starts the mixed-case sequence `d Q w 4 w 9 W g X c Q`. Symbols fall individually. All eleven must be caught; an earlier miss still lets the sequence finish, and failure is reported only after the last symbol passes below the catcher line. Success unlocks the copper Rick palette, selectable under **Color theme**, and resumes the normal game. The challenge itself adds no points or word records; spelling the initial RICK target uses normal scoring. The unlock is saved locally and survives app updates and word-stat resets.
+
+**Give up** in the header pauses the run and asks for confirmation. Keep playing cancels; confirming ends the run without deleting records or unlocked themes. Stats still pauses automatically and requires manual resume on return, including during the Rick challenge.

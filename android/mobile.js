@@ -10,7 +10,7 @@ function loadMobileRecords(){
  if(!data||typeof data!=='object')return records;
  records.highScore=validCount(data.highScore);
  const saved=data.words;
- if(saved&&typeof saved==='object')for(const word of words){
+ if(saved&&typeof saved==='object')for(const word of allWords){
   const entry=Object.prototype.hasOwnProperty.call(saved,word)?saved[word]:null;
   if(entry&&typeof entry==='object'){
    const met=validCount(entry.met);records.words[word]={met,perfect:Math.min(met,validCount(entry.perfect))};
@@ -45,14 +45,14 @@ function renderMobileRecords(){
 const originalMobileHud=hud;
 hud=function(){
  originalMobileHud();
- if(mobileNextWordPending){mobileNextWordPending=false;recordWordMet();}
+ if(mobileNextWordPending&&!rickChallenge&&state==='playing'){mobileNextWordPending=false;recordWordMet();}
  if(score>mobileRecords.highScore){mobileRecords.highScore=score;saveMobileRecords();}
  renderMobileRecords();
 };
 const originalMobileStart=start;
 start=function(){
  if(!$('mobile-stats-panel').hidden)return;
- const resuming=state==='paused';originalMobileStart();
+ const resuming=state==='paused';if(!resuming)mobileNextWordPending=false;originalMobileStart();
  if(!resuming){recordWordMet();renderMobileRecords();}
 };
 const originalMobileFinishWord=finishWord;
@@ -75,7 +75,7 @@ function selectMobileTab(tab){
  if(stats&&state==='playing')pause();
  keys.clear();
  $('mobile-game-panel').hidden=stats;$('mobile-stats-panel').hidden=!stats;
- $('pause').hidden=stats;
+ $('pause').hidden=stats;$('give-up').hidden=stats;
  for(const name of ['game','stats']){
   const selected=(name==='stats')===stats;const button=$('mobile-'+name+'-tab');
   button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;
