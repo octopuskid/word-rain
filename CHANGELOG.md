@@ -2,6 +2,14 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.1
+
+- Added bounded random variation to drop timing and weighted letter/pickup selection, plus random horizontal positions.
+- Increased the base spawn rate by 5% relative to 1.4.0.
+- Added 3% of the new base spawn rate per 20 percentage points above each mode's starting speed, interpolated between steps and capped at +18%; slowing down reverses it.
+- Retained pending-target duplicate suppression and equal falling speeds.
+- Full and Lite Android builds use version code 17 and retain saved data on in-place updates.
+
 ## 1.4.0
 
 - Tightened handwriting paragraph, rule and instruction spacing.

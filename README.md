@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.0**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.1**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -56,26 +56,28 @@ A catch that breaks perfection resets the streak and ends the bonus. Shielded wr
 
 Every two consecutive perfect words increase falling speed by **20 percentage points**. Each wrong letter lowers it by **5 percentage points**; each caught × lowers it by **20 percentage points**, including shielded catches. Speed stays within the selected difficulty's limits.
 
-**Ordinary drops spawn at a fixed interval of about 1.27 seconds. The interval does not shrink during a run.** Speed rewards change how fast blocks fall, not how frequently they spawn. All ordinary drops share the same falling speed at a given multiplier. The Rick challenge uses its own sequence timing.
+**Drops now have varied timing:** the mean interval at starting speed is about **1.21 seconds**, making the base spawn rate **5% higher than 1.4.0**. Each scheduled interval varies randomly by up to **±20%** around its current mean. Falling speeds remain shared at a given multiplier to avoid overtaking and bunching.
 
-Hazards, pickups and letter opportunities use balanced scheduling rather than independent random rolls. The fixed cadence preserves the initial average drop density after the earlier density reductions. Spawn positions cover six lanes in shuffled rounds.
+For every **20 percentage points above the selected mode's starting speed**, the spawn rate gains **3% of the new base rate**, up to **18%** at maximum speed. This increase is additive and interpolated between steps: Normal 100% / Hard 160% has no speed-related increase; Normal 120% / Hard 180% has +3%; Normal 220% / Hard 280% has +18%. Slowing down reduces the rate again. Elapsed time alone does not increase density. The Rick challenge retains its own sequence timing.
+
+Hazards, pickups and letter opportunities use balanced scheduling with bounded randomness, so long-term shares stay close to their targets without a repeating sequence. Each drop's horizontal position is random across the play area; there is no fixed lane cycle.
 
 | Ordinary letter opportunity | Normal | Hard |
 | --- | --- | --- |
 | Current target letter | 20% | 8% |
 | Following target letter | 5% | 8% |
 
-These are balanced selection shares among ordinary letter opportunities, not independent probabilities for every block. The following-letter selection is omitted at the final blank. If the selected target character is already falling above the catcher line, a distractor appears instead; the skipped copy is not queued. Actual target frequency can therefore be lower while a copy is on screen. Existing printed letters never change. Catching the following letter before it is needed counts as wrong. Consecutive identical target letters use the same character.
+These are long-term balanced selection shares among ordinary letter opportunities, not independent probabilities for every block. The following-letter selection is omitted at the final blank. If the selected target character is already falling above the catcher line, a distractor appears instead; the skipped copy is not queued. Actual target frequency can therefore be lower while a copy is on screen. Existing printed letters never change. Catching the following letter before it is needed counts as wrong. Consecutive identical target letters use the same character.
 
 ### Purple ✦ wildcard
 
-Normal mode only: completing one perfect word unlocks wildcard mode, shown by purple hearts. While unlocked, wildcards occupy **1.5% of non-× drop opportunities** using balanced scheduling. Hard has no wildcard mode or drops.
+Normal mode only: completing one perfect word unlocks wildcard mode, shown by purple hearts. While unlocked, wildcards occupy **1.5% of non-× drop opportunities** using balanced scheduling with bounded randomness. Hard has no wildcard mode or drops.
 
 A wildcard fills the next blank and behaves like a correct letter, including scoring-pause recovery; it preserves perfection. An unshielded wrong letter removes wildcard mode. Shielded wrong catches keep it, including the catch that shatters the shield. Another perfect word restores a lost mode.
 
 ### Blue 🛡️ shield
 
-Shields occupy **3% of non-× drop opportunities** using balanced scheduling, without unlock conditions. A full shield has two health points; a half shield has one.
+Shields occupy **3% of non-× drop opportunities** using balanced scheduling with bounded randomness, without unlock conditions. A full shield has two health points; a half shield has one.
 
 | Catch | Hearts and shield | Perfection |
 | --- | --- | --- |
