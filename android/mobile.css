@@ -2,3 +2,7 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}.mobile-high-score{
 
 /* Drag controls are the Android UI; retain keyboard support for attached keyboards. */
 .controls{display:none}
+
+/* Compact the shared header while preserving Android system-bar clearance. */
+header{margin-bottom:12px;gap:8px}header h1{font-size:28px;line-height:1.12;margin:3px 0}header .eyebrow{font-size:9px;letter-spacing:1.5px}header .header-actions{gap:6px}header .theme-toggle{font-size:12px;padding:10px}header .pause{padding:10px 12px;min-width:44px;min-height:44px}
+.mobile-reset{margin-top:18px}.mobile-reset button{font-size:13px;padding:12px 14px;background:var(--button);color:var(--button-text)}#confirm-reset-stats{background:var(--penalty);color:var(--page)}#reset-stats-confirm{padding:12px;margin-top:10px;border:1px solid var(--border);border-radius:12px;font-size:13px;line-height:1.6}#reset-stats-confirm[hidden]{display:none}#reset-stats-status{font-size:12px;color:var(--muted)}

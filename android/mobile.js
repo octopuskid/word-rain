@@ -80,6 +80,7 @@ function selectMobileTab(tab){
   const selected=(name==='stats')===stats;const button=$('mobile-'+name+'-tab');
   button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;
  }
+ $('reset-stats-confirm').hidden=true;
  if(stats)renderMobileRecords();
 }
 $('mobile-game-tab').onclick=()=>selectMobileTab('game');
@@ -93,3 +94,20 @@ $('mobile-tabs').addEventListener('keydown',event=>{
 $('start').onclick=start;
 $('pause').onclick=pause;
 renderMobileRecords();
+
+$('reset-stats').onclick=()=>{
+ $('reset-stats-status').textContent='';
+ $('reset-stats-confirm').hidden=false;
+ $('cancel-reset-stats').focus();
+};
+$('cancel-reset-stats').onclick=()=>{
+ $('reset-stats-confirm').hidden=true;$('reset-stats').focus();
+};
+$('confirm-reset-stats').onclick=()=>{
+ if($('reset-stats-confirm').hidden||$('mobile-stats-panel').hidden)return;
+ mobileRecords.words=Object.create(null);
+ saveMobileRecords();renderMobileRecords();
+ $('reset-stats-confirm').hidden=true;
+ $('reset-stats-status').textContent='Word stats reset. Your personal best is kept.';
+ $('reset-stats').focus();
+};
