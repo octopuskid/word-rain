@@ -193,3 +193,22 @@ const tones=music.run('audioNodes.length');music.run("sound('correct')");assert.
 music.el('bgm-toggle').onclick();assert.equal(music.run('musicSource'),null);assert.equal(session(music.store).run('audioPrefs.sfx'),false);assert.equal(session(music.store).run('audioPrefs.bgm'),false);
 music.run("window.Audio=class {constructor(src){this.src=src;this.paused=true;} play(){this.paused=false;} pause(){this.paused=true;}removeAttribute(){}load(){}};pause();loadCustomMusic('data:audio/mpeg;base64,AAA')");assert(music.run('customMusic.paused'));music.run('start()');assert(!music.run('customMusic.paused'));music.run('pause()');assert(music.run('customMusic.paused'));music.el('reset-music').onclick();assert.equal(music.run('customMusic'),null);
 console.log('PASS: eleven sound events; perfect/completion exclusion; real regen, speed and wildcard transitions; HP/shield vibration; Hard 1.5x including half-point best migration; original music synthesis, independent switches, pause/resume and local-music override.');
+
+for(const source of [webScripts,scripts]){
+ const t=session({},false,source);
+ t.el('color-theme').value='space';t.el('color-theme').onchange();
+ t.el('handwriting-mode').checked=true;t.el('handwriting-mode').onchange();assert(t.el('color-theme').disabled,'paper disables palette');
+ t.el('color-theme').value='nature';t.el('color-theme').onchange();assert.equal(t.run('colorTheme'),'space','paper keeps chosen palette');
+ t.el('handwriting-mode').checked=false;t.el('handwriting-mode').onchange();assert.equal(t.el('color-theme').disabled,false);assert.equal(t.el('color-theme').value,'space');
+ t.run("window.Audio=class {constructor(src){this.src=src;this.paused=true;}play(){this.paused=false;}pause(){this.paused=true;}removeAttribute(){}load(){}};start();score=42;progress=1;perfectRun=2;");
+ for(const id of ['carefree','monkeys']){
+  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('selectedTrack'),id);assert(t.run('customMusic.src').endsWith('.mp3'));assert.equal(t.run('musicSource'),null);
+  assert.equal(t.run('score'),42);assert.equal(t.run('progress'),1);assert.equal(t.run('perfectRun'),2,'changing music does not alter play');
+  const reload=session(t.store,false,source);assert.equal(reload.run('selectedTrack'),id,'track persists');assert(reload.el('music-status').textContent.includes('Kevin MacLeod'));
+ }
+ t.el('bgm-toggle').onclick();assert(!t.run('customMusic.paused'));t.run('pause()');assert(t.run('customMusic.paused'));t.run('start()');assert(!t.run('customMusic.paused'));
+ t.run("loadCustomMusic('data:audio/mpeg;base64,AAAA')");assert.equal(t.run('selectedTrack'),'local');assert.equal(t.el('local-music-option').disabled,false);assert.equal(session(t.store,false,source).run('selectedTrack'),'original','local files are not saved');
+ t.el('reset-music').onclick();assert.equal(t.run('selectedTrack'),'original');assert.equal(t.run('customMusic'),null);
+ const invalid=session({'word-rain-audio-v1':JSON.stringify({bgm:false,sfx:true,track:'__proto__'})},false,source);assert.equal(invalid.run('selectedTrack'),'original','saved track is whitelisted');
+}
+console.log('PASS: handwriting disables/restores palette without changing selection; three music options, saved selection, pause/resume, local override/reset, invalid-track fallback and unchanged live scores/streaks.');

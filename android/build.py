@@ -22,6 +22,8 @@ for name in ['assets','classes','dex']: (out/name).mkdir(parents=True,exist_ok=T
 html=mobile_html((root.parent/'index.html').read_text())
 (out/'assets'/'index.html').write_text(html)
 shutil.copyfile(root.parent/'LICENSE',out/'assets'/'LICENSE')
+shutil.copyfile(root.parent/'MUSIC-LICENSES.md',out/'assets'/'MUSIC-LICENSES.md')
+shutil.copytree(root.parent/'assets'/'music',out/'assets'/'music')
 
 def run(*cmd):subprocess.run([str(c) for c in cmd],check=True)
 tools=args.build_tools.resolve(); jar=args.android_jar.resolve()

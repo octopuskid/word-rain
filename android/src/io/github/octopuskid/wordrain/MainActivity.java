@@ -18,6 +18,10 @@ import org.json.JSONObject;
 import android.view.WindowInsets;
 import android.view.View;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.Map;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -76,12 +80,23 @@ public final class MainActivity extends Activity {
         settings.setBlockNetworkLoads(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         game.setWebViewClient(new WebViewClient() {
+            @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                Uri uri = request.getUrl();
+                if (!"https".equals(uri.getScheme()) || !"appassets.androidplatform.net".equals(uri.getHost())) return null;
+                String path = uri.getPath();
+                if (!"/assets/music/carefree.mp3".equals(path) && !"/assets/music/monkeys-spinning-monkeys.mp3".equals(path)) return null;
+                String range = null;
+                for (Map.Entry<String,String> header : request.getRequestHeaders().entrySet())
+                    if ("Range".equalsIgnoreCase(header.getKey())) range = header.getValue();
+                return bundledMusic(path.substring("/assets/".length()), range);
+            }
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
                 String host = uri.getHost();
                 boolean approved = "https".equals(uri.getScheme()) &&
                     ("octopuskid.itch.io".equals(host) || "github.com".equals(host) ||
-                     "octopuskid.github.io".equals(host));
+                     "octopuskid.github.io".equals(host) || "incompetech.com".equals(host) ||
+                     "creativecommons.org".equals(host));
                 if (request.isForMainFrame() && request.hasGesture() && approved) {
                     try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); }
                     catch (ActivityNotFoundException unavailable) {
@@ -130,6 +145,38 @@ public final class MainActivity extends Activity {
         } catch (java.io.IOException error) {
             Toast.makeText(this, "Could not open the bundled game", Toast.LENGTH_LONG).show();
             finish();
+        }
+    }
+
+    private WebResourceResponse bundledMusic(String name, String range) {
+        // Resolve only the two bundled recordings. No network or device-file access.
+        try (InputStream input = getAssets().open(name)) {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] chunk = new byte[8192]; int count;
+            while ((count = input.read(chunk)) != -1) output.write(chunk, 0, count);
+            byte[] bytes = output.toByteArray();
+            int first = 0, last = bytes.length - 1, status = 200;
+            Map<String,String> headers = new HashMap<String,String>();
+            headers.put("Accept-Ranges", "bytes");
+            if (range != null) {
+                java.util.regex.Matcher match = java.util.regex.Pattern.compile("bytes=(\\d*)-(\\d*)").matcher(range);
+                try {
+                    if (!match.matches() || (match.group(1).isEmpty() && match.group(2).isEmpty())) throw new IllegalArgumentException();
+                    if (match.group(1).isEmpty()) first = Math.max(0, bytes.length - Integer.parseInt(match.group(2)));
+                    else { first = Integer.parseInt(match.group(1)); if (!match.group(2).isEmpty()) last = Math.min(last, Integer.parseInt(match.group(2))); }
+                    if (first < 0 || first > last || first >= bytes.length) throw new IllegalArgumentException();
+                    status = 206;
+                    headers.put("Content-Range", "bytes " + first + "-" + last + "/" + bytes.length);
+                } catch (IllegalArgumentException invalid) {
+                    headers.put("Content-Range", "bytes */" + bytes.length);
+                    return new WebResourceResponse("audio/mpeg", null, 416, "Range Not Satisfiable", headers, new ByteArrayInputStream(new byte[0]));
+                }
+            }
+            headers.put("Content-Length", String.valueOf(last - first + 1));
+            return new WebResourceResponse("audio/mpeg", null, status, status == 206 ? "Partial Content" : "OK", headers,
+                new ByteArrayInputStream(bytes, first, last - first + 1));
+        } catch (java.io.IOException unavailable) {
+            return new WebResourceResponse("text/plain", "UTF-8", 404, "Not Found", null, new ByteArrayInputStream(new byte[0]));
         }
     }
 

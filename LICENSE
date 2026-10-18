@@ -19,3 +19,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Third-party music exception: the Kevin MacLeod recordings in assets/music/*.mp3
+are licensed under CC BY 4.0, not MIT. See MUSIC-LICENSES.md for attribution,
+source links, modification notices and their license.

@@ -12,7 +12,7 @@ Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatG
 
 ## Play
 
-Download `index.html` and open it in a modern browser. The game works offline.
+Download the repository ZIP, extract it with the `assets/music/` directory intact, and open `index.html` in a modern browser. The game and all included music work offline. Opening only the HTML retains the original generated tune; Kevin MacLeod tracks need their bundled MP3 files.
 
 - Drag across the game area, use the on-screen arrow buttons, or press the left/right arrow keys.
 - Catch letters in order to complete words of 4–7 letters.
@@ -106,7 +106,7 @@ The six-perfect-word healing and yellow 2× bonus apply to both difficulties and
 
 The header keeps light/dark, **BGM**, and **SFX** switches together on one row, including on phones. BGM is off initially; SFX is on. Both preferences are saved locally. Audio starts only after a player gesture and requires browser/WebView audio support.
 
-The original background tune **Pocket Forecast** (Word Rain / octopuskid & ChatGPT, MIT) is synthesized offline at 100 BPM, with an eight-bar melody, bass and light rain percussion. No third-party tracks or samples are included. BGM follows active play, pauses in Stats or when the game pauses/ends/backgrounds, and resumes from its position. SFX and music can be switched independently.
+The original background tune **Pocket Forecast** (Word Rain / octopuskid & ChatGPT, MIT) is synthesized offline at 100 BPM, with an eight-bar melody, bass and light rain percussion. The original generated tune is retained alongside the additional tracks listed under Music selection below. BGM follows active play, pauses in Stats or when the game pauses/ends/backgrounds, and resumes from its position. SFX and music can be switched independently.
 
 Distinct original synthesized effects accompany correct letters, wrong letters, shield pickups, wildcards, ordinary completed words, perfect words, entering wildcard mode, actual speed increases, actual heart regeneration, HP loss, and shield shattering. Perfect words play the perfect cue instead of the ordinary completion cue; a capped speed or full-health reward plays no misleading reward cue.
 
@@ -119,3 +119,13 @@ Version 1.3.2 keeps the existing app ID, release signing key, origin and record 
 ## Handwriting alignment (1.3.3)
 
 The lowercase **i** and **l** glyphs now have balanced left/right spacing inside their fixed-width cells. This font correction is included in the standalone HTML, hosted demo and Android APK. Existing records and settings are preserved.
+
+## Music selection and appearance (1.3.4)
+
+Handwriting now disables the Color theme selector while enabled. Turning handwriting off re-enables it and restores the previously chosen colors. Light/dark remains disabled during handwriting as before.
+
+The **Background music** selector below the rules offers Pocket Forecast (the original, still the default), **Carefree** and **Monkeys Spinning Monkeys** by **Kevin MacLeod (incompetech.com)**. The selected built-in track is saved independently of the BGM/SFX switches. Music remains paused in Stats and while play is paused or finished. Mobile local music still works for the current session, and Use original BGM selects Pocket Forecast.
+
+Both Kevin MacLeod recordings are **Creative Commons Attribution 4.0 International**, with source/license links and conversion notices in the game's Music credits & licenses, on itch.io and in [MUSIC-LICENSES.md](MUSIC-LICENSES.md). They are re-encoded to 96 kbps mono MP3 for package size, retain the full tracks, and loop during play. The music license permits use and redistribution without an application when attribution and other terms are followed. These recordings are licensed separately from the game's MIT code and original audio; no artist endorsement is implied.
+
+All three tracks work offline in the APK. App identity, signing key, saved score/stat keys, theme/settings and Rick unlock storage remain unchanged in 1.3.4. Install over the existing app to retain data.

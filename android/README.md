@@ -9,7 +9,7 @@ Offline Android wrapper for the HTML game in the repository root. Android 8.0 (A
 - Move the basket by dragging across the play area. The Android UI hides the left/right buttons and shows a touch-specific tip; attached-keyboard controls remain available.
 - The game pauses when the Activity goes into the background.
 - A native container reserves system-bar/cutout insets plus 6dp top and bottom breathing room. The WebView viewport and fixed bottom tabs stay inside this area, away from the status and navigation bars.
-- User-selected itch.io/GitHub links open in the installed browser, separately from the offline game.
+- User-selected itch.io/GitHub/music-credit/license links open in the installed browser, separately from the offline game.
 - The Game screen shows a persistent personal best. Bottom tabs switch between Game and Word Stats; opening the table pauses active play. The pause/resume and Give up buttons are hidden in Word Stats, and the game stays paused when returning until the player chooses to resume. Keyboard shortcuts cannot resume play behind the table.
 - The mobile header uses a smaller title and spacing while retaining native safe-area clearance. Reset word stats in the Stats tab asks for confirmation, clears only word encounters/perfect counts, and keeps the personal best, theme and current game.
 - Word sets and difficulty match the browser game. Records include all sets and keep old entries even when another set is selected. Switching settings starts a new round without deleting the personal best or word records.
@@ -33,7 +33,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.3.3.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.3.4.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
@@ -52,3 +52,9 @@ Original offline BGM: **Pocket Forecast**, Word Rain / octopuskid & ChatGPT (MIT
 The added automated checks cover audio event routing, perfect-versus-ordinary completion, capped rewards, actual HP/shield haptics, original music generation and transport, independent mute preferences, local music replacement, Hard 1.5× scoring and half-point best preservation. Native picker, speakers and vibration still require testing on a physical phone.
 
 MIT license, as in the repository root.
+
+## Bundled music in 1.3.4
+
+Pocket Forecast remains the default. The music selector also offers Carefree and Monkeys Spinning Monkeys by Kevin MacLeod (incompetech.com), CC BY 4.0. Full credits, source URLs and conversion notices are in MUSIC-LICENSES.md and the in-game Music credits & licenses section. The two MP3 recordings are packaged under assets/music/ and are licensed separately from the MIT code.
+
+A local-only WebView resource handler serves exactly those two bundled MP3 paths under the app's existing HTTPS origin, including media byte-range responses. Network loads and file/content access remain disabled, with no internet/storage permission added. The picker and vibration bridge are unchanged. Audio codecs and haptics still need physical-device verification.
