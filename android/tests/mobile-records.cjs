@@ -103,7 +103,7 @@ for(const source of [webScripts,scripts]){
  const eggScore=egg.run('score'),mainElapsed=egg.run('elapsed');egg.run('pause();start()');assert(egg.run('Boolean(rickChallenge)'),'manual resume preserves challenge');playRick(egg);
  assert.equal(egg.run('state'),'playing');assert.equal(egg.run('rickChallenge'),null);assert(egg.run('rickUnlocked'));assert.equal(egg.run('score'),eggScore);assert.equal(egg.run('elapsed'),mainElapsed,'challenge does not accelerate normal spawn density');
  const unlocked=session(egg.store,false,source);assert(unlocked.run('rickUnlocked'),'Rick theme survives reload');unlocked.el('color-theme').value='rick';unlocked.el('apply-settings').onclick();assert.equal(unlocked.run('document.documentElement.dataset.palette'),'rick');
- const locked=session({},false,source);locked.el('color-theme').value='rick';locked.el('apply-settings').onclick();assert.equal(locked.run('colorTheme'),'set','locked palette cannot be selected');
+ const locked=session({},false,source);locked.el('color-theme').value='rick';locked.el('apply-settings').onclick();assert.equal(locked.run('colorTheme'),'classic','locked palette cannot be selected');
  for(const missAt of [0,5,10]){const fail=session({},false,source);fail.run('start();score=77;beginRickChallenge()');playRick(fail,missAt);assert.equal(fail.run('state'),'over');assert(!fail.run('rickUnlocked'));assert.equal(fail.run('score'),77);}
  const giveup=session({},false,source);giveup.run('start();score=33;hud()');giveup.el('give-up').onclick();assert.equal(giveup.run('state'),'paused');assert.equal(giveup.el('confirm-give-up').hidden,false);giveup.el('start').onclick();assert.equal(giveup.run('state'),'playing');assert.equal(giveup.el('confirm-give-up').hidden,true,'cancel surrender');
  giveup.el('give-up').onclick();giveup.el('confirm-give-up').onclick();assert.equal(giveup.run('state'),'over');assert.equal(giveup.run('score'),33);
@@ -125,3 +125,18 @@ for(const source of [webScripts,scripts]){
  t.el('difficulty').value='normal';t.el('apply-settings').onclick();assert.equal(t.run('speedMultiplier'),1);t.run('setSpeed(99)');assert.equal(t.run('speedMultiplier'),2.2);
 }
 console.log('PASS: active/paused/over settings visibility; Hard 160–280% speed, 8% + 8% letter odds, last-letter exception, no wildcards, full/half duplicate shield rules; Normal preserved.');
+
+for(const source of [webScripts,scripts]){
+ const t=session({},false,source);assert(!t.el('color-theme').innerHTML.includes('value="rick"'),'Rick is absent before unlock');
+ t.el('color-theme').value='space';t.el('color-theme').onchange();assert.equal(t.run('colorTheme'),'space');
+ t.el('word-set').value='nature';t.el('apply-settings').onclick();assert.equal(t.run('activeSet'),'nature');assert.equal(t.run('colorTheme'),'space','word set does not change palette');
+ t.run('pause();score=67;shieldHealth=1;hud()');const game=t.run('JSON.stringify([score,progress,wordIndex,lives,shieldHealth,state])');
+ t.el('handwriting-mode').checked=true;t.el('handwriting-mode').onchange();assert(t.run('handwriting'));assert.equal(t.run('document.documentElement.dataset.handwriting'),'true');assert.equal(t.run('colorTheme'),'space','paper does not erase palette');assert.equal(t.el('theme-toggle').disabled,true);t.run('draw()');assert.equal(t.run('JSON.stringify([score,progress,wordIndex,lives,shieldHealth,state])'),game,'appearance does not restart play');
+ const reload=session(t.store,false,source);assert(reload.run('handwriting'));assert.equal(reload.run('colorTheme'),'space');
+ t.el('handwriting-mode').checked=false;t.el('handwriting-mode').onchange();assert.equal(t.run('document.documentElement.dataset.handwriting'),'false');assert.equal(t.run('document.documentElement.dataset.palette'),'space');assert.equal(t.el('theme-toggle').disabled,false);
+ t.run('rickUnlocked=true;updateRickOption()');assert(t.el('color-theme').innerHTML.includes('value="rick"'),'Rick appears after unlock');assert.equal(t.el('color-theme').value,'space','unlock does not change palette');
+ const migrated=session({'word-rain-settings-v1':JSON.stringify({wordSet:'nature',difficulty:'hard',colorTheme:'set'})},false,source);assert.equal(migrated.run('colorTheme'),'nature','old automatic palette migrated');migrated.el('word-set').value='tricky';migrated.el('apply-settings').onclick();assert.equal(migrated.run('colorTheme'),'nature');
+ const unlocked=session({'word-rain-rick-unlocked-v1':'true','word-rain-settings-v1':JSON.stringify({wordSet:'classic',colorTheme:'rick',handwriting:true})},false,source);assert(unlocked.el('color-theme').innerHTML.includes('value="rick"'));assert.equal(unlocked.run('colorTheme'),'rick');assert(unlocked.run('handwriting'));
+}
+assert(!webScripts.join('').includes('Rick · Locked'));assert(html.includes('data:font/woff;base64,'),'font is offline and bundled');
+console.log('PASS: Rick absent until unlock; independent palettes, legacy settings migration, handwriting save/override/restore without changing live game; paper canvas renders with bundled font.');

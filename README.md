@@ -86,3 +86,11 @@ Completing **RICK** in Classic / Normal clears all ordinary drops and starts the
 ## Hard-mode update (v1.2.1)
 
 The word-set/difficulty/color-theme panel hides during active play and returns on pause, game over or the ready screen. Hard starts at 160% speed (minimum 160%, maximum 280%); Normal remains 100–220%. Hard regular-letter rolls use 8% current letter and 8% following letter, with the latter skipped at the final blank. Hard has no wildcard unlocks or drops. In Hard, a full-shield duplicate pickup costs two hearts and retains half a shield; a half-shield duplicate costs one heart and removes the shield. Normal shield-overload rules remain unchanged. The yellow 2× bonus and other mechanics are retained.
+
+## Appearance (v1.3.0)
+
+Word sets and color themes are independent. Choose Lime, Mint, Blue or Coral with any word set. The Rick palette is absent from the selector until the challenge has been won. Old automatic palettes migrate to a fixed color without deleting records or unlocks.
+
+**Handwriting paper** overrides all color/light/dark palettes with a lined notebook, original pen-stroke lettering, sketched letter tiles and basket, red-scribbled hazards and blue-scribbled shields, inspired by the creator's notebook references. Toggle it off to restore your chosen palette. Appearance changes while paused keep the current game; Apply & start new game is only needed for changing the word set or difficulty.
+
+The original MIT-licensed font is embedded in the HTML, so it works offline in both browser and APK. Rebuild with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable font. Reference photographs are not bundled or published.
