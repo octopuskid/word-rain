@@ -21,7 +21,7 @@ Both recordings are licensed under Creative Commons Attribution 4.0 Internationa
 https://creativecommons.org/licenses/by/4.0/
 Legal terms: https://creativecommons.org/licenses/by/4.0/legalcode.en
 
-Changes: re-encoded from the official MP3 downloads to 96 kbps mono MP3 to
+Changes: re-encoded from the official MP3 downloads to 80 kbps mono MP3 to
 reduce package size. Full tracks retained; playback loops and uses reduced
 volume within the game. No endorsement by Kevin MacLeod or Incompetech is implied.
 
