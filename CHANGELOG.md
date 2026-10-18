@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.4
+
+- Reduced ordinary falling speeds to 60% of the original classic pace while retaining the HUD’s 100% baseline and existing multipliers, caps and penalties.
+- Kept spawn timing, density rules and the Rick challenge’s separate speed unchanged.
+- Full and Lite APKs use version code 20 and preserve existing records on in-place updates.
+
 ## 1.4.3
 
 - Removed RICK from all word sets. Catch R, I, C and K consecutively yourself to trigger the secret in any set or difficulty; other caught blocks interrupt the sequence.

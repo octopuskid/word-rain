@@ -15,5 +15,5 @@ def lite_html(source: str) -> str:
         '// Lightweight edition: generated original music and device-local importing only.')
     source=source.replace('<section class="audio-settings" aria-label="Music settings">',
         '<section class="audio-settings" aria-label="Music settings"><p>Lightweight edition · Original music and local importing · No bundled recordings.</p>',1)
-    source=source.replace('v1.4.3 · NO UMBRELLA REQUIRED','v1.4.3 LITE · NO UMBRELLA REQUIRED',1)
+    source=source.replace('v1.4.4 · NO UMBRELLA REQUIRED','v1.4.4 LITE · NO UMBRELLA REQUIRED',1)
     return source

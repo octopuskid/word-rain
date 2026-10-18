@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.3**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.4**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -58,7 +58,7 @@ Every two consecutive perfect words increase falling speed by **20 percentage po
 
 **Classic dropping is restored:** random hazards, skipped drop attempts and varied falling speeds create gaps, overlaps and occasional small groups. Each wave has one attempt normally, two attempts 15% of the time, or three attempts 3% of the time. Each attempt can still be skipped by the density reductions, so a wave can produce zero to three blocks. Several letters, including copies of a target character, may be on screen at once. Printed letters never change after spawning.
 
-The wave interval decreases with active play time using the original schedule (`max(0.28, 0.77 − elapsed × 0.005)` seconds before frequency adjustments). Falling speeds also gradually increase with elapsed play time, up to the original cap, with a random speed offset per block. The displayed speed multiplier is applied on top of that classic pace. Paused time does not advance the schedule. The Rick challenge retains its own sequence timing.
+The wave interval decreases with active play time using the original schedule (`max(0.28, 0.77 − elapsed × 0.005)` seconds before frequency adjustments). Falling speeds also gradually increase with elapsed play time, up to the original cap, with a random speed offset per block. Ordinary falling speeds are scaled to **60% of the original classic pace** before the displayed multiplier is applied. The HUD still shows 100% at Normal’s starting speed; Hard’s 160% is 96% of the original 100% pace at the same elapsed time and random offset. This scaling does not change spawn intervals or the speed-linked frequency rule. The Rick sequence retains its separate fixed falling speed. Paused time does not advance the schedule. The Rick challenge retains its own sequence timing.
 
 The **5% base-frequency increase** and **3% per 20 percentage points above the mode's starting speed** from 1.4.1 remain. The speed-linked increase is additive, interpolated between steps and capped at +18%; slowing down reduces it. Wave intervals are multiplied by the mean wave size (1.21) so extra attempts in multi-block waves do not independently inflate the expected density. The 35% letter-attempt and 50% hazard-attempt reductions are retained.
 

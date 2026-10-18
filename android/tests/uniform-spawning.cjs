@@ -6,6 +6,7 @@ const oldRandom=Math.random;
 try{
  for(const hard of [false,true]){
   const t=session();t.run("start();difficulty="+JSON.stringify(hard?'hard':'normal')+";speedMultiplier=baseSpeed();words.splice(0,words.length,'LETTER');wordIndex=0;progress=0;resetSpawns();var seed=123;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;}");
+  for(const age of [0,40,200]){t.run('elapsed='+age+';items=[];var heldRandom=Math.random;Math.random=()=>.1;spawnDrop();Math.random=heldRandom');assert(Math.abs(t.run('items[0].speed')-(130+Math.min(160,age*2)+4.5)*.6*(hard?1.6:1))<1e-10,'ordinary speed is 60% of classic at each elapsed time');}t.run('elapsed=0;items=[]');
   const counts=t.run("(()=>{let current=0,next=0,last=-100,minGap=100,maxGap=0;for(let i=0;i<10000;i++){const c=randomLetter();if(c==='L'){current++;if(last>=0){minGap=Math.min(minGap,i-last);maxGap=Math.max(maxGap,i-last);}last=i;}if(c==='E')next++;}return {current,next,minGap,maxGap};})()");
   assert.equal(counts.current,hard?800:2000);assert.equal(counts.next,hard?800:500);assert(counts.maxGap-counts.minGap<=3);
   t.run("resetSpawns();items=[{letter:'L',y:0},{letter:'E',y:0}]");const pending=t.run("Array.from({length:1000},()=>randomLetter())");assert.equal(pending.filter(c=>c==='L').length,hard?80:200);assert.equal(pending.filter(c=>c==='E').length,hard?80:50);

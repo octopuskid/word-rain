@@ -75,3 +75,5 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 1.4.2 (version code 18) restores classic random dropping with occasional multi-block waves and evenly distributed target-letter opportunities. Existing save keys and app identity remain unchanged.
 
 1.4.3 (version code 19) replaces the RICK target with a manual catch sequence and improves Copper contrast. Legacy RICK statistics and all existing saves are preserved.
+
+1.4.4 (version code 20) scales ordinary falling speeds to 60% of the original pace while keeping the HUD baseline at 100%. Install over the existing APK to retain records.
