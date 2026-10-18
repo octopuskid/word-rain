@@ -3,6 +3,7 @@
 import argparse, hashlib, os, shutil, subprocess, zipfile
 import xml.etree.ElementTree as ET
 from mobile import mobile_html
+from variants import lite_html
 from pathlib import Path
 
 parser=argparse.ArgumentParser(description=__doc__)
@@ -11,19 +12,25 @@ parser.add_argument('--android-jar', type=Path, required=True)
 parser.add_argument('--ecj', type=Path, required=True, help='Eclipse ECJ 3.40.0 compiler JAR')
 parser.add_argument('--keystore', type=Path, required=True)
 parser.add_argument('--password-file', type=Path, required=True)
+parser.add_argument('--lite', action='store_true', help='Omit bundled recordings; keep original music and local importing')
 args=parser.parse_args()
 root=Path(__file__).resolve().parent
 version=ET.parse(root/'AndroidManifest.xml').getroot().attrib['{http://schemas.android.com/apk/res/android}versionName']
-out=root/'build'
-apk=out/('word-rain-'+version+'.apk')
+out=root/('build-lite' if args.lite else 'build')
+apk=out/('word-rain-'+version+('-lite' if args.lite else '')+'.apk')
 if out.exists():shutil.rmtree(out)
 for name in ['assets','classes','dex']: (out/name).mkdir(parents=True,exist_ok=True)
 # Shared game plus Android-only records UI; external links use the native browser.
-html=mobile_html((root.parent/'index.html').read_text())
+source=(root.parent/'index.html').read_text()
+html=mobile_html(lite_html(source) if args.lite else source)
 (out/'assets'/'index.html').write_text(html)
-shutil.copyfile(root.parent/'LICENSE',out/'assets'/'LICENSE')
-shutil.copyfile(root.parent/'MUSIC-LICENSES.md',out/'assets'/'MUSIC-LICENSES.md')
-shutil.copytree(root.parent/'assets'/'music',out/'assets'/'music')
+if args.lite:
+    license_text=(root.parent/'LICENSE').read_text().split('\nThird-party music exception:')[0]
+    (out/'assets'/'LICENSE').write_text(license_text)
+else:
+    shutil.copyfile(root.parent/'LICENSE',out/'assets'/'LICENSE')
+    shutil.copyfile(root.parent/'MUSIC-LICENSES.md',out/'assets'/'MUSIC-LICENSES.md')
+    shutil.copytree(root.parent/'assets'/'music',out/'assets'/'music')
 
 def run(*cmd):subprocess.run([str(c) for c in cmd],check=True)
 tools=args.build_tools.resolve(); jar=args.android_jar.resolve()
@@ -38,5 +45,5 @@ run(tools/'zipalign','-f','-p','4',out/'unsigned.apk',out/'aligned.apk')
 run('java','-jar',tools/'lib'/'apksigner.jar','sign','--ks',args.keystore.resolve(),'--ks-key-alias','word-rain','--ks-pass','file:'+str(args.password_file.resolve()),'--out',apk,out/'aligned.apk')
 run('java','-jar',tools/'lib'/'apksigner.jar','verify','--verbose','--print-certs',apk)
 run(tools/'zipalign','-c','-p','4',apk)
-(out/'SHA256SUMS.txt').write_text(hashlib.sha256(apk.read_bytes()).hexdigest()+'  '+apk.name+'\n')
+(out/('SHA256SUMS-lite.txt' if args.lite else 'SHA256SUMS.txt')).write_text(hashlib.sha256(apk.read_bytes()).hexdigest()+'  '+apk.name+'\n')
 print('Built:',apk)

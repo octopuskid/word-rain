@@ -129,3 +129,9 @@ The **Background music** selector below the rules offers Pocket Forecast (the or
 Both Kevin MacLeod recordings are **Creative Commons Attribution 4.0 International**, with source/license links and conversion notices in the game's Music credits & licenses, on itch.io and in [MUSIC-LICENSES.md](MUSIC-LICENSES.md). They are re-encoded to 80 kbps mono MP3 for package size, retain the full tracks, and loop during play. The music license permits use and redistribution without an application when attribution and other terms are followed. These recordings are licensed separately from the game's MIT code and original audio; no artist endorsement is implied.
 
 All three tracks work offline in the APK. App identity, signing key, saved score/stat keys, theme/settings and Rick unlock storage remain unchanged in 1.3.4. Install over the existing app to retain data.
+
+## Lightweight 1.3.4 edition
+
+The same release also offers **word-rain-1.3.4-lite.apk** and a lightweight HTML download. These omit the two bundled Kevin MacLeod recordings while keeping Pocket Forecast, all sound effects and mobile local-music importing. No external music files are needed.
+
+Full and Lite APKs share the same app identity, signing key and storage. They replace one another rather than installing side by side; installing over the existing app preserves scores, word statistics, settings and unlocks. A bundled-track preference falls back safely to Pocket Forecast in Lite. Do not uninstall first. The full soundtrack edition remains available.

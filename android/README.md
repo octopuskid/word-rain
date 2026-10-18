@@ -58,3 +58,9 @@ MIT license, as in the repository root.
 Pocket Forecast remains the default. The music selector also offers Carefree and Monkeys Spinning Monkeys by Kevin MacLeod (incompetech.com), CC BY 4.0. Full credits, source URLs and conversion notices are in MUSIC-LICENSES.md and the in-game Music credits & licenses section. The two MP3 recordings are packaged under assets/music/ and are licensed separately from the MIT code.
 
 A local-only WebView resource handler serves exactly those two bundled MP3 paths under the app's existing HTTPS origin, including media byte-range responses. Network loads and file/content access remain disabled, with no internet/storage permission added. The picker and vibration bridge are unchanged. Audio codecs and haptics still need physical-device verification.
+
+## Lightweight edition
+
+Add `--lite` to the normal build command. Output goes to `android/build-lite/word-rain-1.3.4-lite.apk` with `SHA256SUMS-lite.txt`, leaving the full build untouched. The shared-source transform in variants.py removes the bundled-track catalog entries/options/credits; no MP3 assets are packaged. Generated Pocket Forecast, SFX, local importing, vibration and saved records stay available.
+
+Full and Lite use the same app ID, signing key and versionCode and can replace one another in place. They cannot be installed side by side. Install over the existing app to keep data.
