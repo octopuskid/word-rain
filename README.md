@@ -21,8 +21,9 @@ Download `index.html` and open it in a modern browser. The game works offline.
 
 ## Scoring and hearts
 
-- Correct letter: +10 points. Completed word: +50 points.
-- Wrong letter: +1 point while scoring is active, and word progress resets.
+- Normal: correct letter +10, completed word +50; Hard awards 1.5× (+15 / +75).
+- The six-perfect-word 2× bonus stacks with Hard: +30 per correct catch and +150 per completed word. The sixth word itself still earns the pre-bonus amount.
+- Wrong letter: +1 in Normal or +1.5 in Hard while scoring is active; word progress resets. Wrong-letter points do not receive the perfection bonus. Half-points are displayed and saved exactly.
 - Three consecutive wrong letters pause scoring; the third earns no point. A correct catch clears the pause without awarding points, then normal scoring resumes.
 - Start with three hearts. Reaching zero ends the game.
 
@@ -100,3 +101,17 @@ The original MIT-licensed font is embedded in the HTML, so it works offline in b
 ## 1.3.1 correction
 
 The six-perfect-word healing and yellow 2× bonus apply to both difficulties and use the same perfection streak and shield exceptions. The handwriting shield now has a closed top and a pointed bottom, replacing the crown-like shape.
+
+## Audio and haptics (1.3.2)
+
+The header keeps light/dark, **BGM**, and **SFX** switches together on one row, including on phones. BGM is off initially; SFX is on. Both preferences are saved locally. Audio starts only after a player gesture and requires browser/WebView audio support.
+
+The original background tune **Pocket Forecast** (Word Rain / octopuskid & ChatGPT, MIT) is synthesized offline at 100 BPM, with an eight-bar melody, bass and light rain percussion. No third-party tracks or samples are included. BGM follows active play, pauses in Stats or when the game pauses/ends/backgrounds, and resumes from its position. SFX and music can be switched independently.
+
+Distinct original synthesized effects accompany correct letters, wrong letters, shield pickups, wildcards, ordinary completed words, perfect words, entering wildcard mode, actual speed increases, actual heart regeneration, HP loss, and shield shattering. Perfect words play the perfect cue instead of the ordinary completion cue; a capped speed or full-health reward plays no misleading reward cue.
+
+On phones, actual HP loss and shield shattering also request vibration, independently of SFX. Android uses the normal VIBRATE permission; browser vibration depends on platform support and may be unavailable (including in some mobile browsers or embedded frames). A hard-mode overload retaining half a shield does not count as a shatter.
+
+Phone players can choose **Choose local BGM** below the rules to select an audio file up to 24 MB. “Upload” here is a device-local picker: nothing is sent to a server. The chosen file loops instead of the original music, follows the same pause/mute controls and lasts for that session; select it again after reopening. **Use original BGM** restores Pocket Forecast. Codec support depends on the browser/WebView. Android reads only the document the player selects and requests neither storage nor internet permission.
+
+Version 1.3.2 keeps the existing app ID, release signing key, origin and record storage keys. Existing personal bests, word statistics, settings and Rick unlocks survive an in-place update. Do not uninstall the previous app first.

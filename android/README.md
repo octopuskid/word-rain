@@ -3,8 +3,8 @@
 Offline Android wrapper for the HTML game in the repository root. Android 8.0 (API 26) or newer and an up-to-date Android System WebView are required.
 
 - The APK embeds the game and MIT license. It does not fetch the game from a website.
-- No Android permissions are requested, including INTERNET or storage access.
-- JavaScript and local theme storage are enabled; file/content access and network loads are disabled. No JavaScript-to-native bridge is exposed.
+- Only the normal VIBRATE permission is requested, for HP-loss and shield-shatter feedback. No INTERNET or storage permission is requested.
+- JavaScript and local theme storage are enabled; file/content access and network loads are disabled. A narrow JavaScript bridge exposes only vibration and the player-initiated audio document picker. Only bundled game content is loaded; external pages cannot run in this WebView.
 - Phones (smallest width below 600dp) request sensor portrait; larger devices request sensor landscape. Android may override orientation requests in multitasking or on large screens.
 - Move the basket by dragging across the play area. The Android UI hides the left/right buttons and shows a touch-specific tip; attached-keyboard controls remain available.
 - The game pauses when the Activity goes into the background.
@@ -33,7 +33,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.3.1.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.3.2.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
@@ -43,6 +43,12 @@ After building, run `node android/tests/mobile-records.cjs` (Node.js required). 
 
 ## Validation and limitations
 
-Release checks verify compilation, APK signatures, ZIP alignment, embedded game bytes, launch Activity, SDK versions, and the absence of permissions. These checks do not replace testing on a real Android device. This first APK has not been tested on physical Android hardware or an Android emulator in the build environment.
+Release checks verify compilation, APK signatures, ZIP alignment, embedded game bytes, launch Activity, SDK versions, and VIBRATE as the only declared permission. These checks do not replace testing on a real Android device. This first APK has not been tested on physical Android hardware or an Android emulator in the build environment.
+
+## Audio in 1.3.2
+
+Original offline BGM: **Pocket Forecast**, Word Rain / octopuskid & ChatGPT (MIT). Header switches control BGM and synthesized SFX independently. A phone-only local BGM picker below the rules accepts audio up to 24 MB for the current session; files are never uploaded or bundled into future releases. Android uses ACTION_OPEN_DOCUMENT with a read-only temporary grant, then reads only that selected file into memory. No persistent document permission is retained. Use original BGM restores the built-in tune. Playback and codec support depend on Android System WebView.
+
+The added automated checks cover audio event routing, perfect-versus-ordinary completion, capped rewards, actual HP/shield haptics, original music generation and transport, independent mute preferences, local music replacement, Hard 1.5× scoring and half-point best preservation. Native picker, speakers and vibration still require testing on a physical phone.
 
 MIT license, as in the repository root.

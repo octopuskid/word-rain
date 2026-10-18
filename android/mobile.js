@@ -1,14 +1,16 @@
 'use strict';
+$('custom-music-controls').hidden=false;
 // Android-only local records. No server, account, or database is involved.
 const mobileRecordKey='word-rain-mobile-records-v1';
 let mobileStorageAvailable=true;
+function validScore(value){return Number.isFinite(value)&&value>=0&&(Number.isSafeInteger(value)||Number.isSafeInteger(value*2))?value:0;}
 function validCount(value){return Number.isSafeInteger(value)&&value>=0?value:0;}
 function loadMobileRecords(){
  let raw=null;try{raw=localStorage.getItem(mobileRecordKey);}catch(_){mobileStorageAvailable=false;}
  let data;try{data=JSON.parse(raw);}catch(_){}
  const records={highScore:0,words:Object.create(null)};
  if(!data||typeof data!=='object')return records;
- records.highScore=validCount(data.highScore);
+ records.highScore=validScore(data.highScore);
  const saved=data.words;
  if(saved&&typeof saved==='object')for(const word of allWords){
   const entry=Object.prototype.hasOwnProperty.call(saved,word)?saved[word]:null;

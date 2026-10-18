@@ -10,6 +10,11 @@ import android.graphics.Insets;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
+import android.util.Base64;
+import android.webkit.JavascriptInterface;
+import org.json.JSONObject;
 import android.view.WindowInsets;
 import android.view.View;
 import android.webkit.WebResourceRequest;
@@ -23,9 +28,38 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-/** Offline-only shell: all game code is bundled; no network or storage permissions. */
+/** Offline-only shell: all game code is bundled; no network or storage permissions; vibration uses its normal Android permission. */
 public final class MainActivity extends Activity {
     private WebView game;
+    private static final int MUSIC_PICKER = 132;
+    private boolean choosingMusic;
+    public final class GameBridge {
+        @JavascriptInterface public void haptic(String kind) {
+            if (!"hp".equals(kind) && !"shield".equals(kind) && !"both".equals(kind)) return;
+            if (getResources().getConfiguration().smallestScreenWidthDp >= 600) return;
+            try {
+                Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                if (vibrator == null || !vibrator.hasVibrator()) return;
+                long[] pattern = "both".equals(kind) ? new long[]{0,110,50,60,35,60}
+                    : "hp".equals(kind) ? new long[]{0,130} : new long[]{0,55,35,55};
+                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1));
+            } catch (RuntimeException unavailable) { /* No vibration support. */ }
+        }
+        @JavascriptInterface public void chooseMusic() {
+            runOnUiThread(new Runnable() { @Override public void run() {
+                if (choosingMusic || game == null) return;
+                Intent picker = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                picker.addCategory(Intent.CATEGORY_OPENABLE);
+                picker.setType("audio/*");
+                picker.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                try { choosingMusic = true; startActivityForResult(picker, MUSIC_PICKER); }
+                catch (ActivityNotFoundException unavailable) {
+                    choosingMusic = false;
+                    Toast.makeText(MainActivity.this, "No audio picker installed", Toast.LENGTH_SHORT).show();
+                }
+            }});
+        }
+    }
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -35,6 +69,7 @@ public final class MainActivity extends Activity {
         game.setBackgroundColor(Color.rgb(16, 28, 40));
         WebSettings settings = game.getSettings();
         settings.setJavaScriptEnabled(true);
+        game.addJavascriptInterface(new GameBridge(), "WordRainNative");
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false);
         settings.setAllowContentAccess(false);
@@ -98,6 +133,35 @@ public final class MainActivity extends Activity {
         }
     }
 
+    @Override protected void onActivityResult(int request, int result, final Intent data) {
+        super.onActivityResult(request, result, data);
+        if (request != MUSIC_PICKER) return;
+        choosingMusic = false;
+        if (result != RESULT_OK || data == null || data.getData() == null) return;
+        // Only read the explicitly selected document. Never persist its URI permission.
+        new Thread(new Runnable() { @Override public void run() {
+            String selected = null;
+            try (InputStream input = getContentResolver().openInputStream(data.getData())) {
+                if (input == null) throw new java.io.IOException("No audio");
+                String mime = getContentResolver().getType(data.getData());
+                if (mime == null || !mime.matches("audio/[a-zA-Z0-9.+-]+")) mime = "audio/mpeg";
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                byte[] chunk = new byte[8192]; int count;
+                while ((count = input.read(chunk)) != -1) {
+                    if (bytes.size() + count > 24 * 1024 * 1024) throw new java.io.IOException("Audio too large");
+                    bytes.write(chunk, 0, count);
+                }
+                selected = "data:" + mime + ";base64," + Base64.encodeToString(bytes.toByteArray(), Base64.NO_WRAP);
+            } catch (Exception unavailable) { /* Report a readable error in the game. */ }
+            final String source = selected;
+            runOnUiThread(new Runnable() { @Override public void run() {
+                if (game == null) return;
+                game.evaluateJavascript(source == null ? "window.wordRainMusicError();"
+                    : "window.wordRainMusicData(" + JSONObject.quote(source) + ");", null);
+            }});
+        }}, "WordRainMusicPicker").start();
+    }
+
     private void applyDeviceOrientation() {
         boolean phone = getResources().getConfiguration().smallestScreenWidthDp < 600;
         setRequestedOrientation(phone ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
@@ -123,7 +187,7 @@ public final class MainActivity extends Activity {
     }
 
     @Override protected void onDestroy() {
-        if (game != null) { game.stopLoading(); game.destroy(); game = null; }
+        if (game != null) { game.removeJavascriptInterface("WordRainNative"); game.stopLoading(); game.destroy(); game = null; }
         super.onDestroy();
     }
 }

@@ -49,13 +49,13 @@ for(const source of [webScripts,scripts]){
  for(let n=0;n<5;n++)complete(hard);
  assert.equal(hard.run('doubleScore'),false,'five perfect words do not unlock bonus');
  const beforeSixth=hard.run('score'),sixthLength=hard.run('words[wordIndex].length');complete(hard);
- assert.equal(hard.run('score')-beforeSixth,sixthLength*10+50,'sixth word still earns base points');assert(hard.run('doubleScore'));
- const beforeBonus=hard.run('score');correct(hard);assert.equal(hard.run('score')-beforeBonus,20,'bonus correct catch doubles');
- const beforeBonusWord=hard.run('score'),remaining=hard.run('words[wordIndex].length-progress');complete(hard);assert.equal(hard.run('score')-beforeBonusWord,remaining*20+100,'word completion doubles');
+ assert.equal(hard.run('score')-beforeSixth,(sixthLength*10+50)*1.5,'sixth word still earns base points');assert(hard.run('doubleScore'));
+ const beforeBonus=hard.run('score');correct(hard);assert.equal(hard.run('score')-beforeBonus,30,'bonus correct catch doubles');
+ const beforeBonusWord=hard.run('score'),remaining=hard.run('words[wordIndex].length-progress');complete(hard);assert.equal(hard.run('score')-beforeBonusWord,(remaining*20+100)*1.5,'word completion doubles');
  catchItem(hard,{wild:true});assert(hard.run('doubleScore'),'wildcards retain bonus');
  const streak=hard.run('perfectRun');hard.run('shieldHealth=2');catchItem(hard,{letter:hard.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});
  assert.equal(hard.run('doubleScore'),true,'shielded wrong catch preserves bonus');assert.equal(hard.run('perfectRun'),streak,'shield still protects perfection');
- let ordinary=hard.run('score');correct(hard);assert.equal(hard.run('score')-ordinary,20);
+ let ordinary=hard.run('score');correct(hard);assert.equal(hard.run('score')-ordinary,30);
  complete(hard);assert(hard.run('doubleScore'),'preserved perfection keeps bonus');
  for(let n=0;n<5;n++)complete(hard);assert(hard.run('doubleScore'),'six new perfect words restore bonus');
  for(const shield of [2,1,0]){hard.run('doubleScore=true;perfectRun=6;shieldHealth='+shield+';lives=3');catchItem(hard,{bomb:true});assert.equal(hard.run('doubleScore'),shield===1,'half-shield x preserves bonus');assert.equal(hard.run('perfectRun'),shield===1?6:0);}
@@ -144,9 +144,9 @@ console.log('PASS: Rick absent until unlock; independent palettes, legacy settin
 for(const source of [webScripts,scripts])for(const mode of ['normal','hard']){
  const t=session({},false,source);t.el('difficulty').value=mode;t.el('word-set').value='nature';t.el('apply-settings').onclick();t.run('lives=2');
  for(let n=0;n<5;n++)complete(t);assert(!t.run('doubleScore'));assert.equal(t.run('lives'),2);
- const before=t.run('score'),length=t.run('words[wordIndex].length');complete(t);assert.equal(t.run('score')-before,length*10+50);assert.equal(t.run('lives'),3,'sixth word heals');assert(t.run('doubleScore'),'sixth word unlocks bonus in '+mode);
- const beforeLetter=t.run('score');correct(t);assert.equal(t.run('score')-beforeLetter,20);
- const beforeWord=t.run('score'),remaining=t.run('words[wordIndex].length-progress');complete(t);assert.equal(t.run('score')-beforeWord,remaining*20+100);
+ const before=t.run('score'),length=t.run('words[wordIndex].length');complete(t);assert.equal(t.run('score')-before,(length*10+50)*(mode==='hard'?1.5:1));assert.equal(t.run('lives'),3,'sixth word heals');assert(t.run('doubleScore'),'sixth word unlocks bonus in '+mode);
+ const beforeLetter=t.run('score');correct(t);assert.equal(t.run('score')-beforeLetter,20*(mode==='hard'?1.5:1));
+ const beforeWord=t.run('score'),remaining=t.run('words[wordIndex].length-progress');complete(t);assert.equal(t.run('score')-beforeWord,(remaining*20+100)*(mode==='hard'?1.5:1));
  t.run('shieldHealth=2');for(let n=0;n<2;n++){catchItem(t,{letter:t.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(t.run('doubleScore'),'protected mistakes preserve bonus');}assert.equal(t.run('shieldHealth'),0);
  t.run('shieldHealth=1');catchItem(t,{bomb:true});assert(t.run('doubleScore'));assert.equal(t.run('lives'),2);assert.equal(t.run('perfectRun'),7);
  complete(t);assert.equal(t.run('perfectRun'),8);assert.equal(t.run('lives'),2,'no stored heal after full-health reward');for(let n=0;n<4;n++)complete(t);assert.equal(t.run('lives'),3,'twelfth perfect word heals');assert(t.run('doubleScore'));
@@ -155,3 +155,41 @@ for(const source of [webScripts,scripts])for(const mode of ['normal','hard']){
  t.run('shieldHealth=0');catchItem(t,{letter:t.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(!t.run('doubleScore'));assert.equal(t.run('perfectRun'),0);
 }
 console.log('PASS: Normal + Hard six-perfect-word healing/2x, sixth-word boundary, doubled later letters/words, 3-HP cap, recurring healing, shield protection and disqualifying-catch reset.');
+
+// Audio event hooks are tested on actual catch paths, independently of audio hardware.
+for(const source of [webScripts,scripts]){
+ const t=session({},false,source);t.run("start();var cues=[],buzz=[];sound=name=>cues.push(name);window.WordRainNative={haptic:kind=>buzz.push(kind)};");
+ function clear(){t.run('cues=[];buzz=[]');}function has(name){assert(t.run('cues.includes('+JSON.stringify(name)+')'),'cue: '+name);}
+ correct(t);has('correct');clear();catchItem(t,{letter:'!'});has('wrong');assert.equal(t.run('buzz.length'),0);
+ clear();catchItem(t,{shield:true});has('shield');assert.equal(t.run('buzz.length'),0);
+ clear();catchItem(t,{wild:true});has('wildcard');
+ t.run('progress=words[wordIndex].length-1;wordPerfect=false');clear();correct(t);has('completed');assert(!t.run("cues.includes('perfect')"));
+ t.run('progress=words[wordIndex].length-1;wordPerfect=true;wildcardUnlocked=false');clear();correct(t);has('perfect');has('wildcardMode');assert(!t.run("cues.includes('completed')"),'perfect never plays ordinary completion');
+ t.run('progress=words[wordIndex].length-1;wordPerfect=true;perfectWords=1;perfectRun=5;lives=2');clear();correct(t);has('speedUp');has('regen');has('perfect');assert(!t.run("cues.includes('wildcardMode')"),'mode-enter cue only when newly unlocked');
+ t.run('progress=words[wordIndex].length-1;wordPerfect=true;perfectRun=11;lives=3;setSpeed(maxSpeed());perfectWords=1');clear();correct(t);assert(!t.run("cues.includes('regen')"));assert(!t.run("cues.includes('speedUp')"),'no acceleration cue at cap');
+ for(const health of [0,1,2]){t.run('lives=3;shieldHealth='+health);clear();catchItem(t,{bomb:true});assert.equal(t.run("cues.includes('loseHP')"),health!==2);assert.equal(t.run("cues.includes('shatter')"),health>0);assert.equal(t.run('buzz[0]'),health===2?'shield':health===1?'both':'hp');}
+ t.run('lives=3;shieldHealth=1');clear();catchItem(t,{letter:'!'});has('wrong');has('shatter');assert.equal(t.run('buzz[0]'),'shield');
+ t.run('lives=3;shieldHealth=2');clear();catchItem(t,{shield:true});has('shield');has('loseHP');has('shatter');assert.equal(t.run('buzz[0]'),'both');
+ t.el('difficulty').value='hard';t.el('apply-settings').onclick();catchItem(t,{letter:'!'});assert.equal(t.run('score'),1.5);catchItem(t,{letter:'!'});assert.equal(t.run('score'),3);catchItem(t,{letter:'!'});assert.equal(t.run('score'),3);correct(t);assert.equal(t.run('score'),3,'recovery catch remains unscored in Hard');correct(t);assert.equal(t.run('score'),18);
+ if(source===scripts){t.run('score=1000.5;hud()');assert.equal(session(t.store).run('mobileRecords.highScore'),1000.5,'half-point best survives reload');}
+}
+// Exercise actual synthesis/mixing/transport with a deterministic Web Audio stand-in.
+const music=session();music.run(`
+var audioNodes=[];
+function audioNode(){return {gain:{value:0,setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}},frequency:{value:0},connect(){},disconnect(){},start(...args){this.started=args;},stop(){this.stopped=true;}};}
+window.AudioContext=class {
+ constructor(){this.state='running';this.currentTime=0;this.destination={};}
+ createGain(){return audioNode();}
+ createOscillator(){const node=audioNode();audioNodes.push(node);return node;}
+ createBufferSource(){const node=audioNode();audioNodes.push(node);return node;}
+ createBuffer(channels,length,rate){const data=new Float32Array(length);return {duration:length/rate,getChannelData(){return data;}};}
+};
+start();
+`);
+assert(music.run('Boolean(audioContext)'));music.el('bgm-toggle').onclick();assert(music.run('musicSource.loop'));assert(music.run('musicBuffer.getChannelData(0).every(Number.isFinite)'));assert(music.run('musicBuffer.getChannelData(0).some(n=>n!==0)'));
+const peak=music.run('musicBuffer.getChannelData(0).reduce((m,n)=>Math.max(m,Math.abs(n)),0)');assert(peak<1&&peak>.05,'original music has signal and headroom');
+music.run('audioContext.currentTime=3;pause()');assert.equal(music.run('musicSource'),null);assert.equal(music.run('musicOffset'),3);music.run('start()');assert.equal(music.run('musicSource.started[1]'),3,'BGM resumes at paused position');
+const tones=music.run('audioNodes.length');music.run("sound('correct')");assert.equal(music.run('audioNodes.length'),tones+2);music.el('sfx-toggle').onclick();music.run("sound('wrong')");assert.equal(music.run('audioNodes.length'),tones+2,'muted SFX schedules no tones');assert(music.run('Boolean(musicSource)'),'SFX switch does not mute BGM');
+music.el('bgm-toggle').onclick();assert.equal(music.run('musicSource'),null);assert.equal(session(music.store).run('audioPrefs.sfx'),false);assert.equal(session(music.store).run('audioPrefs.bgm'),false);
+music.run("window.Audio=class {constructor(src){this.src=src;this.paused=true;} play(){this.paused=false;} pause(){this.paused=true;}removeAttribute(){}load(){}};pause();loadCustomMusic('data:audio/mpeg;base64,AAA')");assert(music.run('customMusic.paused'));music.run('start()');assert(!music.run('customMusic.paused'));music.run('pause()');assert(music.run('customMusic.paused'));music.el('reset-music').onclick();assert.equal(music.run('customMusic'),null);
+console.log('PASS: eleven sound events; perfect/completion exclusion; real regen, speed and wildcard transitions; HP/shield vibration; Hard 1.5x including half-point best migration; original music synthesis, independent switches, pause/resume and local-music override.');
