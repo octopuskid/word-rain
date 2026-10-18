@@ -67,3 +67,5 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 
 
 1.3.5 (version code 15) uses uniform spawning in both full and Lite builds. App identity, signing key, origin and storage keys remain unchanged. Install over the existing app to preserve records.
+
+1.4.0 (version code 16) compacts handwriting text and the ready/pause overlay. Existing saves are retained by in-place updates in both editions.

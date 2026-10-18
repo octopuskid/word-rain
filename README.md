@@ -140,3 +140,8 @@ Full and Lite APKs share the same app identity, signing key and storage. They re
 ## Uniform spawning (1.3.5)
 
 Replaces skipped spawn attempts and independent target rolls with a fixed drop interval and smooth weighted distribution. Target letters cannot duplicate while an earlier copy is still falling above the catcher line. Drops fall at one shared speed, so faster drops cannot overtake slower ones. Perfect-streak speed changes still apply; word, shield, scoring and save rules remain unchanged. Both full and Lite APKs use version code 15 and preserve existing records when installed over the previous version.
+
+
+## Compact handwriting layout (1.4.0)
+
+Handwriting paragraphs and rules use tighter line spacing. The ready/pause overlay has smaller text, closer spacing and a scroll fallback on short screens, keeping its controls reachable. This layout update includes the uniform generator from 1.3.5. Full and Lite APKs use version code 16 with the same app identity, signing key and save keys; install over the previous version to keep scores, stats, settings and unlocks.
