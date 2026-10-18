@@ -18,6 +18,7 @@ def mobile_html(source: str) -> str:
 <p class="mobile-storage-note">Records are saved only on this device. Clearing app data or uninstalling removes them. Updating the app keeps them.</p></section>
 <p class="mobile-storage-note" id="mobile-storage-warning" role="status" hidden>Local storage is unavailable. Records will last only until the app closes.</p></main>
 <nav class="mobile-tabs" id="mobile-tabs" role="tablist" aria-label="Game and word statistics"><button type="button" role="tab" id="mobile-game-tab" aria-selected="true" aria-controls="mobile-game-panel" tabindex="0">☂ Game</button><button type="button" role="tab" id="mobile-stats-tab" aria-selected="false" aria-controls="mobile-stats-panel" tabindex="-1">▤ Word Stats</button></nav>'''
+    source=source.replace('Drag in the sky, use the buttons, or press ← →.','Drag your finger across the play area to move the basket.',1)
     source=source.replace('</main>',panel,1)
     source=source.replace('</body>','<script>\n'+script+'\n</script></body>',1)
     return source.replace(' target="_blank"','')

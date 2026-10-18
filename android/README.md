@@ -6,6 +6,7 @@ Offline Android wrapper for the HTML game in the repository root. Android 8.0 (A
 - No Android permissions are requested, including INTERNET or storage access.
 - JavaScript and local theme storage are enabled; file/content access and network loads are disabled. No JavaScript-to-native bridge is exposed.
 - Phones (smallest width below 600dp) request sensor portrait; larger devices request sensor landscape. Android may override orientation requests in multitasking or on large screens.
+- Move the basket by dragging across the play area. The Android UI hides the left/right buttons and shows a touch-specific tip; attached-keyboard controls remain available.
 - The game pauses when the Activity goes into the background.
 - A native container reserves system-bar/cutout insets plus 6dp top and bottom breathing room. The WebView viewport and fixed bottom tabs stay inside this area, away from the status and navigation bars.
 - User-selected itch.io/GitHub links open in the installed browser, separately from the offline game.
@@ -29,7 +30,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.1.1.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.1.2.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
