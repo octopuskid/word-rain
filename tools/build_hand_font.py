@@ -62,7 +62,7 @@ def glyph(ch):
  for stroke in paths.get(ch,paths['?']).split('/'):
   pts=[tuple(float(v) for v in p.split(',')) for p in stroke.split()]
   pts=[(x*8+40+sin((i+1)*1.7+ord(ch))*2.8,y*7) for i,(x,y) in enumerate(pts)]
-  radius=10 if ch not in '.:,;\u0027\u0022’·' else 15
+  radius=22 if ch not in '.:,;\u0027\u0022’·' else 15
   for (x,y),(u,v) in zip(pts,pts[1:]):
    length=hypot(u-x,v-y) or 1;nx=-(v-y)/length*radius;ny=(u-x)/length*radius
    polygon(pen,[(round(x-nx),round(y-ny)),(round(u-nx),round(v-ny)),(round(u+nx),round(v+ny)),(round(x+nx),round(y+ny))])
