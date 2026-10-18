@@ -17,6 +17,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -54,21 +56,33 @@ public final class MainActivity extends Activity {
                 return true;
             }
         });
-        // Respect Android 15 edge-to-edge system bars and camera cutouts.
-        game.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+        // Inset the native container, not WebView padding: fixed HTML elements
+        // must be laid out inside the usable viewport above Android navigation.
+        FrameLayout safeArea = new FrameLayout(this);
+        safeArea.setBackgroundColor(Color.rgb(16, 28, 40));
+        final int breathingRoom = Math.round(6 * getResources().getDisplayMetrics().density);
+        safeArea.addView(game, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        safeArea.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
           @Override public WindowInsets onApplyWindowInsets(View view, WindowInsets insets) {
             if (Build.VERSION.SDK_INT >= 30) {
-                Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-                view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                int types = WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout();
+                Insets bars = insets.getInsetsIgnoringVisibility(types);
+                view.setPadding(bars.left, bars.top + breathingRoom,
+                                bars.right, bars.bottom + breathingRoom);
+                // Tell WebView these insets were handled by the parent already.
+                return new WindowInsets.Builder(insets).setInsets(types, Insets.NONE)
+                        .setInsetsIgnoringVisibility(types, Insets.NONE).build();
             } else {
-                view.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
-                                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                view.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop() + breathingRoom,
+                                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom() + breathingRoom);
             }
-            return insets;
+            WindowInsets handled = insets.consumeSystemWindowInsets().consumeStableInsets();
+            return Build.VERSION.SDK_INT >= 28 ? handled.consumeDisplayCutout() : handled;
           }
         });
-        setContentView(game);
-        game.requestApplyInsets();
+        setContentView(safeArea);
+        safeArea.requestApplyInsets();
         try (InputStream input = getAssets().open("index.html")) {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             byte[] buffer = new byte[8192];
