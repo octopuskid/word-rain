@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.2**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.3**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -94,9 +94,9 @@ Word-progress resets, scoring rules and speed penalties still apply to shielded 
 
 ### Rick challenge
 
-Completing **RICK** in Classic / Normal clears ordinary drops and starts the case-sensitive sequence `d Q w 4 w 9 W g X c Q`. Catch all eleven symbols. A miss is reported as failure only after the final symbol passes below the catcher line. Success unlocks the copper Rick color theme and resumes the main game.
+**RICK is absent from every word set.** Catch the ordinary letters **R → I → C → K** consecutively yourself in any set or difficulty, even when they are wrong for the displayed word. Another caught letter interrupts the sequence; catching ×, a shield or a wildcard clears it. Missed drops and pausing do not clear it; starting a new game does. The fourth letter clears ordinary drops and starts the case-sensitive sequence `d Q w 4 w 9 W g X c Q`. Catch all eleven symbols. A miss is reported as failure only after the final symbol passes below the catcher line. Success unlocks the copper Rick color theme and resumes the main game.
 
-The challenge adds no score or word records; spelling the initial RICK target scores normally. Its unlock is saved locally and survives app updates and word-stat resets. Pause, Give up and the Android Stats tab also work during the challenge.
+The challenge adds no score or word records; the four trigger catches follow normal correct/wrong-letter scoring and penalties, with no extra word-completion award. Old RICK encounter/perfect records remain in Android statistics, but triggering the secret adds no RICK encounter. Its unlock is saved locally and survives app updates and word-stat resets. Pause, Give up and the Android Stats tab also work during the challenge.
 
 ### Appearance and sound
 

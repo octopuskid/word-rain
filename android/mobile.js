@@ -12,7 +12,7 @@ function loadMobileRecords(){
  if(!data||typeof data!=='object')return records;
  records.highScore=validScore(data.highScore);
  const saved=data.words;
- if(saved&&typeof saved==='object')for(const word of allWords){
+ if(saved&&typeof saved==='object')for(const word of new Set([...allWords,'RICK'])){
   const entry=Object.prototype.hasOwnProperty.call(saved,word)?saved[word]:null;
   if(entry&&typeof entry==='object'){
    const met=validCount(entry.met);records.words[word]={met,perfect:Math.min(met,validCount(entry.perfect))};

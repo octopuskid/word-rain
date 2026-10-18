@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.3
+
+- Removed RICK from all word sets. Catch R, I, C and K consecutively yourself to trigger the secret in any set or difficulty; other caught blocks interrupt the sequence.
+- Increased Copper contrast in both light and dark mode, including tile lettering and the basket.
+- Preserved legacy RICK word statistics and existing unlocks, scores and settings.
+- Full and Lite APKs use version code 19; install over the previous app to retain data.
+
 ## 1.4.2
 
 - Restored classic random drop attempts, varied falling speeds and elapsed-time acceleration from the original prototype, while keeping printed letters fixed.

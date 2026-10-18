@@ -96,9 +96,9 @@ for(const source of [webScripts,scripts]){
  const drops=session({},false,source);drops.run('start();wildcardUnlocked=true');
  const distribution=drops.run(`(()=>{const old=Math.random;let shield=0,wild=0;try{for(let i=0;i<1000;i++){const draws=[.9,0,(i+.5)/1000,.5,.5,.5,.5];Math.random=()=>draws.shift()??.5;items=[];spawnDrop();if(items[0].shield)shield++;if(items[0].wild)wild++;}}finally{Math.random=old;}return {shield,wild};})()`);
  assert.equal(distribution.shield,30);assert.equal(distribution.wild,15);
- // Reach the Easter egg by actually completing RICK.
- const egg=session({},false,source);egg.run("start();wordIndex=words.indexOf('RICK');progress=0;items=[{x:50,y:20,speed:10,letter:'Z'}];particles=[{life:.5}]");
- for(let i=0;i<4;i++)correct(egg);
+ // Reach the Easter egg by deliberately catching R-I-C-K outside the target word.
+ const egg=session({},false,source);egg.run("start();words.splice(0,words.length,'PUNNY');wordIndex=0;progress=0;items=[{x:50,y:20,speed:10,letter:'Z'}];particles=[{life:.5}]");
+ for(const letter of 'RICK')catchItem(egg,{letter});
  assert(egg.run('Boolean(rickChallenge)'));assert.equal(egg.run('items.length'),0,'clear ordinary screen');assert.equal(egg.run('particles.length'),0);
  const eggScore=egg.run('score'),mainElapsed=egg.run('elapsed');egg.run('pause();start()');assert(egg.run('Boolean(rickChallenge)'),'manual resume preserves challenge');playRick(egg);
  assert.equal(egg.run('state'),'playing');assert.equal(egg.run('rickChallenge'),null);assert(egg.run('rickUnlocked'));assert.equal(egg.run('score'),eggScore);assert.equal(egg.run('elapsed'),mainElapsed,'challenge does not accelerate normal spawn density');

@@ -73,3 +73,5 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 1.4.1 (version code 17) adds bounded spawning randomness, a 5% higher base rate and speed-linked frequency. Both editions preserve saved records on in-place updates.
 
 1.4.2 (version code 18) restores classic random dropping with occasional multi-block waves and evenly distributed target-letter opportunities. Existing save keys and app identity remain unchanged.
+
+1.4.3 (version code 19) replaces the RICK target with a manual catch sequence and improves Copper contrast. Legacy RICK statistics and all existing saves are preserved.
