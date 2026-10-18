@@ -2,6 +2,14 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.2
+
+- Restored classic random drop attempts, varied falling speeds and elapsed-time acceleration from the original prototype, while keeping printed letters fixed.
+- Added occasional waves of two or three attempts; adjusted intervals for their mean size to preserve expected density.
+- Made current/following-letter opportunities evenly spaced and allowed multiple pending copies.
+- Retained the 5% base frequency increase, speed-linked frequency boost and earlier letter/hazard density reductions.
+- Full and Lite Android builds use version code 18 and preserve existing data on in-place updates.
+
 ## 1.4.1
 
 - Added bounded random variation to drop timing and weighted letter/pickup selection, plus random horizontal positions.

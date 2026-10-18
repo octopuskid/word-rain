@@ -94,7 +94,7 @@ for(const source of [webScripts,scripts]){
  const unshielded=session({},false,source);unshielded.run('start();wildcardUnlocked=true');catchItem(unshielded,{letter:unshielded.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(!unshielded.run('wildcardUnlocked'));
  // Exhaust the pickup-roll distribution: 3% shields and exactly 1.5% wildcards.
  const drops=session({},false,source);drops.run('start();wildcardUnlocked=true');
- const distribution=drops.run(`(()=>{let shield=0,wild=0,n=0;while(n<1000){items=[];spawnDrop();if(items[0].bomb)continue;n++;if(items[0].shield)shield++;if(items[0].wild)wild++;}return {shield,wild};})()`);
+ const distribution=drops.run(`(()=>{const old=Math.random;let shield=0,wild=0;try{for(let i=0;i<1000;i++){const draws=[.9,0,(i+.5)/1000,.5,.5,.5,.5];Math.random=()=>draws.shift()??.5;items=[];spawnDrop();if(items[0].shield)shield++;if(items[0].wild)wild++;}}finally{Math.random=old;}return {shield,wild};})()`);
  assert.equal(distribution.shield,30);assert.equal(distribution.wild,15);
  // Reach the Easter egg by actually completing RICK.
  const egg=session({},false,source);egg.run("start();wordIndex=words.indexOf('RICK');progress=0;items=[{x:50,y:20,speed:10,letter:'Z'}];particles=[{life:.5}]");
