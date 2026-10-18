@@ -55,7 +55,7 @@ Each non-× drop has a 3% chance of being a shield, without unlock conditions. P
 | Catch × without a shield | Lose one heart and perfection |
 | Catch a wrong letter without a shield | Lose perfection |
 
-Scoring, word-progress and speed penalties still apply during shielding. Any wrong letter or × also ends the Hard-mode score bonus. Shield pickups do not restore perfection already lost for the current word. Shield pickup damage can end the game immediately.
+Scoring, word-progress and speed penalties still apply during shielding. The 2× score bonus ends only when perfection breaks, following the shield exceptions above. Shield pickups do not restore perfection already lost for the current word. Shield pickup damage can end the game immediately.
 
 ## Letter generation
 
@@ -75,7 +75,9 @@ MIT. See [LICENSE](LICENSE). This permits modification, redistribution, and comm
 
 Open **Word set & difficulty** to choose any of the four freely available sets: Classic (lime), Nature (mint), Space (blue), or Tricky (coral). Each palette works with both light and dark mode. Normal uses 4–7 letter words; Hard uses the 6–7 letter words from your chosen set. Apply & start new game begins a fresh round and keeps saved records. Choices are saved locally.
 
-On Hard, six consecutive perfect word completions activate 2× scoring for subsequent correct catches (+20) and word completions (+100). The sixth word itself earns normal points. The target word becomes yellow, and a text indicator shows the bonus. Any wrong letter or × ends the bonus and resets its streak, even if a shield preserves perfection or a heart. Wildcards count as correct catches. Bonus points never stack beyond 2×. Normal scoring, shield exceptions, regeneration and speed rules otherwise stay the same.
+In **both Normal and Hard**, six consecutive perfect word completions restore one heart (up to three) and activate 2× scoring for subsequent correct catches (+20) and word completions (+100). The sixth word itself earns normal points. The target word becomes yellow, and a text indicator shows the bonus. The same streak restores another heart at each further multiple of six, skipping recovery at full health. Points never stack above 2×.
+
+The bonus stays active until perfection breaks. An unshielded wrong letter, an unshielded ×, or a × caught with a full shield ends it and resets the perfect streak. Shielded wrong letters (including the shield-breaking catch) and a half-shield × preserve perfection and the bonus. Shield pickup damage also preserves perfection. Wildcards are normal correct catches in Normal mode. The existing three-wrong-catch scoring pause still applies; a catch that clears this pause earns no letter points.
 
 ## Rick challenge and giving up
 
@@ -94,3 +96,7 @@ Word sets and color themes are independent. Choose Lime, Mint, Blue or Coral wit
 **Handwriting paper** overrides all color/light/dark palettes with a lined notebook, original pen-stroke lettering, sketched letter tiles and basket, red-scribbled hazards and blue-scribbled shields, inspired by the creator's notebook references. Toggle it off to restore your chosen palette. Appearance changes while paused keep the current game; Apply & start new game is only needed for changing the word set or difficulty.
 
 The original MIT-licensed font is embedded in the HTML, so it works offline in both browser and APK. Rebuild with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable font. Reference photographs are not bundled or published.
+
+## 1.3.1 correction
+
+The six-perfect-word healing and yellow 2× bonus apply to both difficulties and use the same perfection streak and shield exceptions. The handwriting shield now has a closed top and a pointed bottom, replacing the crown-like shape.

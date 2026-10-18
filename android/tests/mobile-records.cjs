@@ -54,13 +54,13 @@ for(const source of [webScripts,scripts]){
  const beforeBonusWord=hard.run('score'),remaining=hard.run('words[wordIndex].length-progress');complete(hard);assert.equal(hard.run('score')-beforeBonusWord,remaining*20+100,'word completion doubles');
  catchItem(hard,{wild:true});assert(hard.run('doubleScore'),'wildcards retain bonus');
  const streak=hard.run('perfectRun');hard.run('shieldHealth=2');catchItem(hard,{letter:hard.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});
- assert.equal(hard.run('doubleScore'),false,'shielded wrong catch ends bonus');assert.equal(hard.run('bonusRun'),0);assert.equal(hard.run('perfectRun'),streak,'shield still protects perfection');
- let ordinary=hard.run('score');correct(hard);assert.equal(hard.run('score')-ordinary,10);
- complete(hard);assert(!hard.run('doubleScore'),'preserved perfection cannot instantly restore bonus');
+ assert.equal(hard.run('doubleScore'),true,'shielded wrong catch preserves bonus');assert.equal(hard.run('perfectRun'),streak,'shield still protects perfection');
+ let ordinary=hard.run('score');correct(hard);assert.equal(hard.run('score')-ordinary,20);
+ complete(hard);assert(hard.run('doubleScore'),'preserved perfection keeps bonus');
  for(let n=0;n<5;n++)complete(hard);assert(hard.run('doubleScore'),'six new perfect words restore bonus');
- for(const shield of [2,1,0]){hard.run('doubleScore=true;bonusRun=6;shieldHealth='+shield+';lives=3');catchItem(hard,{bomb:true});assert(!hard.run('doubleScore'),'all shield states lose bonus on x');assert.equal(hard.run('bonusRun'),0);}
+ for(const shield of [2,1,0]){hard.run('doubleScore=true;perfectRun=6;shieldHealth='+shield+';lives=3');catchItem(hard,{bomb:true});assert.equal(hard.run('doubleScore'),shield===1,'half-shield x preserves bonus');assert.equal(hard.run('perfectRun'),shield===1?6:0);}
  hard.el('word-set').value='nature';hard.el('difficulty').value='normal';hard.el('apply-settings').onclick();assert(!hard.run('doubleScore'));assert.equal(hard.run('score'),0);assert(hard.run('words.every(w=>wordSets.nature.words.includes(w))'));
- for(let n=0;n<6;n++)complete(hard);assert(!hard.run('doubleScore'),'normal has no bonus');
+ for(let n=0;n<6;n++)complete(hard);assert(hard.run('doubleScore'),'normal unlocks bonus too');
  const reloaded=session(hard.store,false,source);assert.equal(reloaded.run('activeSet'),'nature');assert.equal(reloaded.run('difficulty'),'normal');
  for(const set of ['classic','nature','space','tricky'])for(const level of ['normal','hard']){hard.el('word-set').value=set;hard.el('difficulty').value=level;hard.el('apply-settings').onclick();assert(hard.run('words.length>=2'));assert(hard.run('words.every(w=>/^[A-Z]{4,7}$/.test(w))'));assert.equal(hard.run('new Set(words).size'),hard.run('words.length'));}
 }
@@ -87,9 +87,9 @@ for(const source of [webScripts,scripts]){
   assert.equal(t.run('lives'),hp);assert.equal(t.run('shieldHealth'),health?0:2);assert(t.run('wordPerfect'));assert(t.run('wildcardUnlocked'));assert(t.run('doubleScore'));
  }
  for(const health of [1,2]){
-  const t=session({},false,source);t.run('start();shieldHealth='+health+';wildcardUnlocked=true;setSpeed(1.5);doubleScore=true;bonusRun=6');
+  const t=session({},false,source);t.run('start();shieldHealth='+health+';wildcardUnlocked=true;setSpeed(1.5);doubleScore=true;perfectRun=6');
   const wrong=t.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])");catchItem(t,{letter:wrong});
-  assert(t.run('wildcardUnlocked'),'shielded wrong catch preserves purple mode');assert.equal(t.run('speedMultiplier'),1.45);assert.equal(t.run('shieldHealth'),health-1);assert(t.run('wordPerfect'));assert(!t.run('doubleScore'));
+  assert(t.run('wildcardUnlocked'),'shielded wrong catch preserves purple mode');assert.equal(t.run('speedMultiplier'),1.45);assert.equal(t.run('shieldHealth'),health-1);assert(t.run('wordPerfect'));assert(t.run('doubleScore'));
  }
  const unshielded=session({},false,source);unshielded.run('start();wildcardUnlocked=true');catchItem(unshielded,{letter:unshielded.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(!unshielded.run('wildcardUnlocked'));
  // Exhaust the pickup-roll distribution: 3% shields and exactly 1.5% wildcards.
@@ -140,3 +140,18 @@ for(const source of [webScripts,scripts]){
 }
 assert(!webScripts.join('').includes('Rick · Locked'));assert(html.includes('data:font/woff;base64,'),'font is offline and bundled');
 console.log('PASS: Rick absent until unlock; independent palettes, legacy settings migration, handwriting save/override/restore without changing live game; paper canvas renders with bundled font.');
+
+for(const source of [webScripts,scripts])for(const mode of ['normal','hard']){
+ const t=session({},false,source);t.el('difficulty').value=mode;t.el('word-set').value='nature';t.el('apply-settings').onclick();t.run('lives=2');
+ for(let n=0;n<5;n++)complete(t);assert(!t.run('doubleScore'));assert.equal(t.run('lives'),2);
+ const before=t.run('score'),length=t.run('words[wordIndex].length');complete(t);assert.equal(t.run('score')-before,length*10+50);assert.equal(t.run('lives'),3,'sixth word heals');assert(t.run('doubleScore'),'sixth word unlocks bonus in '+mode);
+ const beforeLetter=t.run('score');correct(t);assert.equal(t.run('score')-beforeLetter,20);
+ const beforeWord=t.run('score'),remaining=t.run('words[wordIndex].length-progress');complete(t);assert.equal(t.run('score')-beforeWord,remaining*20+100);
+ t.run('shieldHealth=2');for(let n=0;n<2;n++){catchItem(t,{letter:t.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(t.run('doubleScore'),'protected mistakes preserve bonus');}assert.equal(t.run('shieldHealth'),0);
+ t.run('shieldHealth=1');catchItem(t,{bomb:true});assert(t.run('doubleScore'));assert.equal(t.run('lives'),2);assert.equal(t.run('perfectRun'),7);
+ complete(t);assert.equal(t.run('perfectRun'),8);assert.equal(t.run('lives'),2,'no stored heal after full-health reward');for(let n=0;n<4;n++)complete(t);assert.equal(t.run('lives'),3,'twelfth perfect word heals');assert(t.run('doubleScore'));
+ t.run('shieldHealth=2');catchItem(t,{bomb:true});assert(!t.run('doubleScore'),'full shield x breaks perfection');assert.equal(t.run('lives'),3);assert.equal(t.run('perfectRun'),0);
+ complete(t);assert.equal(t.run('perfectRun'),0,'damaged word is not perfect');for(let n=0;n<6;n++)complete(t);assert(t.run('doubleScore'));
+ t.run('shieldHealth=0');catchItem(t,{letter:t.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(!t.run('doubleScore'));assert.equal(t.run('perfectRun'),0);
+}
+console.log('PASS: Normal + Hard six-perfect-word healing/2x, sixth-word boundary, doubled later letters/words, 3-HP cap, recurring healing, shield protection and disqualifying-catch reset.');
