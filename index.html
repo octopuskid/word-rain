@@ -53,7 +53,7 @@ header{align-items:center}.header-actions{flex-wrap:nowrap;gap:6px}.header-actio
 'use strict';
 const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),$=id=>document.getElementById(id);
 
-// Original, offline audio. No music samples, external services, or network calls.
+// Offline audio: original synthesis plus the separately credited bundled CC BY recordings.
 const audioKey='word-rain-audio-v1';
 const musicTracks={original:{title:'Pocket Forecast',author:'Word Rain / octopuskid & ChatGPT'},carefree:{title:'Carefree',author:'Kevin MacLeod',src:'assets/music/carefree.mp3'},monkeys:{title:'Monkeys Spinning Monkeys',author:'Kevin MacLeod',src:'assets/music/monkeys-spinning-monkeys.mp3'}};
 let audioPrefs={bgm:false,sfx:true,track:'original'};
