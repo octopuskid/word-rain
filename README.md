@@ -115,3 +115,7 @@ On phones, actual HP loss and shield shattering also request vibration, independ
 Phone players can choose **Choose local BGM** below the rules to select an audio file up to 24 MB. “Upload” here is a device-local picker: nothing is sent to a server. The chosen file loops instead of the original music, follows the same pause/mute controls and lasts for that session; select it again after reopening. **Use original BGM** restores Pocket Forecast. Codec support depends on the browser/WebView. Android reads only the document the player selects and requests neither storage nor internet permission.
 
 Version 1.3.2 keeps the existing app ID, release signing key, origin and record storage keys. Existing personal bests, word statistics, settings and Rick unlocks survive an in-place update. Do not uninstall the previous app first.
+
+## Handwriting alignment (1.3.3)
+
+The lowercase **i** and **l** glyphs now have balanced left/right spacing inside their fixed-width cells. This font correction is included in the standalone HTML, hosted demo and Android APK. Existing records and settings are preserved.

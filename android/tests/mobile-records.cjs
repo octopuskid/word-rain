@@ -158,7 +158,7 @@ console.log('PASS: Normal + Hard six-perfect-word healing/2x, sixth-word boundar
 
 // Audio event hooks are tested on actual catch paths, independently of audio hardware.
 for(const source of [webScripts,scripts]){
- const t=session({},false,source);t.run("start();var cues=[],buzz=[];sound=name=>cues.push(name);window.WordRainNative={haptic:kind=>buzz.push(kind)};");
+ const t=session({},false,source);t.el('word-set').value='nature';t.el('apply-settings').onclick();t.run("var cues=[],buzz=[];sound=name=>cues.push(name);window.WordRainNative={haptic:kind=>buzz.push(kind)};");
  function clear(){t.run('cues=[];buzz=[]');}function has(name){assert(t.run('cues.includes('+JSON.stringify(name)+')'),'cue: '+name);}
  correct(t);has('correct');clear();catchItem(t,{letter:'!'});has('wrong');assert.equal(t.run('buzz.length'),0);
  clear();catchItem(t,{shield:true});has('shield');assert.equal(t.run('buzz.length'),0);

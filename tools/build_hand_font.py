@@ -72,8 +72,17 @@ root=Path(__file__).resolve().parents[1]
 fb=FontBuilder(1000,isTTF=True);order=['.notdef','space']+['g'+str(ord(c)) for c in paths]
 fb.setupGlyphOrder(order);fb.setupCharacterMap({32:'space',**{ord(c):'g'+str(ord(c)) for c in paths}})
 glyphs={'.notdef':glyph('?'),'space':TTGlyphPen(None).glyph(),**{'g'+str(ord(c)):glyph(c) for c in paths}}
-fb.setupGlyf(glyphs);fb.setupHorizontalMetrics({n:(570 if n!='space' else 280,0) for n in order});fb.setupHorizontalHeader(ascent=860,descent=-280)
-fb.setupNameTable({'familyName':'Word Rain Hand','styleName':'Regular','uniqueFontIdentifier':'WordRainHand-1.3.0','fullName':'Word Rain Hand','psName':'WordRainHand','version':'Version 1.3.0','copyright':'Original notebook-inspired lettering. MIT license; Word Rain contributors.'})
+fb.setupGlyf(glyphs)
+metrics={n:(570 if n!='space' else 280,0) for n in order}
+# Narrow lowercase strokes need symmetric side bearings within the fixed cell.
+# Matching xMin to the left side bearing also keeps outline and metric origins aligned.
+for ch in 'il':
+ name='g'+str(ord(ch));g=glyphs[name];advance=metrics[name][0]
+ left=(advance-(g.xMax-g.xMin))//2
+ g.coordinates.translate((left-g.xMin,0));g.recalcBounds(glyphs)
+ metrics[name]=(advance,left)
+fb.setupHorizontalMetrics(metrics);fb.setupHorizontalHeader(ascent=860,descent=-280)
+fb.setupNameTable({'familyName':'Word Rain Hand','styleName':'Regular','uniqueFontIdentifier':'WordRainHand-1.3.3','fullName':'Word Rain Hand','psName':'WordRainHand','version':'Version 1.3.3','copyright':'Original notebook-inspired lettering. MIT license; Word Rain contributors.'})
 fb.setupOS2(sTypoAscender=860,sTypoDescender=-280,usWinAscent=860,usWinDescent=280);fb.setupPost();fb.setupMaxp()
 fb.font['head'].created=fb.font['head'].modified=3854044800
 fb.font.flavor='woff';out=root/'assets/word-rain-hand.woff';fb.save(out)
