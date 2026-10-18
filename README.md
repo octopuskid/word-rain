@@ -8,7 +8,7 @@ Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatG
 
 ## Android app
 
-[Download the offline Android APK](https://github.com/octopuskid/word-rain/releases/tag/v1.0.0) (Android 8.0+). The game is bundled inside the app and works without internet access. See [Android source and build instructions](android/README.md).
+[Download the offline Android APK](https://github.com/octopuskid/word-rain/releases/latest) (Android 8.0+). The game is bundled inside the app and works without internet access. The Android version also saves a personal best and a Word Stats table locally, with bottom navigation tabs. See [Android source and build instructions](android/README.md).
 
 ## Play
 

@@ -3,3 +3,4 @@
 *.keystore
 *.p12
 *password*
+__pycache__/

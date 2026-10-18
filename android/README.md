@@ -8,7 +8,10 @@ Offline Android wrapper for the HTML game in the repository root. Android 8.0 (A
 - Phones (smallest width below 600dp) request sensor portrait; larger devices request sensor landscape. Android may override orientation requests in multitasking or on large screens.
 - The game pauses when the Activity goes into the background.
 - User-selected itch.io/GitHub links open in the installed browser, separately from the offline game.
-- App data contains only the theme preference. Uninstalling removes it.
+- The Game screen shows a persistent personal best. Bottom tabs switch between Game and Word Stats; opening the table pauses active play.
+- The Word Stats table stores how often each word became the target and how often it was perfected. A wrong-letter restart or pause/resume does not add an encounter. Perfect counts follow the existing shield exceptions.
+- High score, word records, and theme preference are stored only in the app’s local WebView storage. Updating with the same app ID and signing key preserves them; uninstalling or clearing app data removes them. There is no MySQL/server or online leaderboard.
+- If local storage is unavailable, a notice explains that records last only for the current session.
 
 ## Build
 
@@ -25,9 +28,13 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.0.0.apk` and `SHA256SUMS.txt`. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It copies the root game's current HTML into the APK at build time, removing only the `target="_blank"` attribute so native link handling can open the browser.
+Output: `android/build/word-rain-1.1.0.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
+
+## Records tests
+
+After building, run `node android/tests/mobile-records.cjs` (Node.js required). The checks exercise real game catches, score persistence, word encounters, perfection/shield exceptions, tab pause behavior, and corrupt or unavailable storage.
 
 ## Validation and limitations
 

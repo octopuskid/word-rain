@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Build a signed offline APK with Android SDK Build Tools 35 and Java 17+."""
 import argparse, hashlib, os, shutil, subprocess, zipfile
+import xml.etree.ElementTree as ET
+from mobile import mobile_html
 from pathlib import Path
 
 parser=argparse.ArgumentParser(description=__doc__)
@@ -11,11 +13,13 @@ parser.add_argument('--keystore', type=Path, required=True)
 parser.add_argument('--password-file', type=Path, required=True)
 args=parser.parse_args()
 root=Path(__file__).resolve().parent
+version=ET.parse(root/'AndroidManifest.xml').getroot().attrib['{http://schemas.android.com/apk/res/android}versionName']
 out=root/'build'
+apk=out/('word-rain-'+version+'.apk')
 if out.exists():shutil.rmtree(out)
 for name in ['assets','classes','dex']: (out/name).mkdir(parents=True,exist_ok=True)
-# Same game as the web release, with external links handled by the native browser intent.
-html=(root.parent/'index.html').read_text().replace(' target="_blank"','')
+# Shared game plus Android-only records UI; external links use the native browser.
+html=mobile_html((root.parent/'index.html').read_text())
 (out/'assets'/'index.html').write_text(html)
 shutil.copyfile(root.parent/'LICENSE',out/'assets'/'LICENSE')
 
@@ -26,12 +30,11 @@ run(tools/'aapt2','link','-o',out/'unsigned.apk','--manifest',root/'AndroidManif
 sources=sorted((root/'src').rglob('*.java'))
 run('java','-jar',args.ecj.resolve(),'-source','8','-target','8','-bootclasspath',jar,'-d',out/'classes',*sources)
 run('java','-cp',tools/'lib'/'d8.jar','com.android.tools.r8.D8','--release','--min-api','26','--lib',jar,'--output',out/'dex',*sorted((out/'classes').rglob('*.class')))
-with zipfile.ZipFile(out/'unsigned.apk','a',zipfile.ZIP_DEFLATED) as apk:
-    for dex in sorted((out/'dex').glob('*.dex')):apk.write(dex,dex.name)
+with zipfile.ZipFile(out/'unsigned.apk','a',zipfile.ZIP_DEFLATED) as package_zip:
+    for dex in sorted((out/'dex').glob('*.dex')):package_zip.write(dex,dex.name)
 run(tools/'zipalign','-f','-p','4',out/'unsigned.apk',out/'aligned.apk')
-run('java','-jar',tools/'lib'/'apksigner.jar','sign','--ks',args.keystore.resolve(),'--ks-key-alias','word-rain','--ks-pass','file:'+str(args.password_file.resolve()),'--out',out/'word-rain-1.0.0.apk',out/'aligned.apk')
-run('java','-jar',tools/'lib'/'apksigner.jar','verify','--verbose','--print-certs',out/'word-rain-1.0.0.apk')
-run(tools/'zipalign','-c','-p','4',out/'word-rain-1.0.0.apk')
-apk=out/'word-rain-1.0.0.apk'
+run('java','-jar',tools/'lib'/'apksigner.jar','sign','--ks',args.keystore.resolve(),'--ks-key-alias','word-rain','--ks-pass','file:'+str(args.password_file.resolve()),'--out',apk,out/'aligned.apk')
+run('java','-jar',tools/'lib'/'apksigner.jar','verify','--verbose','--print-certs',apk)
+run(tools/'zipalign','-c','-p','4',apk)
 (out/'SHA256SUMS.txt').write_text(hashlib.sha256(apk.read_bytes()).hexdigest()+'  '+apk.name+'\n')
 print('Built:',apk)
