@@ -60,7 +60,7 @@ Scoring, word-progress and speed penalties still apply during shielding. The 2×
 
 ## Letter generation
 
-Normal ordinary letter drops use a 20% current-letter selection and a 5% following-letter selection; Hard uses 8% for each. The following-letter rule is skipped on the final letter. Remaining letters exclude those selected targets. When two consecutive letters are identical, both selections produce the same character. Letters remain fixed after spawning, and catching the following letter before it is needed counts as wrong.
+Ordinary letter opportunities use balanced, evenly spaced selections: Normal 20% current / 5% following letter, Hard 8% / 8%. The following-letter rule is skipped on the final letter. If that target character is already falling above the catcher line, that opportunity becomes a distractor rather than another copy; there is no backlog or catch-up swarm. Thus actual target frequency may be lower while a copy is still on screen. Existing printed letters never change. All drops share a fixed cadence (about 1.27 seconds) and the same falling speed at a given speed multiplier. The cadence preserves the original initial average density after the 35% letter-density and 50% hazard reductions; elapsed time no longer silently increases density. Hazards, pickups and target opportunities use smooth weighted scheduling. Spawn positions cover all six lanes in shuffled rounds.
 
 Letter drop density is reduced by 35% relative to the initial spawning schedule; × drops are reduced by 50%. Shields and wildcards share non-× drop opportunities. The spawning interval gradually decreases during a run.
 
@@ -135,3 +135,8 @@ All three tracks work offline in the APK. App identity, signing key, saved score
 The same release also offers **word-rain-1.3.4-lite.apk** and a lightweight HTML download. These omit the two bundled Kevin MacLeod recordings while keeping Pocket Forecast, all sound effects and mobile local-music importing. No external music files are needed.
 
 Full and Lite APKs share the same app identity, signing key and storage. They replace one another rather than installing side by side; installing over the existing app preserves scores, word statistics, settings and unlocks. A bundled-track preference falls back safely to Pocket Forecast in Lite. Do not uninstall first. The full soundtrack edition remains available.
+
+
+## Uniform spawning (1.3.5)
+
+Replaces skipped spawn attempts and independent target rolls with a fixed drop interval and smooth weighted distribution. Target letters cannot duplicate while an earlier copy is still falling above the catcher line. Drops fall at one shared speed, so faster drops cannot overtake slower ones. Perfect-streak speed changes still apply; word, shield, scoring and save rules remain unchanged. Both full and Lite APKs use version code 15 and preserve existing records when installed over the previous version.

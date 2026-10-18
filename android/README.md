@@ -64,3 +64,6 @@ A local-only WebView resource handler serves exactly those two bundled MP3 paths
 Add `--lite` to the normal build command. Output goes to `android/build-lite/word-rain-1.3.4-lite.apk` with `SHA256SUMS-lite.txt`, leaving the full build untouched. The shared-source transform in variants.py removes the bundled-track catalog entries/options/credits; no MP3 assets are packaged. Generated Pocket Forecast, SFX, local importing, vibration and saved records stay available.
 
 Full and Lite use the same app ID, signing key and versionCode and can replace one another in place. They cannot be installed side by side. Install over the existing app to keep data.
+
+
+1.3.5 (version code 15) uses uniform spawning in both full and Lite builds. App identity, signing key, origin and storage keys remain unchanged. Install over the existing app to preserve records.
