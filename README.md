@@ -6,6 +6,10 @@ A browser arcade game: catch letters, spell words, and survive with shields and 
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS, and JavaScript, with no external dependencies or build step.
 
+## Android app
+
+[Download the offline Android APK](https://github.com/octopuskid/word-rain/releases/tag/v1.0.0) (Android 8.0+). The game is bundled inside the app and works without internet access. See [Android source and build instructions](android/README.md).
+
 ## Play
 
 Download `index.html` and open it in a modern browser. The game works offline.
