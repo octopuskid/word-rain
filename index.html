@@ -17,13 +17,32 @@ let canvasPalette;
 function applyTheme(theme){document.documentElement.dataset.theme=theme;const light=theme==='light';$('theme-toggle').textContent=light?'☾ Dark':'☀ Light';$('theme-toggle').setAttribute('aria-pressed',String(light));document.querySelector('meta[name="theme-color"]').content=light?'#f3f7f5':'#101c28';const styles=getComputedStyle(document.documentElement);canvasPalette={grid:styles.getPropertyValue('--grid').trim(),rain:styles.getPropertyValue('--rain').trim(),ground:styles.getPropertyValue('--ground').trim()};}
 applyTheme(document.documentElement.dataset.theme);
 $('theme-toggle').onclick=()=>{const theme=document.documentElement.dataset.theme==='light'?'dark':'light';applyTheme(theme);try{localStorage.setItem('word-rain-theme',theme)}catch(_){}};
+// Detect phones independently of the current viewport (including landscape phones).
+function isPhoneClient(){
+ const ua=navigator.userAgent||'';
+ if(/iPhone|iPod/i.test(ua))return true;
+ if(/iPad/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1))return false;
+ if(/Android/i.test(ua))return /Mobile/i.test(ua);
+ if(navigator.userAgentData&&typeof navigator.userAgentData.mobile==='boolean')return navigator.userAgentData.mobile;
+ const shortSide=Math.min(screen.width||0,screen.height||0);
+ return window.matchMedia('(pointer: coarse)').matches&&shortSide>0&&shortSide<=600;
+}
+const preferredOrientation=isPhoneClient()?'portrait':'landscape';
+document.documentElement.dataset.device=preferredOrientation==='portrait'?'phone':'large';
+async function applyPreferredOrientation(){
+ // Orientation locks need fullscreen on many browsers; unsupported locks are harmless.
+ try{if(screen.orientation&&typeof screen.orientation.lock==='function')await screen.orientation.lock(preferredOrientation);}catch(_){}
+}
+document.addEventListener('fullscreenchange',applyPreferredOrientation);
+window.addEventListener('pageshow',applyPreferredOrientation);
+applyPreferredOrientation();
 const words=['PUNS','RAIN','WORD','PLAY','STAR','MOON','PUNNY','CLOUD','RAINY','WORDS','HAPPY','GAMES','CATCH','LETTER','PUZZLE','BASKET','SUNSET','PLANET','RIDDLE','RAINBOW','WHISPER','CATCHER','THUNDER','SPARKLE','JOURNEY'];
 function shuffleWords(previous){for(let i=words.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[words[i],words[j]]=[words[j],words[i]]}if(words[0]===previous){[words[0],words[1]]=[words[1],words[0]]}}
 let state='ready',score=0,lives=3,x=240,target=240,items=[],particles=[],spawn=0,elapsed=0,progress=0,wordIndex=0,last=0,invulnerable=0,wrongStreak=0,scoringPaused=false,speedMultiplier=1,perfectWords=0,wordPerfect=true,wildcardUnlocked=false,shieldHealth=0,perfectRun=0;const keys=new Set();
 function hud(){ const speedPercent=Math.round(speedMultiplier*100);$('regen').textContent=(perfectRun%6)+' / 6 perfect words · Streak '+perfectRun;$('shield-value').textContent=shieldHealth+' / 2';$('shield-fill').style.width=(shieldHealth*50)+'%';$('shield-meter').setAttribute('aria-valuenow',shieldHealth);$('shield-meter').setAttribute('aria-valuetext',shieldHealth===2?'Full shield':shieldHealth===1?'Half shield':'No shield');$('pace').textContent=speedPercent+'%';$('speed-fill').style.width=((speedPercent-100)/120*100)+'%';$('speed-meter').setAttribute('aria-valuenow',speedPercent);$('speed-streak').textContent='Perfect words: '+perfectWords+' / 2'+(speedMultiplier>=2.2?' · Maximum speed':'');$('wildcard-status').textContent=wildcardUnlocked?'Mode active · Hearts are purple':'Mode inactive · Perfect one word to unlock';$('lives').classList.toggle('wildcard',wildcardUnlocked); $('score').textContent=score;$('lives').innerHTML=Array.from({length:3},(_,i)=>'<span aria-hidden="true"'+(i>=lives?' class="lost"':'')+'>'+(i<lives?'♥':'♡')+'</span>').join('');$('scoring').textContent=scoringPaused?'Scoring paused — catch '+words[wordIndex][progress]+' to resume.':'Wrong letters in a row: '+wrongStreak+' / 3';$('scoring').classList.toggle('penalty',scoringPaused);$('lives').setAttribute('aria-label',lives+' of 3 HP');$('word').innerHTML=words[wordIndex].split('').map((c,i)=>'<span style="'+(i<progress?'color:var(--accent)':i===progress?'color:var(--strong);border-bottom:3px solid var(--accent)':'color:var(--word-dim)')+'">'+c+'</span>').join(' '); }
 function checkGameOver(){if(lives===0){state='over';show('Rain check?','You scored '+score+' points. The clouds have plenty more puns.','Play again →')}}
 function show(title,message,label){$('title').textContent=title;$('message').textContent=message;$('start').textContent=label;$('overlay').hidden=false}
-function start(){if(state==='paused'){state='playing';$('overlay').hidden=true;$('pause').textContent='Ⅱ';return}score=0;lives=3;wrongStreak=0;scoringPaused=false;speedMultiplier=1;perfectWords=0;wordPerfect=true;wildcardUnlocked=false;shieldHealth=0;perfectRun=0;items=[];particles=[];elapsed=0;spawn=.4;progress=0;shuffleWords();wordIndex=0;invulnerable=0;x=target=240;keys.clear();state='playing';$('overlay').hidden=true;$('pause').textContent='Ⅱ';$('feedback').textContent='Catch '+words[wordIndex][progress]+' next.';hud()}
+function start(){applyPreferredOrientation();if(state==='paused'){state='playing';$('overlay').hidden=true;$('pause').textContent='Ⅱ';return}score=0;lives=3;wrongStreak=0;scoringPaused=false;speedMultiplier=1;perfectWords=0;wordPerfect=true;wildcardUnlocked=false;shieldHealth=0;perfectRun=0;items=[];particles=[];elapsed=0;spawn=.4;progress=0;shuffleWords();wordIndex=0;invulnerable=0;x=target=240;keys.clear();state='playing';$('overlay').hidden=true;$('pause').textContent='Ⅱ';$('feedback').textContent='Catch '+words[wordIndex][progress]+' next.';hud()}
 function pause(){if(state==='playing'){state='paused';keys.clear();$('pause').textContent='▶';show('A break in the clouds.','Your letters can wait.','Keep playing →')}else if(state==='paused')start()}
 function burst(px,py,color){for(let i=0;i<12;i++)particles.push({x:px,y:py,vx:(Math.random()-.5)*190,vy:(Math.random()-.5)*190,life:.5,color})}
 function randomLetter(){const word=words[wordIndex],correct=word[progress],next=word[progress+1],roll=Math.random();if(roll<.2)return correct;if(next&&roll<.25)return next;const others=Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ').filter(letter=>letter!==correct&&letter!==next).join('');return others[Math.floor(Math.random()*others.length)]}
