@@ -30,15 +30,15 @@ Download `index.html` and open it in a modern browser. The game works offline.
 
 A word is perfect if it is completed without a disqualifying catch during that word. Uncaught drops do not affect perfection. Shield exceptions are described below.
 
-- Every two consecutive perfect words increase falling speed by 20 percentage points, capped at 220% of normal.
-- Each wrong letter lowers speed by 5 percentage points; each caught × lowers it by 20 percentage points. Speed cannot fall below 100%.
+- Every two consecutive perfect words increase falling speed by 20 percentage points, capped at 220% in Normal or 280% in Hard. Hard starts at 160%.
+- Each wrong letter lowers speed by 5 percentage points; each caught × lowers it by 20 percentage points. Speed cannot fall below 100% in Normal or 160% in Hard.
 - Every six consecutive perfect words restore one heart, capped at three. Rewards at full health are skipped, not stored.
 
 ## Special blocks
 
 ### Purple ✦ wildcard
 
-One perfect word unlocks wildcard mode. Each non-× drop has a 1.5% chance of being a wildcard while the mode is active. A wildcard fills the next blank and behaves like a normal correct catch, including scoring-pause recovery. It preserves perfection. Hearts turn purple while this mode is active. Catching an unshielded wrong letter removes the mode; shielded wrong catches keep it, including the catch that breaks the shield. Another perfect word restores a lost mode.
+In Normal only, one perfect word unlocks wildcard mode. Hard has no wildcards. Each non-× drop has a 1.5% chance of being a wildcard while the mode is active. A wildcard fills the next blank and behaves like a normal correct catch, including scoring-pause recovery. It preserves perfection. Hearts turn purple while this mode is active. Catching an unshielded wrong letter removes the mode; shielded wrong catches keep it, including the catch that breaks the shield. Another perfect word restores a lost mode.
 
 ### Blue 🛡️ shield
 
@@ -47,7 +47,7 @@ Each non-× drop has a 3% chance of being a shield, without unlock conditions. P
 | Event | Result |
 | --- | --- |
 | Pick up a shield with no shield | Equip a full shield; no heart loss; preserve perfection |
-| Pick up a shield with a full shield | Lose two hearts; remove all shield; preserve perfection |
+| Pick up a shield with a full shield | Lose two hearts; Normal removes all shield, Hard retains half; preserve perfection |
 | Pick up a shield with a half shield | Lose one heart; remove all shield; preserve perfection |
 | Catch × with a full shield | Shield shatters; no heart loss; lose perfection |
 | Catch × with a half shield | Shield shatters; lose one heart; preserve perfection |
@@ -59,7 +59,7 @@ Scoring, word-progress and speed penalties still apply during shielding. Any wro
 
 ## Letter generation
 
-Ordinary letter drops use a 20% current-letter selection and a 5% following-letter selection. The following-letter rule is skipped on the final letter. Remaining letters exclude those selected targets. When two consecutive letters are identical, both selections produce the same character. Letters remain fixed after spawning, and catching the following letter before it is needed counts as wrong.
+Normal ordinary letter drops use a 20% current-letter selection and a 5% following-letter selection; Hard uses 8% for each. The following-letter rule is skipped on the final letter. Remaining letters exclude those selected targets. When two consecutive letters are identical, both selections produce the same character. Letters remain fixed after spawning, and catching the following letter before it is needed counts as wrong.
 
 Letter drop density is reduced by 35% relative to the initial spawning schedule; × drops are reduced by 50%. Shields and wildcards share non-× drop opportunities. The spawning interval gradually decreases during a run.
 
@@ -82,3 +82,7 @@ On Hard, six consecutive perfect word completions activate 2× scoring for subse
 Completing **RICK** in Classic / Normal clears all ordinary drops and starts the mixed-case sequence `d Q w 4 w 9 W g X c Q`. Symbols fall individually. All eleven must be caught; an earlier miss still lets the sequence finish, and failure is reported only after the last symbol passes below the catcher line. Success unlocks the copper Rick palette, selectable under **Color theme**, and resumes the normal game. The challenge itself adds no points or word records; spelling the initial RICK target uses normal scoring. The unlock is saved locally and survives app updates and word-stat resets.
 
 **Give up** in the header pauses the run and asks for confirmation. Keep playing cancels; confirming ends the run without deleting records or unlocked themes. Stats still pauses automatically and requires manual resume on return, including during the Rick challenge.
+
+## Hard-mode update (v1.2.1)
+
+The word-set/difficulty/color-theme panel hides during active play and returns on pause, game over or the ready screen. Hard starts at 160% speed (minimum 160%, maximum 280%); Normal remains 100–220%. Hard regular-letter rolls use 8% current letter and 8% following letter, with the latter skipped at the final blank. Hard has no wildcard unlocks or drops. In Hard, a full-shield duplicate pickup costs two hearts and retains half a shield; a half-shield duplicate costs one heart and removes the shield. Normal shield-overload rules remain unchanged. The yellow 2× bonus and other mechanics are retained.

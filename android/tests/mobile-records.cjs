@@ -111,3 +111,17 @@ for(const source of [webScripts,scripts]){
 }
 const statsEgg=session();statsEgg.run('start();beginRickChallenge()');statsEgg.el('mobile-stats-tab').onclick();assert.equal(statsEgg.run('state'),'paused');assert.equal(statsEgg.el('give-up').hidden,true);statsEgg.el('mobile-game-tab').onclick();assert.equal(statsEgg.run('state'),'paused');statsEgg.el('pause').onclick();assert.equal(statsEgg.run('state'),'playing');assert(statsEgg.run('Boolean(rickChallenge)'));
 console.log('PASS: Rick exact sequence, screen clearing, success/unlock persistence, delayed first/middle/final misses, no challenge score; shield overload/purple preservation, 1.5% wildcard rolls, yellow bonus word, Give Up and Stats challenge pause.');
+
+for(const source of [webScripts,scripts]){
+ const t=session({},false,source);assert.equal(t.el('game-options').hidden,false);t.el('difficulty').value='hard';t.el('apply-settings').onclick();assert.equal(t.el('game-options').hidden,true);assert.equal(t.run('speedMultiplier'),1.6);t.run('pause()');assert.equal(t.el('game-options').hidden,false);t.run('start()');assert(t.el('game-options').hidden);
+ for(let n=0;n<14;n++)complete(t);assert.equal(t.run('speedMultiplier'),2.8);assert(!t.run('wildcardUnlocked'));assert.equal(t.el('speed-meter').attributes['aria-valuemax'],'280');assert.equal(t.el('speed-fill').style.width,'100%');
+ t.run('setSpeed(0);hud()');assert.equal(t.run('speedMultiplier'),1.6);assert.equal(t.el('speed-meter').attributes['aria-valuemin'],'160');assert.equal(t.el('speed-fill').style.width,'0%');
+ t.run("words.splice(0,words.length,'LETTER','RHYTHM');wordIndex=0;progress=0");
+ const odds=t.run(`(()=>{const old=Math.random;let current=0,next=0;try{for(let i=0;i<1000;i++){let first=true;Math.random=()=>{if(first){first=false;return (i+.5)/1000;}return .5;};const c=randomLetter();if(c==='L')current++;if(c==='E')next++;}}finally{Math.random=old;}return {current,next};})()`);assert.equal(odds.current,80);assert.equal(odds.next,80);
+ t.run('progress=5');const lastOdds=t.run(`(()=>{const old=Math.random;let count=0;try{for(let i=0;i<1000;i++){let first=true;Math.random=()=>{if(first){first=false;return (i+.5)/1000;}return .5;};if(randomLetter()==='R')count++;}}finally{Math.random=old;}return count;})()`);assert.equal(lastOdds,80);
+ for(const [health,remaining,hp] of [[0,2,3],[1,0,2],[2,1,1]]){t.run('lives=3;shieldHealth='+health);catchItem(t,{shield:true});assert.equal(t.run('lives'),hp);assert.equal(t.run('shieldHealth'),remaining);}
+ const noWild=t.run(`(()=>{const old=Math.random;try{const draws=[.9,0,.04,.5,.5,.5,.5];Math.random=()=>draws.shift()??.5;items=[];wildcardUnlocked=true;spawnDrop();return items[0].wild;}finally{Math.random=old;}})()`);assert.equal(noWild,false,'no hard wildcard drop even if flag was stale');
+ t.run('lives=1;shieldHealth=2');catchItem(t,{shield:true});assert.equal(t.run('state'),'over');assert.equal(t.el('game-options').hidden,false,'game over restores settings');
+ t.el('difficulty').value='normal';t.el('apply-settings').onclick();assert.equal(t.run('speedMultiplier'),1);t.run('setSpeed(99)');assert.equal(t.run('speedMultiplier'),2.2);
+}
+console.log('PASS: active/paused/over settings visibility; Hard 160–280% speed, 8% + 8% letter odds, last-letter exception, no wildcards, full/half duplicate shield rules; Normal preserved.');
