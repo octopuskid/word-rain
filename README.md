@@ -2,7 +2,7 @@
 
 A browser arcade game: catch letters, spell words, and survive with shields and wildcards.
 
-**[Play the demo](https://octopuskid.github.io/word-rain/)**
+**[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)**
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS, and JavaScript, with no external dependencies or build step.
 
