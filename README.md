@@ -21,7 +21,7 @@ The Android APK requires Android 8.0+ and bundles the game for offline play. **F
 The HTML edition uses a wide landscape playfield on PCs and tablets, with the target word and movement controls beside it on wider screens. Phones keep the portrait playfield and finger-drag controls. Narrow computer windows stack the target panel below the wide board. Falling speed, spawn timing, scoring, saved settings and unlocks are unchanged. This layout update does not change the APK releases.
 
 
-- Drag across the play area to move the basket. Browser players can also use the on-screen arrows; keyboard players can use the left/right arrow keys.
+- Click and drag across the play area with your mouse to move the basket (finger-drag on phones). On PC, you can also hold ← / → or A / D, or hold the on-screen arrow buttons. Mouse hover alone does not move the basket.
 - Catch the highlighted letter to spell the target word in order. A wrong letter resets progress on that word.
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
