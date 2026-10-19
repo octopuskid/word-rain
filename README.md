@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.2**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.3**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -31,7 +31,7 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 
 
 - Click and drag across the play area with your mouse to move the basket (finger-drag on phones). On PC, you can also hold ← / → or A / D, or hold the on-screen arrow buttons. Mouse hover alone does not move the basket.
-- Catch the highlighted letter to spell the target word in order. An unshielded wrong letter resets progress on that word.
+- Catch the highlighted letter to spell the target word in order. An unshielded × costs one heart, breaks perfection and resets word progress. Wrong letters keep word progress; without a shield they still break perfection and remove purple mode.
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
@@ -118,8 +118,8 @@ Each actual non-× drop has a **3% chance of being a shield**, without unlock co
 | × with a full shield | Shield shatters; no heart loss | Broken |
 | × with a half shield | Shield shatters; lose one heart | Preserved |
 | Wrong letter with any shield | Consume half a shield and keep word progress, including the catch that shatters it | Preserved |
-| × without a shield | Lose one heart | Broken |
-| Wrong letter without a shield | No heart loss; reset word progress | Broken |
+| × without a shield | Lose one heart; reset word progress | Broken |
+| Wrong letter without a shield | No heart loss; keep word progress | Broken |
 
 Shielded wrong catches keep word progress and perfection, even when the shield shatters. Scoring rules and speed penalties still apply. Shield-pickup damage can end the game immediately.
 

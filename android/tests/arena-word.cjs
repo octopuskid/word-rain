@@ -7,7 +7,7 @@ for(const mode of ['normal','hard']){
  const t=session();t.el('difficulty').value=mode;t.el('apply-settings').onclick();mirror(t);
  t.run("words.splice(0,words.length,'RAIN','MOON');wordIndex=0;progress=0;hud()");mirror(t);
  catchBlock(t,'R');assert(t.el('arena-word').innerHTML.includes('color:var(--accent)'));
- catchBlock(t,'!');assert.equal(t.run('progress'),0);
+ catchBlock(t,'!');assert.equal(t.run('progress'),1);
  t.run('shieldHealth=2;doubleScore=true;perfectRun=6;hud()');mirror(t);assert(t.el('arena-word').classList.contains('bonus'));
  catchBlock(t,'!');assert(t.el('arena-word').classList.contains('bonus'),'protected catch retains yellow background word');
  t.run('shieldHealth=0');catchBlock(t,'!');assert(!t.el('arena-word').classList.contains('bonus'));

@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.5.3
+
+- Unshielded × catches now reset word progress, as well as losing one heart and breaking perfection.
+- Unshielded wrong-letter catches now keep word progress; perfection and purple mode still end. Shielded catches, scoring pauses and speed penalties are unchanged.
+- Updated in-game instructions and the GitHub/itch.io How to play. Full and Lite HTML/APKs share the change; saved data and signing identity are preserved.
+
 ## 1.5.2
 
 - Make the existing wrong-letter sound clearer on small speakers with higher-pitched descending tones and a stronger attack.

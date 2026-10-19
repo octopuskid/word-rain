@@ -33,7 +33,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.5.2.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.5.3.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
@@ -89,3 +89,5 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 1.5.1 (version code 26) preserves word progress as well as perfection when a wrong-letter catch consumes half a shield, including the catch that shatters it. Scoring and speed penalties still apply. Run `node android/tests/shield-progress-151.cjs` against Full and Lite build assets. App identity, signing key and storage keys are unchanged.
 
 1.5.2 (version code 27) makes the existing wrong-letter SFX a clearer, higher-pitched descending two-tone cue. It applies to every wrong-letter catch, including shielded and scoring-paused catches, and respects SFX mute independently of BGM. Verify with `node android/tests/wrong-sound-152.cjs` against both build assets. App identity, signing key and saved data keys are unchanged.
+
+1.5.3 (version code 28): unshielded × catches lose one heart, break perfection and reset word progress. Unshielded wrong letters keep progress but still break perfection and purple mode. Shield rules, scoring and speed penalties are unchanged. App identity, signing certificate and storage keys are preserved.

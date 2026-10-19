@@ -8,7 +8,7 @@ for(const source of [web,scripts])for(const mode of ['normal','hard'])for(const 
  const speed=t.run('speedMultiplier');
  function wrong(){t.run('spawn=99;x=target=240;items=[{x:240,y:460,speed:0,bomb:false,wild:false,shield:false,letter:"!"}];update(0)')}
  wrong();assert.equal(t.run('tones[0].frequency.value'),620);assert.equal(t.run('tones[1].frequency.value'),390);assert(t.run('tones[0].type==="triangle"&&tones[1].type==="triangle"'));assert(t.run('tones[1].started>tones[0].started'));assert(t.run('tones[1].stopped>.25'));assert.equal(t.run('sfxGain.gain.value'),.22,'SFX independent of disabled BGM');
- assert.equal(t.run('shieldHealth'),Math.max(0,health-1));assert.equal(t.run('progress'),health?1:0);assert.equal(t.run('wordPerfect'),!!health);assert.equal(t.run('scoringPaused'),streak>=2);
+ assert.equal(t.run('shieldHealth'),Math.max(0,health-1));assert.equal(t.run('progress'),1);assert.equal(t.run('wordPerfect'),!!health);assert.equal(t.run('scoringPaused'),streak>=2);
  t.el('sfx-toggle').onclick();const count=t.run('tones.length');wrong();assert.equal(t.run('tones.length'),count,'muted wrong catches schedule no tones');
 }
 const signal=session();signal.run("var attack;audioPrefs.sfx=true;audioContext={state:'running',currentTime:0,createOscillator(){return {frequency:{},connect(){},start(){},stop(){}}},createGain(){return {gain:{setValueAtTime(){},linearRampToValueAtTime(v){attack=v},exponentialRampToValueAtTime(){}},connect(){}}}};sfxGain={};sound('wrong')");assert.equal(signal.run('attack'),.70,'wrong cue has stronger attack');signal.run("sound('correct')");assert.equal(signal.run('attack'),.45,'other cue levels unchanged');

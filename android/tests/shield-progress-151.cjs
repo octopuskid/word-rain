@@ -14,7 +14,7 @@ for(const source of [web,scripts])for(const mode of ['normal','hard']){
   for(let i=progress;i<4;i++)catchLetter(t,'RAIN'[i]);assert.equal(t.run('words[wordIndex]'),'MOON');assert.equal(t.run('perfectRun'),7);
   if(source===scripts)assert.equal(t.run('mobileRecords.words.RAIN.perfect'),1);
  }
- const shattered=boot(mode,source);shattered.run('shieldHealth=1;progress=2;wildcardUnlocked=true');catchLetter(shattered,'Z');assert.equal(shattered.run('progress'),2);assert(shattered.run('wordPerfect'));catchLetter(shattered,'Z');assert.equal(shattered.run('progress'),0);assert(!shattered.run('wordPerfect'));assert(!shattered.run('wildcardUnlocked'));
+ const shattered=boot(mode,source);shattered.run('shieldHealth=1;progress=2;wildcardUnlocked=true');catchLetter(shattered,'Z');assert.equal(shattered.run('progress'),2);assert(shattered.run('wordPerfect'));catchLetter(shattered,'Z');assert.equal(shattered.run('progress'),2);assert(!shattered.run('wordPerfect'));assert(!shattered.run('wildcardUnlocked'));
  const imperfect=boot(mode,source);imperfect.run('shieldHealth=2;progress=2;wordPerfect=false');catchLetter(imperfect,'Z');assert.equal(imperfect.run('progress'),2);assert(!imperfect.run('wordPerfect'),'shield does not restore previously lost perfection');
  const paused=boot(mode,source);paused.run('shieldHealth=1;progress=2;wrongStreak=2');catchLetter(paused,'Z');assert(paused.run('scoringPaused'));assert.equal(paused.run('score'),0);assert.equal(paused.run('progress'),2);catchLetter(paused,'I');assert.equal(paused.run('progress'),3);assert.equal(paused.run('score'),0);assert(!paused.run('scoringPaused'));
 }
