@@ -4,6 +4,12 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
+## Watch how it was made
+
+[**I let an AI develop and promote a game. Here's how.**](https://www.youtube.com/watch?v=6qs_zLBvUO4)
+
+A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
+
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.2**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
