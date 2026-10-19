@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.0**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.1**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -25,7 +25,7 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 
 
 - Click and drag across the play area with your mouse to move the basket (finger-drag on phones). On PC, you can also hold ← / → or A / D, or hold the on-screen arrow buttons. Mouse hover alone does not move the basket.
-- Catch the highlighted letter to spell the target word in order. A wrong letter resets progress on that word.
+- Catch the highlighted letter to spell the target word in order. An unshielded wrong letter resets progress on that word.
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
@@ -111,11 +111,11 @@ Each actual non-× drop has a **3% chance of being a shield**, without unlock co
 | Shield with a half shield equipped | Lose one heart; remove all shield | Preserved |
 | × with a full shield | Shield shatters; no heart loss | Broken |
 | × with a half shield | Shield shatters; lose one heart | Preserved |
-| Wrong letter with any shield | Consume half a shield, including the catch that shatters it | Preserved |
+| Wrong letter with any shield | Consume half a shield and keep word progress, including the catch that shatters it | Preserved |
 | × without a shield | Lose one heart | Broken |
 | Wrong letter without a shield | No heart loss; reset word progress | Broken |
 
-Word-progress resets, scoring rules and speed penalties still apply to shielded wrong catches. Shield-pickup damage can end the game immediately.
+Shielded wrong catches keep word progress and perfection, even when the shield shatters. Scoring rules and speed penalties still apply. Shield-pickup damage can end the game immediately.
 
 ### Rick challenge
 

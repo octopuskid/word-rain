@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.5.1
+
+- Shielded wrong-letter catches consume half a shield while keeping word progress and perfection, including the catch that shatters the shield.
+- Keep existing wrong-letter scoring, scoring-pause and speed penalties. Unshielded mistakes still reset word progress.
+- Clarify the current How to play and shield table; preserve saved player data across in-place updates.
+
 ## 1.5.0
 
 - Resolve overlapping letters/hazards/shields/wildcards while preserving random wave spawning. Two letters create a wildcard outside purple mode as well; wildcard + × fills one blank immediately; two wildcards perfect the current word immediately.
