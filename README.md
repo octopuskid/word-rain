@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.6**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.7**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -17,6 +17,9 @@ The Android APK requires Android 8.0+ and bundles the game for offline play. **F
 ## How to play
 
 ### Controls and word sets
+
+The current word appears faintly inside the falling-letter playfield, behind the drops. Completed letters show your progress; the underlined letter is the next one to catch. The background stays synchronized after wrong catches, word completions and restarts, and turns yellow with the 2× perfect bonus. It follows the handwriting style and shows the mixed-case sequence during the Rick challenge. The separate target display remains available for a clearer view.
+
 
 The HTML edition uses a wide landscape playfield on PCs and tablets, with the target word and movement controls beside it on wider screens. Phones keep the portrait playfield and finger-drag controls. Narrow computer windows stack the target panel below the wide board. Falling speed, spawn timing, scoring, saved settings and unlocks are unchanged. PC landscape controls and the phone portrait layout are included in the shared source.
 

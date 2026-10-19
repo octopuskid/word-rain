@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.7
+
+- Display the current target word faintly inside the playfield, behind falling letters, so progress and the next underlined letter can be checked while watching drops.
+- Synchronize this display with correct/wrong catches, word changes, restarts, the 2× bonus and the Rick challenge, including handwriting themes.
+- Updated How to play on GitHub and itch.io. Gameplay/scoring values and saved data are unchanged.
+- Full and Lite APKs use version code 24 with the existing app identity and signing key.
+
 ## 1.4.6
 
 - Hard mode starts at 140% and caps at 260% (previously 160–280%). Speed penalties stop at the new 140% minimum.

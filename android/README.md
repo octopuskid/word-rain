@@ -81,3 +81,5 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 1.4.5 (version code 22) awards +2 for active-scoring wrong-letter catches in Hard, while Normal remains +1. The third consecutive wrong catch and recovery catch remain unscored. Legacy half-point best scores and all saved data are preserved.
 
 1.4.6 (version code 23) uses Hard speeds of 140–260% and current/following letter shares of 8% / 5%. App identity, signing certificate and storage keys remain unchanged.
+
+1.4.7 (version code 24) adds a synchronized faint target word behind the falling letters in Full and Lite. Existing scores, word stats, settings and unlocks are kept with in-place updates.
