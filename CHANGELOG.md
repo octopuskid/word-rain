@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.5.2
+
+- Make the existing wrong-letter sound clearer on small speakers with higher-pitched descending tones and a stronger attack.
+- Verify every wrong catch plays the cue with SFX enabled, including shielded catches, the third consecutive mistake and scoring-paused catches; SFX mute and independent BGM controls remain respected.
+- Update How to play and preserve player data in Full/Lite in-place updates.
+
 ## 1.5.1
 
 - Shielded wrong-letter catches consume half a shield while keeping word progress and perfection, including the catch that shatters the shield.

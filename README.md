@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.1**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.2**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -129,7 +129,7 @@ Word sets and colors are independent. Choose Lime, Mint, Blue or Coral, plus lig
 
 The header keeps the theme, **BGM** and **SFX** switches in one row. Music is initially off and effects on; preferences are saved. Audio starts after a player gesture. Music follows active play and pauses with the game, Stats, game over or backgrounding.
 
-Both editions include the original generated tune **Pocket Forecast** and synthesized effects for catches, word completion/perfection, wildcard activation, speed increases, healing, heart loss and shield shattering. Perfect words play the perfect cue instead of the ordinary completion cue. Full also offers **Carefree** and **Monkeys Spinning Monkeys** by Kevin MacLeod. The built-in track choice is saved; an unavailable Full track falls back to Pocket Forecast in Lite.
+Both editions include the original generated tune **Pocket Forecast** and synthesized effects for catches, word completion/perfection, wildcard activation, speed increases, healing, heart loss and shield shattering. Wrong-letter catches play a distinct descending two-tone cue when **SFX is on**, including shielded mistakes, the third consecutive wrong catch and catches while scoring is paused. Its higher pitch and stronger attack help it stand out on phone speakers. SFX off mutes it; BGM can remain off independently. Perfect words play the perfect cue instead of the ordinary completion cue. Full also offers **Carefree** and **Monkeys Spinning Monkeys** by Kevin MacLeod. The built-in track choice is saved; an unavailable Full track falls back to Pocket Forecast in Lite.
 
 Phone players can use **Choose local BGM** below the rules to select an audio file up to 24 MB for the current session. Nothing is uploaded. Select it again after reopening, or use **Use original BGM** to restore Pocket Forecast. Codec support depends on the browser/WebView. Actual heart loss and shield shattering request vibration on supported phones, independently of SFX.
 
