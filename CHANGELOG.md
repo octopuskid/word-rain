@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.5
+
+- Hard mode awards +2 (previously +1.5) for wrong-letter catches while scoring is active. Normal remains +1; the third consecutive wrong catch and the recovery catch still award no letter points.
+- Correct-letter and word-completion scores retain the Hard 1.5× multiplier and 2× perfect bonus; wrong-letter points are never doubled.
+- Full and Lite APKs use version code 22 with the same app identity, signing certificate and storage keys; legacy fractional records are preserved.
+- Includes the PC landscape HTML layout, mouse dragging, arrow keys / A / D and on-screen arrow controls.
+
 ## 1.4.4
 
 - HTML-only follow-up: wide landscape field and side controls on PCs/tablets; portrait drag controls on phones. Existing APK releases are unchanged.

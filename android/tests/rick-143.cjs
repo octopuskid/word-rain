@@ -6,7 +6,7 @@ for(const level of ['normal','hard'])for(const set of ['classic','nature','space
  const t=session();assert(t.run("Object.values(wordSets).every(set=>!set.words.includes('RICK'))"));
  t.el('difficulty').value=level;t.el('word-set').value=set;t.el('apply-settings').onclick();t.run("words.splice(0,words.length,'PUNNY');wordIndex=0;progress=0");
  for(const letter of 'RIC'){catchBlock(t,{letter});assert(!t.run('rickChallenge'));}
- t.run('pause();start()');catchBlock(t,{letter:'K'});assert(t.run('Boolean(rickChallenge)'));assert.equal(t.run('rickInput'),'');assert.equal(t.run('progress'),0);assert.equal(t.run('score'),level==='hard'?3:2,'normal wrong catch scoring only');
+ t.run('pause();start()');catchBlock(t,{letter:'K'});assert(t.run('Boolean(rickChallenge)'));assert.equal(t.run('rickInput'),'');assert.equal(t.run('progress'),0);assert.equal(t.run('score'),level==='hard'?4:2,'normal wrong catch scoring only');
 }
 for(const interrupt of [{letter:'A'},{bomb:true},{shield:true},{wild:true}]){
  const t=session();t.run("start();words.splice(0,words.length,'PUNNY');wordIndex=0;progress=0");for(const letter of 'RI')catchBlock(t,{letter});catchBlock(t,interrupt);for(const letter of 'CK')catchBlock(t,{letter});assert(!t.run('rickChallenge'),'interrupted input must not trigger');

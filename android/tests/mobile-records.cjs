@@ -170,9 +170,21 @@ for(const source of [webScripts,scripts]){
  for(const health of [0,1,2]){t.run('lives=3;shieldHealth='+health);clear();catchItem(t,{bomb:true});assert.equal(t.run("cues.includes('loseHP')"),health!==2);assert.equal(t.run("cues.includes('shatter')"),health>0);assert.equal(t.run('buzz[0]'),health===2?'shield':health===1?'both':'hp');}
  t.run('lives=3;shieldHealth=1');clear();catchItem(t,{letter:'!'});has('wrong');has('shatter');assert.equal(t.run('buzz[0]'),'shield');
  t.run('lives=3;shieldHealth=2');clear();catchItem(t,{shield:true});has('shield');has('loseHP');has('shatter');assert.equal(t.run('buzz[0]'),'both');
- t.el('difficulty').value='hard';t.el('apply-settings').onclick();catchItem(t,{letter:'!'});assert.equal(t.run('score'),1.5);catchItem(t,{letter:'!'});assert.equal(t.run('score'),3);catchItem(t,{letter:'!'});assert.equal(t.run('score'),3);correct(t);assert.equal(t.run('score'),3,'recovery catch remains unscored in Hard');correct(t);assert.equal(t.run('score'),18);
+ t.el('difficulty').value='hard';t.el('apply-settings').onclick();catchItem(t,{letter:'!'});assert.equal(t.run('score'),2);catchItem(t,{letter:'!'});assert.equal(t.run('score'),4);catchItem(t,{letter:'!'});assert.equal(t.run('score'),4);correct(t);assert.equal(t.run('score'),4,'recovery catch remains unscored in Hard');correct(t);assert.equal(t.run('score'),19);
  if(source===scripts){t.run('score=1000.5;hud()');assert.equal(session(t.store).run('mobileRecords.highScore'),1000.5,'half-point best survives reload');}
 }
+// 1.4.5: wrong-letter points are fixed by mode, including protected bonus catches.
+for(const source of [scripts,webScripts])for(const mode of ['normal','hard'])for(const health of [0,1,2]){
+ const t=session({},false,source);t.el('difficulty').value=mode;t.el('apply-settings').onclick();
+ t.run('shieldHealth='+health+';doubleScore=true;perfectRun=6');
+ const expected=mode==='hard'?2:1;
+ catchItem(t,{letter:'!'});assert.equal(t.run('score'),expected,'fixed wrong points, no perfect doubling');
+ catchItem(t,{letter:'!'});assert.equal(t.run('score'),expected*2);
+ catchItem(t,{letter:'!'});assert.equal(t.run('score'),expected*2,'third wrong catch earns zero');
+ correct(t);assert.equal(t.run('score'),expected*2,'recovery catch earns zero');
+ correct(t);assert.equal(t.run('score'),expected*2+(mode==='hard'?15:10));
+}
+console.log('PASS 1.4.5: Normal +1 / Hard +2, shield and bonus exceptions, third wrong/recovery zero, subsequent correct scoring.');
 // Exercise actual synthesis/mixing/transport with a deterministic Web Audio stand-in.
 const music=session();music.run(`
 var audioNodes=[];
@@ -201,12 +213,14 @@ for(const source of [webScripts,scripts]){
  t.el('color-theme').value='nature';t.el('color-theme').onchange();assert.equal(t.run('colorTheme'),'space','paper keeps chosen palette');
  t.el('handwriting-mode').checked=false;t.el('handwriting-mode').onchange();assert.equal(t.el('color-theme').disabled,false);assert.equal(t.el('color-theme').value,'space');
  t.run("window.Audio=class {constructor(src){this.src=src;this.paused=true;}play(){this.paused=false;}pause(){this.paused=true;}removeAttribute(){}load(){}};start();score=42;progress=1;perfectRun=2;");
+ if(t.run("Object.hasOwn(musicTracks,'carefree')")){
  for(const id of ['carefree','monkeys']){
   t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('selectedTrack'),id);assert(t.run('customMusic.src').endsWith('.mp3'));assert.equal(t.run('musicSource'),null);
   assert.equal(t.run('score'),42);assert.equal(t.run('progress'),1);assert.equal(t.run('perfectRun'),2,'changing music does not alter play');
   const reload=session(t.store,false,source);assert.equal(reload.run('selectedTrack'),id,'track persists');assert(reload.el('music-status').textContent.includes('Kevin MacLeod'));
  }
  t.el('bgm-toggle').onclick();assert(!t.run('customMusic.paused'));t.run('pause()');assert(t.run('customMusic.paused'));t.run('start()');assert(!t.run('customMusic.paused'));
+ }else{assert.deepEqual(Array.from(t.run('Object.keys(musicTracks)')),['original'],'Lite keeps original music only');}
  t.run("loadCustomMusic('data:audio/mpeg;base64,AAAA')");assert.equal(t.run('selectedTrack'),'local');assert.equal(t.el('local-music-option').disabled,false);assert.equal(session(t.store,false,source).run('selectedTrack'),'original','local files are not saved');
  t.el('reset-music').onclick();assert.equal(t.run('selectedTrack'),'original');assert.equal(t.run('customMusic'),null);
  const invalid=session({'word-rain-audio-v1':JSON.stringify({bgm:false,sfx:true,track:'__proto__'})},false,source);assert.equal(invalid.run('selectedTrack'),'original','saved track is whitelisted');

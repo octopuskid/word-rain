@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.4**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.5**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -18,7 +18,7 @@ The Android APK requires Android 8.0+ and bundles the game for offline play. **F
 
 ### Controls and word sets
 
-The HTML edition uses a wide landscape playfield on PCs and tablets, with the target word and movement controls beside it on wider screens. Phones keep the portrait playfield and finger-drag controls. Narrow computer windows stack the target panel below the wide board. Falling speed, spawn timing, scoring, saved settings and unlocks are unchanged. This layout update does not change the APK releases.
+The HTML edition uses a wide landscape playfield on PCs and tablets, with the target word and movement controls beside it on wider screens. Phones keep the portrait playfield and finger-drag controls. Narrow computer windows stack the target panel below the wide board. Falling speed, spawn timing, scoring, saved settings and unlocks are unchanged. PC landscape controls and the phone portrait layout are included in the shared source.
 
 
 - Click and drag across the play area with your mouse to move the basket (finger-drag on phones). On PC, you can also hold ← / → or A / D, or hold the on-screen arrow buttons. Mouse hover alone does not move the basket.
@@ -36,9 +36,9 @@ Open **Word set & difficulty** while ready, paused or finished to choose Classic
 | Completed word | +50 | +75 |
 | Correct letter with the 2× perfect bonus | +20 | +30 |
 | Completed word with the 2× perfect bonus | +100 | +150 |
-| Wrong letter while scoring is active | +1 | +1.5 |
+| Wrong letter while scoring is active | +1 | +2 |
 
-Hard awards 1.5× Normal points, including half-points. Wrong-letter points never receive the 2× perfect bonus. After three consecutive wrong letters, scoring pauses: the third wrong catch earns nothing. The next correct letter or wildcard clears the pause without awarding letter points; subsequent catches score normally.
+Hard awards 1.5× Normal points for correct letters and word completions. Active-scoring wrong-letter catches award +2 in Hard (+1 in Normal); these points never receive the 2× perfect bonus. Existing saved scores, including legacy half-points, are preserved. After three consecutive wrong letters, scoring pauses: the third wrong catch earns nothing. The next correct letter or wildcard clears the pause without awarding letter points; subsequent catches score normally.
 
 Start with three hearts. Reaching zero ends the game. The shield table below explains heart loss and protection.
 
