@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.4.6
+
+- Hard mode starts at 140% and caps at 260% (previously 160–280%). Speed penalties stop at the new 140% minimum.
+- Hard ordinary-letter opportunities are 8% current target and 5% following target (previously 8% following). The final-letter exception is retained.
+- Updated in-game settings/rules and the current How to play instructions on GitHub and itch.io. Normal mode is unchanged.
+- Full and Lite APKs use version code 23; install over the existing app to preserve all records, settings and unlocks.
+
 ## 1.4.5
 
 - Hard mode awards +2 (previously +1.5) for wrong-letter catches while scoring is active. Normal remains +1; the third consecutive wrong catch and the recovery catch still award no letter points.
