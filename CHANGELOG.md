@@ -2,6 +2,14 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.5.0
+
+- Resolve overlapping letters/hazards/shields/wildcards while preserving random wave spawning. Two letters create a wildcard outside purple mode as well; wildcard + × fills one blank immediately; two wildcards perfect the current word immediately.
+- Perfect words unlock purple mode in Normal and Hard. Random wildcard chances while unlocked are now 1% and 0.5% per non-× drop respectively.
+- Reuse ordinary scoring, scoring-pause recovery, completion, perfect streaks, healing and mobile-record paths for automatic rewards.
+- Update current How to play on GitHub, itch.io and in the HTML. Add “Available on both mobile & PC” first on itch.io and put both phone screenshots ahead of PC captures.
+- Full/Lite APK version code 25, same identity, signing certificate and storage keys; install over the previous app to preserve data.
+
 ## 1.4.7
 
 - Display the current target word faintly inside the playfield, behind falling letters, so progress and the next underlined letter can be checked while watching drops.

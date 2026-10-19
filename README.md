@@ -4,7 +4,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.4.7**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.0**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Run the game
 
@@ -62,7 +62,7 @@ A catch that breaks perfection resets the streak and ends the bonus. Shielded wr
 
 Every two consecutive perfect words increase falling speed by **20 percentage points**. Each wrong letter lowers it by **5 percentage points**; each caught × lowers it by **20 percentage points**, including shielded catches. Speed stays within the selected difficulty's limits.
 
-**Classic dropping is restored:** random hazards, skipped drop attempts and varied falling speeds create gaps, overlaps and occasional small groups. Each wave has one attempt normally, two attempts 15% of the time, or three attempts 3% of the time. Each attempt can still be skipped by the density reductions, so a wave can produce zero to three blocks. Several letters, including copies of a target character, may be on screen at once. Printed letters never change after spawning.
+**Classic dropping is restored:** random hazards, skipped drop attempts and varied falling speeds create gaps and occasional small groups; overlapping blocks now resolve using the rules below. Each wave has one attempt normally, two attempts 15% of the time, or three attempts 3% of the time. Each attempt can still be skipped by the density reductions, so a wave can produce zero to three blocks. Several letters, including copies of a target character, may be on screen at once. Printed letters never change after spawning.
 
 The wave interval decreases with active play time using the original schedule (`max(0.28, 0.77 − elapsed × 0.005)` seconds before frequency adjustments). Falling speeds also gradually increase with elapsed play time, up to the original cap, with a random speed offset per block. Ordinary falling speeds are scaled to **60% of the original classic pace** before the displayed multiplier is applied. The HUD still shows 100% at Normal’s starting speed; Hard’s 140% is 84% of the original 100% pace at the same elapsed time and random offset. This scaling does not change spawn intervals or the speed-linked frequency rule. The Rick sequence retains its separate fixed falling speed. Paused time does not advance the schedule. The Rick challenge retains its own sequence timing.
 
@@ -77,9 +77,28 @@ Only these letter selections use evenly spaced weighted scheduling; hazards, pic
 
 ### Purple ✦ wildcard
 
-Normal mode only: completing one perfect word unlocks wildcard mode, shown by purple hearts. While unlocked, each actual non-× drop has a **1.5% chance of being a wildcard**. Hard has no wildcard mode or drops.
+Completing one perfect word in **either Normal or Hard** unlocks wildcard mode, shown by purple hearts. While unlocked, each actual non-× drop has a **1% wildcard chance in Normal** or **0.5% in Hard**. Shields retain their separate 3% share. Collision-created wildcards work in both modes, regardless of whether purple mode is unlocked.
 
-A wildcard fills the next blank and behaves like a correct letter, including scoring-pause recovery; it preserves perfection. An unshielded wrong letter removes wildcard mode. Shielded wrong catches keep it, including the catch that shatters the shield. Another perfect word restores a lost mode.
+A caught wildcard fills the next blank and behaves like a correct letter, including scoring-pause recovery; it preserves the word’s current perfection status. An unshielded wrong letter removes wildcard mode. Shielded wrong catches keep it, including the catch that shatters the shield. Another perfect word restores a lost mode.
+
+### Overlapping blocks
+
+Random waves, positions and falling speeds remain. When two tile hitboxes overlap in the visible falling area above the catcher line, resolve them immediately; touching edges alone do not count. These rules run before basket catches and also handle chains of overlapping blocks.
+
+| Overlap | Result |
+| --- | --- |
+| Letter + letter | One purple wildcard, even outside wildcard mode |
+| Letter + × | Keep the letter; remove × |
+| × + × | One × |
+| Shield + any other kind | Remove the shield; keep the other block |
+| Shield + shield | One shield |
+| Wildcard + letter | Keep the wildcard; remove the letter |
+| Wildcard + × | Consume both; immediately fill the next blank as a correct catch |
+| Wildcard + wildcard | Consume both; immediately complete the current word as perfect |
+
+Merged blocks appear at the pair’s midpoint with their average falling speed. Removing a shield or hazard through overlap does not count as catching it and causes no heart loss, shield damage, speed penalty or perfection loss. A wildcard created by letters does not itself unlock purple mode; a perfect word does.
+
+Automatic letter fills use the same points, scoring-pause recovery and word-completion rules as caught wildcards. The one-letter reward preserves any earlier perfection failure. The whole-word reward restores perfection for the current word and awards the remaining correct-letter points and one completion bonus; already-filled letters are not scored again. If scoring is paused, the first automatic fill resumes it for zero letter points, and later fills score normally. The six-word bonus boundary, regeneration, speed rewards, mobile word statistics and saved best all follow the regular completion path. An already-broken streak is not restored retroactively. Automatic rewards interrupt manual R-I-C-K input; the Rick challenge itself does not use overlap rules.
 
 ### Blue 🛡️ shield
 

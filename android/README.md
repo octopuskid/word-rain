@@ -33,7 +33,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.3.4.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.5.0.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
@@ -83,3 +83,5 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 1.4.6 (version code 23) uses Hard speeds of 140–260% and current/following letter shares of 8% / 5%. App identity, signing certificate and storage keys remain unchanged.
 
 1.4.7 (version code 24) adds a synchronized faint target word behind the falling letters in Full and Lite. Existing scores, word stats, settings and unlocks are kept with in-place updates.
+
+1.5.0 (version code 25) adds falling-block overlap resolution and automatic wildcard rewards through the shared completion/statistics paths. Wildcard mode now works in both difficulties, with random wildcard chances of 1% Normal / 0.5% Hard. Collision-created wildcards do not require the mode. Run `node android/tests/overlap-150.cjs` against both build assets in addition to the existing tests. App identity, signing key, storage origin and keys are unchanged.
