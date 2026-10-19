@@ -4,6 +4,8 @@ Release history is listed newest first. These entries describe changes at the ti
 
 ## 1.4.4
 
+- HTML-only follow-up: wide landscape field and side controls on PCs/tablets; portrait drag controls on phones. Existing APK releases are unchanged.
+
 - Reduced ordinary falling speeds to 60% of the original classic pace while retaining the HUD’s 100% baseline and existing multipliers, caps and penalties.
 - Kept spawn timing, density rules and the Rick challenge’s separate speed unchanged.
 - Full and Lite APKs use version code 21 (fresh rebuild) and preserve existing records on in-place updates.
