@@ -10,21 +10,15 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. HTML version: **1.6.0** — **this ver is not verified**. Published on GitHub/GitHub Pages only at the author's request. Runtime and device testing are pending. itch.io and the latest Android APK remain on **1.5.3**. The next APK version will be **1.6.1**, not 1.6.0. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.1**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
 See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste iframe code, self-hosting steps, GitHub Pages setup and music credits.
 
-## HTML 1.6.0 — unverified
+## Stable and development releases
 
-**this ver is not verified**
-
-- [Play the GitHub Pages HTML](https://octopuskid.github.io/word-rain/)
-- [Full HTML 1.6.0](https://github.com/octopuskid/word-rain/blob/main/word-rain-1.6.0.html) — use Download raw file; the additional recordings require `assets/music/` beside the file.
-- [Lite HTML 1.6.0](https://github.com/octopuskid/word-rain/blob/main/word-rain-1.6.0-lite.html) — use Download raw file; self-contained original music and effects.
-
-No 1.6.0 APK is being released, and itch.io is intentionally unchanged. See [the release plan](RELEASE-PLAN.md) for the next Android build.
+Stable releases include Full and Lite HTML and APKs. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.1.1`, `1.6.1.2`. Development builds are marked unverified if runtime testing is unavailable.
 
 ## Run the game
 
@@ -36,7 +30,7 @@ The Android APK requires Android 8.0+ and bundles the game for offline play. **F
 
 ## How to play
 
-These are the **1.6.0 HTML preview rules**. The published itch.io game and Android 1.5.3 still use their [1.5.3 rules](https://github.com/octopuskid/word-rain/blob/v1.5.3/README.md#how-to-play). The Android changes prepared on `rebuild/1.6.0`, including hiding BGM/SFX on Word Stats, await the 1.6.1 APK.
+These rules apply to the 1.6.1 stable HTML and Android editions.
 
 ### Controls and word sets
 
@@ -55,7 +49,7 @@ Open **Word set & difficulty** while ready, paused or finished to choose Classic
 
 ### Optional Overcast challenge
 
-Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. Regular appearance uses a cloud texture; Handwriting paper uses sketched clouds. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
+Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. Regular appearance uses a seamless cloud texture; Handwriting paper uses sketched clouds. The rounded puffs wrap at both texture edges without rectangular backplates or flat cutoffs. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
 
 ### Score and hearts
 
@@ -176,3 +170,7 @@ The original handwriting font is embedded for offline use. Rebuild it with `pyth
 Game code, the original handwriting font, **Pocket Forecast** and synthesized effects: **MIT**, as in [LICENSE](LICENSE).
 
 **Carefree** and **Monkeys Spinning Monkeys** by **Kevin MacLeod (incompetech.com)** are separately licensed under **Creative Commons Attribution 4.0 International**. Full tracks are re-encoded to 80 kbps mono MP3 for package size and loop during play. See [MUSIC-LICENSES.md](MUSIC-LICENSES.md) for source links, attribution and conversion notices. No artist endorsement is implied.
+
+## Mobile icon
+
+The launcher was redrawn from the author’s sketch: a yellow hatched W tile, purple hatched wildcard tile and black basket on paper. Android uses a resolution-independent vector with a 1024-unit viewport. A matching 1024×1024 PNG is included with release downloads. Rebuild the vector/SVG with `python tools/build_launcher_icon.py`; the optional PNG export requires CairoSVG.

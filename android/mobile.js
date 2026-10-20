@@ -77,7 +77,7 @@ function selectMobileTab(tab){
  if(stats&&state==='playing')pause();
  keys.clear();
  $('mobile-game-panel').hidden=stats;$('mobile-stats-panel').hidden=!stats;
- $('pause').hidden=stats;$('give-up').hidden=stats;
+ for(const id of ['pause','give-up','bgm-toggle','sfx-toggle'])$(id).hidden=stats;
  for(const name of ['game','stats']){
   const selected=(name==='stats')===stats;const button=$('mobile-'+name+'-tab');
   button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;

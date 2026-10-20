@@ -11,3 +11,6 @@ header .give-up{font-size:11px;padding:10px 8px;min-height:44px}@media(max-width
 
 /* Keep theme, BGM and SFX switches together above the mobile game/stats. */
 header{display:block}header .header-actions{display:flex;flex-wrap:nowrap;justify-content:space-between;width:100%;margin-top:8px;gap:4px}header .header-actions button{font-size:11px;padding:10px 7px;min-width:0}header .header-actions .theme-toggle{flex:1}header .header-actions .give-up{padding:10px 7px}
+
+/* Header flex styles must not override hidden controls on Word Stats. */
+header .header-actions button[hidden]{display:none!important}

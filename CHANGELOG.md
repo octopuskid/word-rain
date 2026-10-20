@@ -2,6 +2,14 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.1 — Stable
+
+- Fix Overcast texture seams and straight cutoffs with wrapping rounded cloud puffs in regular and handwriting styles. Keep the exact middle-half mask and clear upper/lower quarters; dialogs now explicitly sit above clouds.
+- Redraw the mobile launcher from the author’s W/wildcard/basket sketch. Replace the small block icon with a scalable 1024-unit vector and a matching 1024px PNG export.
+- Bring the 1.6.0 wrong-letter rules and Overcast option to Full/Lite Android. Hide BGM and SFX on Word Stats; returning to Game restores them and remains paused.
+- Preserve signing identity, app ID and saved data. Android version code 30; no 1.6.0 APK was released.
+- Update current How to play and document stable/dev numbering.
+
 ## 1.6.0 — HTML only, unverified
 
 - Rewrite wrong-letter handling from released 1.5.3: Normal resets on the third and subsequent consecutive unshielded mistakes; Hard resets on every unshielded wrong letter. Both break perfection. Shielded mistakes preserve progress and perfection.
