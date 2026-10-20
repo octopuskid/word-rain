@@ -12,7 +12,7 @@ def mobile_html(source: str) -> str:
     assert marker in source
     source=source.replace(marker,'<div class="mobile-high-score"><span>PERSONAL BEST</span><strong id="high-score">0</strong></div>'+marker,1)
     panel='''</div><section class="mobile-panel" id="mobile-stats-panel" role="tabpanel" aria-labelledby="mobile-stats-tab" hidden>
-<h2>Word stats</h2><p class="mobile-stats-intro">Your words, across all games on this device. A word is met each time it becomes the target, including the first word of a new game. Restarting the same word after a wrong catch does not add an encounter.</p>
+<h2>Word stats</h2><p class="mobile-stats-intro">Your words, across all games on this device. A word is met each time it becomes the target, including the first word of a new game. Resetting progress on the same word does not add an encounter.</p>
 <div class="mobile-stats-summary" id="word-stats-summary">0 different words · 0 encounters · 0 perfect completions</div>
 <table class="word-stats-table"><caption>Perfect counts follow the game's shield and hazard rules.</caption><thead><tr><th scope="col">Word</th><th scope="col">Met</th><th scope="col">Perfect</th></tr></thead><tbody id="word-stats-body"></tbody></table>
 <div class="mobile-reset"><button type="button" id="reset-stats">Reset word stats</button>
