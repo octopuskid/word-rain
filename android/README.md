@@ -3,7 +3,7 @@
 Offline Android wrapper for the HTML game in the repository root. Android 8.0 (API 26) or newer and an up-to-date Android System WebView are required.
 
 - The APK embeds the game and MIT license. It does not fetch the game from a website.
-- Only the normal VIBRATE permission is requested, for HP-loss and shield-shatter feedback. No INTERNET or storage permission is requested.
+- VIBRATE supports haptics. INTERNET and ACCESS_NETWORK_STATE support native stable-release checks over Wi-Fi/mobile data while open. No storage permission is requested.
 - JavaScript and local theme storage are enabled; file/content access and network loads are disabled. A narrow JavaScript bridge exposes only vibration and the player-initiated audio document picker. Only bundled game content is loaded; external pages cannot run in this WebView.
 - Phones (smallest width below 600dp) request sensor portrait; larger devices request sensor landscape. Android may override orientation requests in multitasking or on large screens.
 - Move the basket by dragging across the play area. The Android UI hides the left/right buttons and shows a touch-specific tip; attached-keyboard controls remain available.
@@ -43,7 +43,7 @@ After building, run `node android/tests/mobile-records.cjs` (Node.js required). 
 
 ## Validation and limitations
 
-Release checks verify compilation, APK signatures, ZIP alignment, embedded game bytes, launch Activity, SDK versions, and VIBRATE as the only declared permission. These checks do not replace testing on a real Android device. This first APK has not been tested on physical Android hardware or an Android emulator in the build environment.
+Release checks verify compilation, APK signatures, ZIP alignment, embedded game bytes, launch Activity, SDK versions, and the three declared normal permissions (VIBRATE, INTERNET, ACCESS_NETWORK_STATE). These checks do not replace testing on a real Android device. This first APK has not been tested on physical Android hardware or an Android emulator in the build environment.
 
 ## Audio in 1.3.2
 
@@ -57,7 +57,7 @@ MIT license, as in the repository root.
 
 Pocket Forecast remains the default. The music selector also offers Carefree and Monkeys Spinning Monkeys by Kevin MacLeod (incompetech.com), CC BY 4.0. Full credits, source URLs and conversion notices are in MUSIC-LICENSES.md and the in-game Music credits & licenses section. The two MP3 recordings are packaged under assets/music/ and are licensed separately from the MIT code.
 
-A local-only WebView resource handler serves exactly those two bundled MP3 paths under the app's existing HTTPS origin, including media byte-range responses. Network loads and file/content access remain disabled, with no internet/storage permission added. The picker and vibration bridge are unchanged. Audio codecs and haptics still need physical-device verification.
+A local-only WebView resource handler serves exactly those two bundled MP3 paths under the app's existing HTTPS origin, including media byte-range responses. Network loads and file/content access remain disabled, with no WebView network access or storage permission. The picker and vibration bridge are unchanged. Audio codecs and haptics still need physical-device verification.
 
 ## Lightweight edition
 
@@ -95,3 +95,9 @@ Full and Lite use the same app ID, signing key and versionCode and can replace o
 1.6.0 (version code 29) adds optional Overcast clouds with regular and handwriting textures, saved in the existing settings object. Normal unshielded wrong letters reset progress on the third consecutive mistake; Hard resets each time. Shields keep their protection. Storage keys, app identity and signing certificate are unchanged.
 
 1.6.1 (code 30) includes the mode-specific wrong-letter handling, saved Overcast option, seamless regular/handwriting cloud textures and hidden BGM/SFX controls on Stats. The launcher is a scalable 1024-unit vector redrawn from the author’s sketch. Regenerate with `python tools/build_launcher_icon.py`; CairoSVG also exports a 1024×1024 PNG. Signing identity and saved data keys stay unchanged.
+
+## 1.6.2 updates
+
+Version code 31. Large irregular layered cloud banks replace repeated puff stamps in both appearances. A native HTTPS checker observes validated default-network connectivity while the Activity is visible. It queries GitHub’s public latest stable release at most every six hours after success, or retries failed checks after five minutes. It excludes dev/prerelease/draft entries and requires both APK assets. A newer version pauses the game and offers the release page once per version. No automatic APK download/install, background service, analytics or player-data upload. WebView network loads remain blocked. INTERNET and ACCESS_NETWORK_STATE are normal permissions; no runtime permission dialog is required. GitHub sees the request’s IP address.
+
+UpdatePolicy.java is independently tested for numeric version ordering and dev-tag rejection. Physical connectivity changes, update dialogs and installation still require a real-device smoke test.

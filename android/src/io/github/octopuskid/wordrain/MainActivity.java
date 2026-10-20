@@ -1,6 +1,18 @@
 package io.github.octopuskid.wordrain;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
+import org.json.JSONArray;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -32,11 +44,126 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-/** Offline-only shell: all game code is bundled; no network or storage permissions; vibration uses its normal Android permission. */
+/** Bundled offline game. Native HTTPS checks public stable releases; WebView network stays blocked. */
 public final class MainActivity extends Activity {
     private WebView game;
     private static final int MUSIC_PICKER = 132;
     private boolean choosingMusic;
+    private final Handler updates = new Handler(Looper.getMainLooper());
+    private ConnectivityManager connectivity;
+    private ConnectivityManager.NetworkCallback networkCallback;
+    private boolean foreground, checkingUpdate;
+    private long lastAttempt = -300000L;
+    private static final long CHECK_INTERVAL = 6 * 60 * 60 * 1000L;
+    private final Runnable periodicUpdate = new Runnable() {
+        @Override public void run() { checkForUpdate(); }
+    };
+
+    @Override protected void onStart() {
+        super.onStart();
+        foreground = true;
+        connectivity = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override public void onCapabilitiesChanged(Network network, NetworkCapabilities capabilities) {
+                if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED))
+                    updates.post(new Runnable() { @Override public void run() { checkForUpdate(); }});
+            }
+        };
+        try { connectivity.registerDefaultNetworkCallback(networkCallback); }
+        catch (RuntimeException unavailable) { networkCallback = null; }
+        checkForUpdate();
+    }
+
+    @Override protected void onStop() {
+        foreground = false;
+        updates.removeCallbacks(periodicUpdate);
+        if (connectivity != null && networkCallback != null) {
+            try { connectivity.unregisterNetworkCallback(networkCallback); }
+            catch (RuntimeException unavailable) { /* Already unregistered. */ }
+        }
+        networkCallback = null;
+        super.onStop();
+    }
+
+    private void scheduleUpdate(long delay) {
+        updates.removeCallbacks(periodicUpdate);
+        if (foreground) updates.postDelayed(periodicUpdate, Math.max(1000L, delay));
+    }
+
+    private void checkForUpdate() {
+        if (!foreground || checkingUpdate || connectivity == null) return;
+        NetworkCapabilities caps = connectivity.getNetworkCapabilities(connectivity.getActiveNetwork());
+        if (caps == null || !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) return;
+        final SharedPreferences prefs = getSharedPreferences("release-check", MODE_PRIVATE);
+        long sinceSuccess = System.currentTimeMillis() - prefs.getLong("last-success", 0);
+        if (sinceSuccess >= 0 && sinceSuccess < CHECK_INTERVAL) {
+            scheduleUpdate(CHECK_INTERVAL - sinceSuccess); return;
+        }
+        long sinceAttempt = SystemClock.elapsedRealtime() - lastAttempt;
+        if (sinceAttempt < 300000L) { scheduleUpdate(300000L - sinceAttempt); return; }
+        lastAttempt = SystemClock.elapsedRealtime();
+        checkingUpdate = true;
+        new Thread(new Runnable() { @Override public void run() {
+            HttpsURLConnection connection = null;
+            boolean succeeded = false;
+            String found = null;
+            try {
+                connection = (HttpsURLConnection) new URL("https://api.github.com/repos/octopuskid/word-rain/releases/latest").openConnection();
+                connection.setConnectTimeout(8000); connection.setReadTimeout(8000);
+                connection.setInstanceFollowRedirects(false);
+                connection.setRequestProperty("Accept", "application/vnd.github+json");
+                connection.setRequestProperty("User-Agent", "WordRain-Android");
+                if (connection.getResponseCode() != 200) throw new java.io.IOException("Release unavailable");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                try (InputStream input = connection.getInputStream()) {
+                    byte[] buffer = new byte[4096]; int count;
+                    while ((count = input.read(buffer)) != -1) {
+                        if (bytes.size() + count > 256 * 1024) throw new java.io.IOException("Release too large");
+                        bytes.write(buffer, 0, count);
+                    }
+                }
+                JSONObject release = new JSONObject(new String(bytes.toByteArray(), StandardCharsets.UTF_8));
+                String tag = release.getString("tag_name");
+                String installed = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                if (!release.getBoolean("draft") && !release.getBoolean("prerelease") && UpdatePolicy.newer(tag, installed)) {
+                    String number = tag.replaceFirst("^v", "");
+                    JSONArray assets = release.getJSONArray("assets");
+                    // Ignore HTML-only releases even if someone marks one as Latest.
+                    boolean full = false, lite = false;
+                    for (int i = 0; i < assets.length(); i++) {
+                        String name = assets.getJSONObject(i).getString("name");
+                        full |= name.equals("word-rain-" + number + ".apk");
+                        lite |= name.equals("word-rain-" + number + "-lite.apk");
+                    }
+                    if (full && lite) found = tag;
+                }
+                succeeded = true;
+            } catch (Exception unavailable) { /* Offline, timeout, invalid response or API limit: keep playing. */ }
+            finally { if (connection != null) connection.disconnect(); }
+            final String version = found;
+            final boolean success = succeeded;
+            updates.post(new Runnable() { @Override public void run() {
+                checkingUpdate = false;
+                if (success) prefs.edit().putLong("last-success", System.currentTimeMillis()).apply();
+                scheduleUpdate(success ? CHECK_INTERVAL : 300000L);
+                if (version == null || !foreground || isFinishing() || isDestroyed() || game == null) return;
+                if (version.equals(prefs.getString("offered-version", ""))) return;
+                prefs.edit().putString("offered-version", version).apply();
+                game.evaluateJavascript("if(typeof state!=='undefined'&&state==='playing')pause();", null);
+                new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Word Rain " + version + " is available")
+                    .setMessage("Open GitHub to choose Full or Lite? Install over this app to keep your records. Downloading uses your Wi-Fi or mobile data. The game will stay paused.")
+                    .setNegativeButton("Later", null)
+                    .setPositiveButton("View update", new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) {
+                            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octopuskid/word-rain/releases/tag/" + version))); }
+                            catch (ActivityNotFoundException unavailable) { Toast.makeText(MainActivity.this, "No browser installed", Toast.LENGTH_SHORT).show(); }
+                        }
+                    }).show();
+            }});
+        }}, "WordRainUpdateCheck").start();
+    }
+
     public final class GameBridge {
         @JavascriptInterface public void haptic(String kind) {
             if (!"hp".equals(kind) && !"shield".equals(kind) && !"both".equals(kind)) return;
@@ -234,6 +361,7 @@ public final class MainActivity extends Activity {
     }
 
     @Override protected void onDestroy() {
+        updates.removeCallbacksAndMessages(null);
         if (game != null) { game.removeJavascriptInterface("WordRainNative"); game.stopLoading(); game.destroy(); game = null; }
         super.onDestroy();
     }

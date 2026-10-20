@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.1**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.2**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -18,7 +18,7 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 ## Stable and development releases
 
-Stable releases include Full and Lite HTML and APKs. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.1.1`, `1.6.1.2`. Development builds are marked unverified if runtime testing is unavailable.
+Stable releases include Full and Lite HTML and APKs. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.2.1`, `1.6.2.2`. Development builds are marked unverified if runtime testing is unavailable.
 
 ## Run the game
 
@@ -30,7 +30,7 @@ The Android APK requires Android 8.0+ and bundles the game for offline play. **F
 
 ## How to play
 
-These rules apply to the 1.6.1 stable HTML and Android editions.
+These rules apply to the 1.6.2 stable HTML and Android editions.
 
 ### Controls and word sets
 
@@ -47,9 +47,15 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 
 Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
 
+### Automatic Android update checks
+
+Full and Lite APKs check the public GitHub **latest stable release** while the app is open, when a validated Wi-Fi/mobile connection is available. Checks run at most once every six hours after success; temporary failures retry after five minutes while open. Reconnecting triggers a check when due. Nothing runs after the app is closed, and offline play is unchanged.
+
+Development tags, drafts, prereleases and releases without both APK editions are ignored. A newer stable version pauses the game and offers **View update** or **Later**, once per version. View update opens the GitHub release page in your browser; downloads and installation remain your choice. This small request sends no scores, word records, music, account credentials or device identifiers. GitHub receives the normal network request, including your IP address. Install the matching edition over the existing APK to retain records; do not uninstall first.
+
 ### Optional Overcast challenge
 
-Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. Regular appearance uses a seamless cloud texture; Handwriting paper uses sketched clouds. The rounded puffs wrap at both texture edges without rectangular backplates or flat cutoffs. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
+Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. Regular and Handwriting styles use one large cloud bank with irregular overlapping layers and scalloped outer edges, based on the creator’s sketch. It scales across the middle band instead of repeating small cloud stamps. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
 
 ### Score and hearts
 
@@ -163,7 +169,7 @@ Opening **Word Stats** pauses play and hides pause/resume, Give up, BGM and SFX.
 
 The shared game is in `index.html`; Android adds its records UI during packaging. There are no accounts, ads, analytics, tracking or databases. The browser stores appearance/audio settings and the Rick unlock locally; the APK also stores personal best and word records. Clearing app data or uninstalling removes device records.
 
-The original handwriting font is embedded for offline use. Rebuild it with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable asset. Reference photographs are not bundled or published. Android reads only audio selected through its document picker and requests neither storage nor internet permission; vibration uses its normal VIBRATE permission.
+The original handwriting font is embedded for offline use. Rebuild it with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable asset. Reference photographs are not bundled or published. Android reads only audio selected through its document picker; no storage permission is requested. INTERNET and ACCESS_NETWORK_STATE support the native update checker, and VIBRATE supports haptics. The bundled game WebView still blocks network loads.
 
 ## Credits and licenses
 

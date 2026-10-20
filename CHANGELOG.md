@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.2 — Stable
+
+- Redraw Overcast as one large cloud bank: irregular overlapping layers, scalloped boundaries and matching pencil contours, based on the creator’s new sketch. Remove the repeated stamped-cloud appearance.
+- Add native Android update checks when the open app has validated internet access. Limit successful checks to six hours, retry failures after five minutes while open, and offer newer stable releases once per version. Ignore development releases and require Full/Lite APK assets. Downloads remain player initiated.
+- Keep offline gameplay, blocked WebView networking, saved records, app identity and signing certificate. Add normal INTERNET and ACCESS_NETWORK_STATE permissions for the checker; no storage permission.
+- Full/Lite APK code 31. Update HTML, demo, itch.io and current How to play together.
+
 ## 1.6.1 — Stable
 
 - Fix Overcast texture seams and straight cutoffs with wrapping rounded cloud puffs in regular and handwriting styles. Keep the exact middle-half mask and clear upper/lower quarters; dialogs now explicitly sit above clouds.
