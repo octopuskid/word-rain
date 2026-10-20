@@ -2,6 +2,16 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.0 — HTML only, unverified
+
+- Rewrite wrong-letter handling from released 1.5.3: Normal resets on the third and subsequent consecutive unshielded mistakes; Hard resets on every unshielded wrong letter. Both break perfection. Shielded mistakes preserve progress and perfection.
+- Add optional saved Overcast checkbox. Clouds hide the middle half of the playfield with regular and handwriting textures; upper/lower quarters remain clear.
+- Hide BGM and SFX on Word Stats, restore on Game, and keep the game paused on return.
+- Add website embedding and hosting tutorial. Keep Android identity, signing setup and storage keys.
+- Published HTML on GitHub/GitHub Pages only by explicit request, with the notice **this ver is not verified**. Runtime/device tests have not been run for this rebuild.
+- No 1.6.0 APK. itch.io stays on 1.5.3. The next APK is planned as 1.6.1 once the user sends the next message and a working build environment is available.
+- The BGM/SFX hiding change on Word Stats is prepared on `rebuild/1.6.0`; it is not in a released APK yet.
+
 ## 1.5.3
 
 - Unshielded × catches now reset word progress, as well as losing one heart and breaking perfection.

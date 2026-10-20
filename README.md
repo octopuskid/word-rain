@@ -10,11 +10,21 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.3**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. HTML version: **1.6.0** — **this ver is not verified**. Published on GitHub/GitHub Pages only at the author's request. Runtime and device testing are pending. itch.io and the latest Android APK remain on **1.5.3**. The next APK version will be **1.6.1**, not 1.6.0. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
 See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste iframe code, self-hosting steps, GitHub Pages setup and music credits.
+
+## HTML 1.6.0 — unverified
+
+**this ver is not verified**
+
+- [Play the GitHub Pages HTML](https://octopuskid.github.io/word-rain/)
+- [Full HTML 1.6.0](https://github.com/octopuskid/word-rain/blob/main/word-rain-1.6.0.html) — use Download raw file; the additional recordings require `assets/music/` beside the file.
+- [Lite HTML 1.6.0](https://github.com/octopuskid/word-rain/blob/main/word-rain-1.6.0-lite.html) — use Download raw file; self-contained original music and effects.
+
+No 1.6.0 APK is being released, and itch.io is intentionally unchanged. See [the release plan](RELEASE-PLAN.md) for the next Android build.
 
 ## Run the game
 
@@ -26,6 +36,8 @@ The Android APK requires Android 8.0+ and bundles the game for offline play. **F
 
 ## How to play
 
+These are the **1.6.0 HTML preview rules**. The published itch.io game and Android 1.5.3 still use their [1.5.3 rules](https://github.com/octopuskid/word-rain/blob/v1.5.3/README.md#how-to-play). The Android changes prepared on `rebuild/1.6.0`, including hiding BGM/SFX on Word Stats, await the 1.6.1 APK.
+
 ### Controls and word sets
 
 The current word appears faintly inside the falling-letter playfield, behind the drops. Completed letters show your progress; the underlined letter is the next one to catch. The background stays synchronized after wrong catches, word completions and restarts, and turns yellow with the 2× perfect bonus. It follows the handwriting style and shows the mixed-case sequence during the Rick challenge. The separate target display remains available for a clearer view.
@@ -35,11 +47,15 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 
 
 - Click and drag across the play area with your mouse to move the basket (finger-drag on phones). On PC, you can also hold ← / → or A / D, or hold the on-screen arrow buttons. Mouse hover alone does not move the basket.
-- Catch the highlighted letter to spell the target word in order. An unshielded × costs one heart, breaks perfection and resets word progress. Wrong letters keep word progress; without a shield they still break perfection and remove purple mode.
+- Catch the highlighted letter to spell the target word in order. An unshielded × costs one heart, breaks perfection and resets word progress. Unshielded wrong letters always break perfection and remove purple mode. In Normal, the first two consecutive wrong catches keep word progress; the third and later unshielded wrong catches reset it until a correct catch clears the counter. In Hard, every unshielded wrong letter resets progress. Shielded wrong catches always preserve progress and perfection, including a catch that shatters the shield.
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
 Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
+
+### Optional Overcast challenge
+
+Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. Regular appearance uses a cloud texture; Handwriting paper uses sketched clouds. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
 
 ### Score and hearts
 
@@ -123,7 +139,7 @@ Each actual non-× drop has a **3% chance of being a shield**, without unlock co
 | × with a half shield | Shield shatters; lose one heart | Preserved |
 | Wrong letter with any shield | Consume half a shield and keep word progress, including the catch that shatters it | Preserved |
 | × without a shield | Lose one heart; reset word progress | Broken |
-| Wrong letter without a shield | No heart loss; keep word progress | Broken |
+| Wrong letter without a shield | No heart loss. Normal: preserve progress for the first two consecutive wrong catches; reset on the third and later unshielded mistakes. Hard: reset progress every time | Broken |
 
 Shielded wrong catches keep word progress and perfection, even when the shield shatters. Scoring rules and speed penalties still apply. Shield-pickup damage can end the game immediately.
 
@@ -145,9 +161,9 @@ Phone players can use **Choose local BGM** below the rules to select an audio fi
 
 ### Android records and Stats
 
-The Android app saves your personal best and a table of word encounters and perfect completions locally. A word is met when it becomes the target, including the first word of a new game; restarting it after a wrong catch does not add an encounter.
+The Android app saves your personal best and a table of word encounters and perfect completions locally. A word is met when it becomes the target, including the first word of a new game; resetting progress on the same word does not add an encounter.
 
-Opening **Word Stats** pauses play and hides the pause/resume button. Returning to **Game** keeps the game paused until you choose to resume. **Reset word stats** requires confirmation and keeps your personal best, live game and unlocked themes.
+Opening **Word Stats** pauses play and hides pause/resume, Give up, BGM and SFX. The theme switch remains available. Returning to Game restores those controls. Returning to **Game** keeps the game paused until you choose to resume. **Reset word stats** requires confirmation and keeps your personal best, live game and unlocked themes.
 
 ## Source and privacy
 

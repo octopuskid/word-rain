@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101c28"><script>
+(function(){let theme;try{theme=localStorage.getItem('word-rain-theme')}catch(_){}if(theme!=='light'&&theme!=='dark')theme=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=theme;})();
+</script><title>Word Rain — Catch a little wordplay</title><style>
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--text);font-family:system-ui,sans-serif;min-height:100svh;display:grid;place-items:center;padding:18px}main{width:min(100%,520px)}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--muted)}h1{font-size:32px;letter-spacing:-1.3px;margin:4px 0}button{font:inherit;cursor:pointer;border:0;border-radius:14px;color:#10251f;background:#c6f077;padding:14px 23px;font-weight:750}button:focus-visible{outline:3px solid var(--strong);outline-offset:4px}.pause{background:var(--button);color:var(--button-text);padding:11px 15px}.stats{align-items:center;display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:15px}.stats strong{color:var(--strong);font-size:20px;margin-left:5px}#lives{display:flex;gap:8px;font-size:36px;line-height:1.2;color:#ff4d68;filter:drop-shadow(0 2px 6px #ff345133)}#lives .lost{color:var(--lost);filter:none}#scoring{font-size:12px;color:var(--muted);margin:0 0 13px;min-height:18px}#scoring.penalty{color:var(--penalty);font-weight:700}.arena{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:24px;background:var(--surface);box-shadow:0 22px 70px #0004}canvas{display:block;width:100%;aspect-ratio:480/530;touch-action:none}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--overlay);text-align:center;padding:25px;backdrop-filter:blur(5px)}.overlay[hidden]{display:none}.badge{font-size:44px;margin-bottom:12px}h2{font-size:29px;letter-spacing:-1px;margin:0 0 10px}.overlay p{color:var(--detail);line-height:1.6;max-width:300px;margin:0 auto 24px}.instructions{text-align:center;color:var(--muted);font-size:12px;margin:16px 0;line-height:1.8}.word{color:var(--accent);letter-spacing:6px;font-weight:800;font-size:21px;text-align:center;min-height:32px;margin-bottom:12px}.tag{font-size:11px;letter-spacing:2px;color:var(--muted);text-align:center;margin:24px 0 7px}.foot{display:flex;justify-content:space-between;color:var(--foot);font-size:11px}.controls{display:flex;gap:12px;justify-content:center;margin-top:12px}.controls button{width:90px;background:var(--button);color:var(--button-text);touch-action:none;font-size:22px;padding:9px} @media(min-height:850px){h1{font-size:38px}header{margin-bottom:25px}}
+#lives.wildcard{color:#be85ff;filter:drop-shadow(0 2px 7px #a966ff66)}.meters{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 14px}.meter-label{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:1px;color:var(--muted);margin-bottom:8px}.meter-label strong{color:var(--text);font-size:13px;letter-spacing:0}.track{height:9px;border-radius:9px;background:var(--track);overflow:hidden}.fill{height:100%;width:0;border-radius:9px;background:#78baff;transition:width .2s ease}.speed-fill{background:#ef4444}.rules{border-top:1px solid var(--rule-border);margin:24px 0 20px;padding-top:8px}.rule{padding:14px 0;border-bottom:1px solid var(--rule-border)}.rule h3{font-size:13px;margin:0 0 6px}.rule p{color:var(--muted);font-size:12px;line-height:1.7;margin:0}.rule .rule-status{margin-top:7px;font-size:11px;color:var(--status)}.extra-rules{color:var(--muted);font-size:12px;line-height:1.8;margin:18px 0}.extra-rules summary{cursor:pointer;color:var(--status)}.extra-rules p{margin:10px 0}
+:root{color-scheme:dark;--page:#101c28;--text:#edf7f1;--muted:#a9c2c8;--strong:#fff;--accent:#c6f077;--word-dim:#829ba4;--surface:#162934;--border:#34494f;--overlay:#10212bca;--detail:#bfd0d2;--button:#213441;--button-text:#d6e5e7;--track:#293e49;--rule-border:#233842;--status:#d4dfdf;--foot:#79949c;--lost:#45545e;--penalty:#ff8a98;--purple:#cc9dff;--pink:#ff899c;--grid:#ffffff06;--rain:#b7dbd712;--ground:#ffffff15}
+:root[data-theme="light"]{color-scheme:light;--page:#f3f7f5;--text:#18332f;--muted:#496760;--strong:#102d26;--accent:#426b13;--word-dim:#657d77;--surface:#e0ece7;--border:#a5c2b5;--overlay:#f3f8f1e8;--detail:#395b53;--button:#d9e7df;--button-text:#203f34;--track:#c6d8ce;--rule-border:#c6d8ce;--status:#385c50;--foot:#506e63;--lost:#83968e;--penalty:#b8203e;--purple:#7736ab;--pink:#b82046;--grid:#18332f0d;--rain:#315d4726;--ground:#18332f26}
+.header-actions{display:flex;align-items:center;gap:8px}.theme-toggle{background:var(--button);color:var(--button-text);padding:11px 12px;white-space:nowrap;font-size:13px}header{gap:12px;flex-wrap:wrap}.eyebrow{letter-spacing:2px}.speed-fill{background:#ef4444}.rule h3.speed-heading{color:#ef4444}.rule h3.wildcard-heading{color:var(--purple)}.rule h3.regen-heading{color:var(--pink)}#feedback{color:var(--detail)}
+@media(max-width:380px){body{padding:12px}h1{font-size:28px}.eyebrow{font-size:9px;letter-spacing:1px}.header-actions{gap:6px}.theme-toggle{padding:10px}.pause{padding:10px 12px}}
+
+:root{--drop:#c6f077;--bonus:#ffe16a}:root[data-theme="light"]{--bonus:#8a5800}
+:root[data-palette="nature"]{--page:#0c2422;--surface:#143530;--overlay:#0c2422e8;--accent:#7ce8ba;--drop:#7ce8ba;--button:#21493f;--track:#285047;--border:#3c6b5c}
+:root[data-palette="space"]{--page:#111c36;--surface:#1a2c49;--overlay:#111c36e8;--accent:#9dceff;--drop:#9dceff;--button:#293e60;--track:#31496a;--border:#405f88}
+:root[data-palette="tricky"]{--page:#2a1c26;--surface:#3b2935;--overlay:#2a1c26e8;--accent:#ffb399;--drop:#ffb399;--button:#573e49;--track:#624854;--border:#7b5868}
+:root[data-theme="light"][data-palette="nature"]{--page:#edf8f0;--surface:#d6eee0;--overlay:#edf8f0ed;--accent:#176444;--button:#c8e5d5;--track:#badbca;--border:#8bb9a1}
+:root[data-theme="light"][data-palette="space"]{--page:#eff5ff;--surface:#dce9fc;--overlay:#eff5ffed;--accent:#245f9d;--button:#ccdff7;--track:#bdd3ed;--border:#96b5d6}
+:root[data-theme="light"][data-palette="tricky"]{--page:#fff3ef;--surface:#f8e0d8;--overlay:#fff3efed;--accent:#9c4126;--button:#eed0c6;--track:#dfbdb2;--border:#c79585}
+.game-options{border:1px solid var(--border);border-radius:14px;padding:10px 12px;margin:0 0 14px;font-size:12px;color:var(--muted)}.game-options summary{cursor:pointer;color:var(--text);font-weight:700}.option-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.option-fields label{display:grid;gap:6px}.option-fields select{width:100%;min-width:0;font:inherit;font-size:14px;padding:10px 6px;border:1px solid var(--border);border-radius:8px;background:var(--button);color:var(--text)}.game-options button{font-size:12px;padding:11px 14px;background:var(--drop)}.game-options p{line-height:1.6}.bonus-status{color:var(--muted);font-size:12px;text-align:center;margin:0 0 12px}.bonus-status.active{color:var(--bonus);font-weight:800}.word.bonus{background:#332c16;border-radius:10px;padding:6px 4px}.word.bonus span{color:#ffe16a!important}.word.bonus span.current{border-bottom-color:#ffe16a!important}#start{background:var(--drop)}
+
+:root[data-palette="rick"]{--page:#291c17;--surface:#3a2820;--overlay:#291c17ed;--text:#fff1df;--strong:#fff7ec;--muted:#dec0a9;--detail:#ead4c1;--accent:#ffc08a;--drop:#f4ad72;--drop-ink:#2b160b;--button:#503628;--button-text:#fff1df;--track:#654734;--border:#b97b4e;--rule-border:#725039;--status:#f0d2b7;--foot:#d2b29a;--word-dim:#c8aa92;--ground:#f5c69c66}
+:root[data-theme="light"][data-palette="rick"]{--page:#fff4e3;--surface:#f8e5c9;--overlay:#fff4e3ed;--text:#3b2419;--strong:#28160e;--muted:#684735;--detail:#553625;--accent:#834017;--drop:#914a22;--drop-ink:#fff8ed;--button:#efd6b3;--button-text:#432717;--track:#d8b88d;--border:#95623c;--rule-border:#bd9670;--status:#563727;--foot:#72513d;--word-dim:#785a46;--ground:#79503380}
+:root[data-palette="rick"]:not([data-handwriting="true"]) #start,:root[data-palette="rick"]:not([data-handwriting="true"]) .game-options button,:root[data-palette="rick"]:not([data-handwriting="true"]) .mobile-tabs button[aria-selected="true"]{color:var(--drop-ink)}
+.header-actions{flex-wrap:wrap;justify-content:flex-end}.give-up{font-size:12px}button:disabled{opacity:.45;cursor:default}#confirm-give-up{display:block;margin:12px auto 0;background:var(--penalty);color:var(--page);font-size:13px}#confirm-give-up[hidden]{display:none}.word{letter-spacing:4px}.word span{display:inline-block}.word:has(span:nth-child(8)){font-size:17px;letter-spacing:0}
+
+:root[data-handwriting="true"][data-palette]{color-scheme:light;--page:#f2efe4;--surface:#f7f3e8;--overlay:#f7f3e8ef;--text:#24202a;--strong:#211f24;--muted:#4c4448;--accent:#244ba1;--drop:#ded9ca;--button:#ebe6d8;--button-text:#302c30;--border:#827b74;--track:#d6d0c0;--rule-border:#c2b9aa;--status:#484248;--detail:#3c333a;--foot:#655d60;--lost:#aaa399;--penalty:#b72e3b;--purple:#764699;--pink:#b53446;--grid:#b6b0a666;--rain:#77716515;--ground:#766e62}
+:root[data-handwriting="true"] body{font-family:'Word Rain Hand',cursive;background-image:repeating-linear-gradient(0deg,transparent 0 29px,#a8a09a40 30px 31px);font-size:20px}
+:root[data-handwriting="true"] h1{font-family:'Word Rain Hand',cursive;font-size:34px;letter-spacing:-1px;font-weight:400}
+:root[data-handwriting="true"] h2{font-family:'Word Rain Hand',cursive;font-size:30px;font-weight:400}
+:root[data-handwriting="true"] button,:root[data-handwriting="true"] select{font-family:'Word Rain Hand',cursive;border:1.5px solid #4c4446;border-radius:9px 13px 8px 11px;box-shadow:1px 1px 0 #746b65;font-weight:400}
+:root[data-handwriting="true"] .arena{border:2px solid #50484a;border-radius:23px 19px 26px 18px;box-shadow:2px 3px 0 #8b827755;background:var(--surface)}
+:root[data-handwriting="true"] .overlay{backdrop-filter:none;background-image:repeating-linear-gradient(0deg,transparent 0 29px,#a8a09a33 30px 31px)}
+:root[data-handwriting="true"] #lives{font-family:'Word Rain Hand',cursive;filter:none}
+:root[data-handwriting="true"] .word{font-family:'Word Rain Hand',cursive;font-size:28px;letter-spacing:3px}
+:root[data-handwriting="true"] .eyebrow{letter-spacing:1px}
+/* Compact notebook text; keep the ready/pause controls inside the play area. */
+:root[data-handwriting="true"] p{line-height:1.35}
+:root[data-handwriting="true"] .overlay{padding:18px}
+:root[data-handwriting="true"] .overlay>div{width:100%;max-height:100%;overflow-y:auto;padding:2px 3px}
+:root[data-handwriting="true"] .overlay .badge{font-size:36px;line-height:1;margin-bottom:8px}
+:root[data-handwriting="true"] .overlay h2{font-size:26px;line-height:1.15;margin-bottom:10px}
+:root[data-handwriting="true"] .overlay p{font-size:16px;line-height:1.3;max-width:340px;margin-bottom:16px}
+:root[data-handwriting="true"] .rule p,:root[data-handwriting="true"] .extra-rules,:root[data-handwriting="true"] .instructions{line-height:1.35}
+
+:root[data-handwriting="true"] .instructions,:root[data-handwriting="true"] .rule p,:root[data-handwriting="true"] .mobile-stats-intro{font-size:16px}
+:root[data-handwriting="true"] .game-options,:root[data-handwriting="true"] .mobile-tabs,:root[data-handwriting="true"] .mobile-stats-summary{background:var(--page)}
+:root[data-handwriting="true"] .meter-label,:root[data-handwriting="true"] .stats,:root[data-handwriting="true"] .option-fields label{font-size:14px}
+:root[data-handwriting="true"] .fill{background:#264dba}:root[data-handwriting="true"] .speed-fill{background:#c13b46}
+:root[data-handwriting="true"] .game-options p{font-size:14px}
+.handwriting-choice>span:last-child{display:flex;gap:8px;align-items:center;min-height:40px}.handwriting-choice input{width:18px;height:18px;accent-color:#244ba1}
+
+
+
+
+/* One unbroken row of switches, including on small phones. */
+header{align-items:center}.header-actions{flex-wrap:nowrap;gap:6px}.header-actions button{min-height:44px}.audio-settings{font-size:12px;line-height:1.7;color:var(--muted)}.audio-settings button{padding:9px 12px;font-size:12px;margin-right:6px}.audio-settings input[hidden]{display:none}.audio-settings select{display:block;width:100%;max-width:100%;padding:11px;margin-top:6px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);font:inherit}.audio-settings a{color:var(--accent)}select:disabled{opacity:.5;cursor:not-allowed}.music-credits{margin:16px 0;overflow-wrap:anywhere}
+@media(max-width:600px){header{display:block}header .header-actions{display:flex;flex-wrap:nowrap;justify-content:space-between;width:100%;margin-top:10px;gap:4px}header .header-actions button{font-size:11px;padding:10px 7px;min-width:0}header .header-actions .give-up{font-size:11px}.header-actions .theme-toggle{flex:1}header h1{margin-bottom:0}}
+/* HAND FONT START */@font-face{font-family:'Word Rain Hand';src:url(data:font/woff;base64,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) format('woff');font-display:swap}/* HAND FONT END */
+
+/* Wide playfield for computers/tablets; phones keep the portrait board. */
+:root[data-device="large"] main{width:min(100%,1100px)}
+:root[data-device="large"] canvas{aspect-ratio:848/530}
+:root[data-device="large"] .play-layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:24px;align-items:center}
+:root[data-device="large"] .play-info{min-width:0;padding:16px 0}
+:root[data-device="large"] .play-info .tag{margin-top:0}
+:root[data-device="large"] .overlay p{max-width:420px;font-size:14px;line-height:1.4;margin-bottom:16px}
+:root[data-device="large"] .overlay h2{font-size:26px}
+:root[data-device="large"] .overlay .badge{font-size:32px;margin-bottom:6px}
+:root[data-device="large"] .instructions{margin-bottom:0}
+@media(max-width:900px){
+ :root[data-device="large"] .play-layout{grid-template-columns:minmax(0,1fr);gap:0}
+ :root[data-device="large"] .play-info{padding-bottom:0}
+}
+:root[data-device="phone"] .controls{display:none}
+
+
+/* Target word stays in the playfield, behind the canvas drops and pause overlay. */
+.arena-word{position:absolute;z-index:0;left:24px;right:24px;top:44%;transform:translateY(-50%);pointer-events:none;user-select:none;text-align:center;white-space:nowrap;font-size:clamp(30px,8vw,68px);line-height:1.3;letter-spacing:3px;font-weight:800;opacity:.22;color:var(--word-dim)}
+.arena-word span{display:inline-block}.arena-word .current{color:var(--accent)!important}
+.arena-word.bonus span{color:var(--bonus)!important}.arena-word.bonus .current{border-bottom-color:var(--bonus)!important}
+.arena-word.sequence{font-size:clamp(20px,4vw,42px);letter-spacing:1px}
+.arena canvas{position:relative;z-index:1}.arena .overlay{z-index:2}
+:root[data-handwriting="true"] .arena-word{font-weight:400;opacity:.27}
+
+
+/* An opaque middle band masks drops but never intercepts movement input. */
+.overcast-cloud{position:absolute;left:0;right:0;top:25%;height:50%;z-index:2;pointer-events:none;background:#b7c4ce url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22240%22%20height%3D%22120%22%3E%3Crect%20width%3D%22240%22%20height%3D%22120%22%20fill%3D%22%23b7c4ce%22%2F%3E%3Cg%20fill%3D%22%23e1e8ed%22%20stroke%3D%22%239eafbc%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22M-25%2064Q-32%2027-3%2029Q6%202%2031%2022Q48-5%2072%2022Q103%208%20111%2037Q144%2029%20149%2063L149%2083H-25Z%22%2F%3E%3Cpath%20d%3D%22M108%20119Q96%2087%20124%2083Q133%2055%20158%2070Q182%2045%20203%2072Q231%2057%20249%2087V125Z%22%2F%3E%3C%2Fg%3E%3Cg%20stroke%3D%22%23f5f8fa%22%20stroke-width%3D%223%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M7%2053Q23%2038%2040%2049M70%2064Q91%2047%20111%2060M139%20107Q153%2091%20174%20102%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") repeat;background-size:240px 120px;box-shadow:inset 0 6px 14px #62758444,inset 0 -6px 14px #62758444}
+.overcast-cloud[hidden]{display:none}
+:root[data-theme="dark"] .overcast-cloud{background-color:#91a1ae;background-blend-mode:multiply}
+:root[data-handwriting="true"] .overcast-cloud{background:#ebe6db url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22240%22%20height%3D%22120%22%3E%3Crect%20width%3D%22240%22%20height%3D%22120%22%20fill%3D%22%23ebe6db%22%2F%3E%3Cg%20fill%3D%22%23f2eee5%22%20stroke%3D%22%23595454%22%20stroke-width%3D%221.7%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M-25%2064Q-32%2027-3%2029Q6%202%2031%2022Q48-5%2072%2022Q103%208%20111%2037Q144%2029%20149%2063L149%2083H-25Z%22%2F%3E%3Cpath%20d%3D%22M108%20119Q96%2087%20124%2083Q133%2055%20158%2070Q182%2045%20203%2072Q231%2057%20249%2087V125Z%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23817976%22%20stroke-width%3D%22.8%22%3E%3Cpath%20d%3D%22M-7%2058Q-15%2033%204%2034M10%2028Q19%2012%2032%2027M43%2022Q56%206%2072%2027M83%2026Q101%2023%20106%2043M114%2045Q135%2038%20143%2062M21%2068l12-16m-3%2019%2013-19m-2%2020%2013-19m-2%2019%2013-18M127%20111l10-16m-2%2019%2012-18m-3%2019%2013-18m-3%2018%2012-17%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") repeat;background-size:240px 120px;background-blend-mode:normal;box-shadow:inset 0 2px #77716b,inset 0 -2px #77716b}
+.overlay{z-index:3}
+.release-notice{padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--button);color:var(--text);font-size:12px;line-height:1.5;margin:0 0 16px}
+</style></head><body><main><p class="release-notice" role="note"><strong>v1.6.0 — this ver is not verified</strong><br>HTML-only preview. Runtime and device testing are pending.</p><header><div><div class="eyebrow">A LITTLE POCKET ARCADE</div><h1>word rain<span style="color:var(--accent)">.</span></h1></div><div class="header-actions"><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Light mode" aria-pressed="false">☀ Light</button><button type="button" class="theme-toggle" id="bgm-toggle" aria-label="Background music" aria-pressed="false">♫ BGM off</button><button type="button" class="theme-toggle" id="sfx-toggle" aria-label="Sound effects" aria-pressed="true">♪ SFX on</button><button class="pause" id="pause" aria-label="Pause game">Ⅱ</button><button type="button" class="pause give-up" id="give-up" disabled>Give up</button></div></header><details class="game-options" id="game-options"><summary>Word set &amp; difficulty</summary><div class="option-fields"><label for="word-set">Word set<select id="word-set"><option value="classic">Classic</option><option value="nature">Nature</option><option value="space">Space</option><option value="tricky">Tricky</option></select></label><label for="difficulty">Difficulty<select id="difficulty"><option value="normal">Normal · 4–7 letters</option><option value="hard">Hard · 6–7 letters</option></select></label><label for="color-theme">Color theme<select id="color-theme"><option value="classic">Lime</option><option value="nature">Mint</option><option value="space">Blue</option><option value="tricky">Coral</option></select></label><label class="handwriting-choice"><span>Drawing style</span><span><input type="checkbox" id="handwriting-mode"> Handwriting paper</span></label><label class="handwriting-choice"><span>Visibility challenge</span><span><input type="checkbox" id="overcast-mode" aria-describedby="overcast-note"> Overcast</span></label></div><p id="overcast-note">Optional clouds hide the middle half of the playfield; the upper and lower quarters stay clear. No extra score multiplier.</p><p id="appearance-note">Colors and word sets can be chosen independently. Handwriting overrides colors while enabled.</p><p id="settings-description">All sets are available. Six perfect words unlock 2× points and recover one heart in either difficulty.</p><button type="button" id="apply-settings">Apply &amp; start new game</button><p>Starting a new game ends your current run. Saved records are kept.</p></details><div class="stats"><span>SCORE <strong id="score">0</strong></span><span aria-label="3 of 3 HP" id="lives"><span>♥</span><span>♥</span><span>♥</span></span></div><div class="meters"><div><div class="meter-label"><span>🛡️ SHIELD</span><strong id="shield-value">0 / 2</strong></div><div class="track" id="shield-meter" role="progressbar" aria-label="Shield health" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0"><div class="fill" id="shield-fill"></div></div></div><div><div class="meter-label"><span>SPEED</span><strong id="pace">100%</strong></div><div class="track" id="speed-meter" role="progressbar" aria-label="Falling speed" aria-valuemin="100" aria-valuemax="220" aria-valuenow="100"><div class="fill speed-fill" id="speed-fill"></div></div></div></div><p id="scoring" role="status">Wrong letters in a row: 0 / 3</p><section class="play-layout" aria-label="Play area and target word"><div class="arena"><div class="arena-word" id="arena-word" aria-hidden="true"></div><canvas width="480" height="530" id="game" tabindex="0" aria-keyshortcuts="ArrowLeft ArrowRight Space" aria-label="Catch the glowing letters with your basket and avoid the red bombs"></canvas><div id="overcast-cloud" class="overcast-cloud" aria-hidden="true" hidden></div><div class="overlay" id="overlay"><div><div class="badge">☂</div><h2 id="title">Forecast: wordplay.</h2><p id="message">Spell shuffled words of 4–7 letters in order. Catch the highlighted letter. An unshielded × costs a heart and resets word progress. Unshielded wrong letters break perfection: Normal keeps progress until three wrong catches in a row; Hard resets progress each time. Three in a row pause scoring until the next correct catch. Keep your hearts above zero to stay in the game!</p><button id="start">Let it rain →</button><button type="button" id="confirm-give-up" hidden>Yes, give up</button></div></div></div><div class="play-info"><div class="tag">SPELL IN ORDER</div><div class="word" id="word">_ _ _ _ _</div><p class="bonus-status" id="bonus-status" role="status">0 / 6 perfect words toward 2×</p><p id="feedback" role="status" style="text-align:center;font-size:13px;min-height:20px;margin:8px 0">Catch the highlighted letter.</p><div class="controls"><button id="left" aria-label="Move left">←</button><button id="right" aria-label="Move right">→</button></div><p class="instructions">Drag the basket with your mouse, press ← → or A / D, or hold the on-screen arrows.<br>The faint word in the sky shows your progress; catch its underlined letter.<br>Keep your hearts above zero.</p></div></section>
+<p class="instructions"><a href="https://octopuskid.itch.io/word-rain" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-weight:700">Also play Word Rain on itch.io ↗</a></p>
+<details class="extra-rules"><summary>Scoring &amp; shield rules</summary><p>Normal: Correct +10 · Wrong +1 while scoring is active · Word +50. Hard: Correct +15 · Wrong +2 while scoring is active · Word +75. Correct letters and word completions earn 1.5× Normal points, including 2× bonus points (+30 / +150). Wrong-letter points never receive the 2× bonus.<br>Three wrong letters in a row pause scoring; the third earns nothing. The next correct catch clears the pause without points.<br>A perfect word has no unprotected wrong catches or × catches. Uncaught drops are harmless; shield exceptions apply.<br>Ordinary letters in Normal: 20% target the current blank; 5% pre-generate the following letter. Hard: 8% current, 5% following. The following-letter rule is skipped on the final letter. If consecutive letters are identical, both chances produce that letter. Letters stay fixed, and catching a future letter too early still counts as wrong.</p><p>🛡️ Blue shield drops: 3%, available from the start. Pickup equips a full shield. Already full: lose 2 hearts; Normal removes all shield, Hard retains half. Half shield: lose 1 heart and all shield. Shield pickups preserve perfection.<br>Full shield + ×: shield shatters, no heart lost, perfection lost.<br>Half shield + ×: shield shatters, lose a heart, perfection preserved.<br>Each shielded wrong letter consumes half a shield and preserves word progress and perfection, including the catch that breaks the shield.<br>Unshielded ×: lose one heart, lose perfection and reset word progress.<br>Unshielded wrong letter: lose perfection and purple mode. Normal keeps progress for the first two consecutive wrong catches; the third and later unshielded mistakes reset it until a correct catch. Hard resets progress on each unshielded wrong letter.<br>Scoring and speed penalties still apply.</p></details>
+<details class="extra-rules"><summary>Overlapping blocks · 1.5.0</summary><p>Two letters → one wildcard, even outside purple mode. Letter + × → keep the letter. Two × → one ×. Shield + another kind → remove the shield, keep the other block. Two shields → one shield. Wildcard + letter → keep the wildcard. Wildcard + × → consume both and immediately fill the next blank as a correct catch. Two wildcards → consume both and immediately perfect the current word, filling remaining blanks. Automatic fills follow normal scoring, scoring-pause recovery, completion, perfect-streak and healing rules. A whole-word reward restores perfection for that word; a one-letter reward preserves its current status. Overlap removal itself causes no damage or shield pickup. Touching tile edges do not count. Rick challenge symbols keep their separate rules.</p></details>
+<section class="rules" aria-label="Bonus, wildcard, speed and regeneration rules"><div class="rule"><h3>2× Perfect bonus · All modes</h3><p>Complete six perfect words in a row to turn the next target word yellow. Subsequent correct catches earn +20 and word completions +100 in Normal; +30 and +150 in Hard. Works in Normal and Hard. The sixth perfect word also restores one heart, up to three. The bonus lasts until perfection breaks: an unshielded wrong letter, an unshielded ×, or a full-shield × ends it. Shielded wrong letters and a half-shield × preserve it. Wildcards count as correct letters. Every further six perfect words can restore another heart; bonus points stay at 2×.</p></div><div class="rule"><h3 class="wildcard-heading">✦ Wildcards</h3><p>Perfect one word in either difficulty to unlock purple mode: random wildcards are 1% per non-× drop in Normal and 0.5% in Hard. Overlapping ordinary letters create a wildcard even outside purple mode. Each caught wildcard fills one blank and counts as a normal correct catch. An unshielded wrong letter removes this mode. Shielded wrong letters keep it, including the catch that breaks the shield. Purple hearts mean it is active.</p><p class="rule-status" id="wildcard-status">Mode inactive</p></div><div class="rule"><h3 class="speed-heading">↗ Speed</h3><p>Every two consecutive perfect words: +20 percentage points. Normal starts at 100%, capped at 220%. Hard starts at 140%, capped at 260%. Wrong letter: −5 points. Catch ×: −20 points. Speed cannot fall below the starting speed for the selected difficulty.</p><p class="rule-status" id="speed-streak">Perfect words: 0 / 2</p></div><div class="rule"><h3 class="regen-heading">♥ Regeneration</h3><p>Every six consecutive perfect words restores one heart, up to three. Rewards at full health are skipped.</p><p class="rule-status" id="regen">0 / 6 perfect words · Streak 0</p></div></section><section class="audio-settings" aria-label="Music settings"><label for="music-track">Background music</label><select id="music-track"><option value="original">Pocket Forecast · Original</option><option value="carefree">Carefree · Kevin MacLeod</option><option value="monkeys">Monkeys Spinning Monkeys · Kevin MacLeod</option><option id="local-music-option" value="local" disabled>Local BGM · This session</option></select><p id="music-status" role="status">Pocket Forecast · Word Rain / octopuskid &amp; ChatGPT</p><p>Original BGM: <strong>Pocket Forecast</strong> · Word Rain / octopuskid &amp; ChatGPT · MIT. Sound effects are original synthesized tones. Wrong-letter catches play a distinct descending two-tone cue when SFX is on, including shielded catches and scoring-paused catches.</p><div id="custom-music-controls" hidden><button type="button" id="choose-music">Choose local BGM</button><button type="button" id="reset-music">Use original BGM</button><input type="file" id="music-file" accept="audio/*" hidden><p>Your audio stays on this device and is used for this session. Choose it again after reopening the game. It is never uploaded.</p></div><details class="music-credits"><summary>Music credits &amp; licenses</summary><p><strong>Carefree</strong> and <strong>Monkeys Spinning Monkeys</strong> by <a href="https://incompetech.com/" target="_blank" rel="noopener noreferrer">Kevin MacLeod (incompetech.com)</a>. Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International</a>.</p><p>Sources: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037" target="_blank" rel="noopener noreferrer">Carefree</a> · <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011" target="_blank" rel="noopener noreferrer">Monkeys Spinning Monkeys</a>. Re-encoded to 80 kbps mono MP3 for download size; full tracks retained, looped in-game at reduced playback volume. No endorsement implied.</p><p>Pocket Forecast and the synthesized effects remain available under MIT. The Kevin MacLeod recordings have their own CC BY 4.0 license.</p></details></section><div class="foot"><span>MADE BY OCTOPUSKID</span><span>v1.6.0 · NO UMBRELLA REQUIRED</span></div></main><script>
+'use strict';
+const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),$=id=>document.getElementById(id);
+
+// Offline audio: original synthesis plus the separately credited bundled CC BY recordings.
+const audioKey='word-rain-audio-v1';
+const musicTracks={original:{title:'Pocket Forecast',author:'Word Rain / octopuskid & ChatGPT'},carefree:{title:'Carefree',author:'Kevin MacLeod',src:'assets/music/carefree.mp3'},monkeys:{title:'Monkeys Spinning Monkeys',author:'Kevin MacLeod',src:'assets/music/monkeys-spinning-monkeys.mp3'}};
+let audioPrefs={bgm:false,sfx:true,track:'original'};
+try{const saved=JSON.parse(localStorage.getItem(audioKey));if(saved&&typeof saved==='object'){if(typeof saved.bgm==='boolean')audioPrefs.bgm=saved.bgm;if(typeof saved.sfx==='boolean')audioPrefs.sfx=saved.sfx;if(Object.hasOwn(musicTracks,saved.track))audioPrefs.track=saved.track;}}catch(_){}
+let audioContext=null,sfxGain=null,musicGain=null,musicBuffer=null,musicSource=null,musicOffset=0,musicStarted=0,customMusic=null,customMusicURL=null,customMusicStarting=false,selectedTrack=audioPrefs.track,localMusicSource=null;
+$('music-track').value=selectedTrack;$('music-status').textContent=musicTracks[selectedTrack].title+' · '+musicTracks[selectedTrack].author;
+function saveAudio(){try{localStorage.setItem(audioKey,JSON.stringify(audioPrefs));}catch(_){} }
+function unlockAudio(){
+ try{const AudioAPI=window.AudioContext||window.webkitAudioContext;if(!AudioAPI)return;
+ if(!audioContext){audioContext=new AudioAPI();sfxGain=audioContext.createGain();sfxGain.gain.value=audioPrefs.sfx?.22:0;sfxGain.connect(audioContext.destination);musicGain=audioContext.createGain();musicGain.gain.value=.22;musicGain.connect(audioContext.destination);}
+ if(audioContext.state==='suspended'){const result=audioContext.resume();if(result&&result.then)result.then(()=>syncAudio()).catch(()=>{});}
+ }catch(_){}
+}
+const soundPatterns={
+ correct:[[740,0,.075],[988,.065,.10]],wrong:[[620,0,.12],[390,.11,.18]],
+ shield:[[392,0,.09],[587,.07,.10],[784,.14,.14]],wildcard:[[523,0,.08],[784,.06,.09],[1047,.12,.12]],
+ completed:[[392,0,.12],[494,.11,.12],[587,.22,.20]],perfect:[[523,0,.10],[659,.09,.10],[784,.18,.12],[1047,.30,.26]],
+ wildcardMode:[[659,0,.12],[988,.12,.12],[1319,.24,.22]],speedUp:[[330,0,.07],[440,.06,.07],[587,.12,.07],[880,.18,.15]],
+ regen:[[523,0,.16],[659,.13,.16],[1047,.27,.28]],loseHP:[[220,0,.16],[147,.13,.18],[82,.28,.24]],shatter:[[1397,0,.045],[932,.045,.055],[622,.10,.065],[311,.17,.13]]
+};
+function sound(name){
+ if(!audioPrefs.sfx||!audioContext||audioContext.state!=='running')return;
+ try{const now=audioContext.currentTime;for(const [frequency,delay,duration] of soundPatterns[name]||[]){
+ const tone=audioContext.createOscillator(),envelope=audioContext.createGain();tone.type=name==='wrong'||name==='shatter'?'triangle':'sine';tone.frequency.value=frequency;
+ envelope.gain.setValueAtTime(0,now+delay);envelope.gain.linearRampToValueAtTime(name==='wrong'?.70:.45,now+delay+.008);envelope.gain.exponentialRampToValueAtTime(.001,now+delay+duration);
+ tone.connect(envelope);envelope.connect(sfxGain);tone.onended=()=>{tone.disconnect();envelope.disconnect();};tone.start(now+delay);tone.stop(now+delay+duration+.015);
+ }}catch(_){}
+}
+// Pocket Forecast: original eight-bar melody, bass and light rain percussion, 100 BPM.
+function makeMusicBuffer(){
+ const rate=22050,beat=.6,duration=32*beat,buffer=audioContext.createBuffer(1,Math.round(rate*duration),rate),data=buffer.getChannelData(0);
+ function note(midi,start,beats,volume,bass=false){const frequency=440*Math.pow(2,(midi-69)/12),length=beats*beat;
+ for(let n=0;n<length*rate;n++){const t=n/rate,at=Math.floor(start*beat*rate)+n;if(at>=data.length)break;const envelope=Math.min(1,t/.015)*Math.pow(Math.max(0,1-t/length),1.7);
+ data[at]+=volume*envelope*(Math.sin(2*Math.PI*frequency*t)+(bass?.12:.2)*Math.sin(4*Math.PI*frequency*t));}}
+ const melody=[[76,0,1],[79,1,.5],[81,1.5,.5],[79,2,1],[74,3,1],[72,4,1.5],[76,5.5,.5],[79,6,1],[76,7,1],[74,8,1],[77,9,.5],[79,9.5,.5],[77,10,1],[72,11,1],[71,12,1.5],[74,13.5,.5],[76,14,2],[76,16,.5],[79,16.5,.5],[83,17,1],[81,18,1],[79,19,1],[76,20,1],[72,21,1],[74,22,1],[76,23,1],[74,24,1],[77,25,1],[79,26,1],[74,27,1],[71,28,1],[74,29,1],[76,30,2]];
+ for(const [midi,at,len] of melody)note(midi,at,len,.17);
+ const roots=[45,48,50,43,45,48,50,40];for(let bar=0;bar<8;bar++){for(let b=0;b<4;b++){note(roots[bar]+(b%2?12:0),bar*4+b,.7,.11,true);if(b===0||b===2)note(roots[bar]+19,bar*4+b,1.6,.045);}}
+ let noise=1234567;for(let b=0;b<64;b++)for(let n=0;n<800;n++){noise=(noise*1664525+1013904223)>>>0;const at=Math.floor(b*.5*beat*rate)+n;if(at<data.length)data[at]+=((noise/4294967296)*2-1)*.025*Math.exp(-n/120);}
+ return buffer;
+}
+function stopMusic(){
+ if(musicSource){musicOffset=(musicOffset+audioContext.currentTime-musicStarted)%musicBuffer.duration;try{musicSource.stop();musicSource.disconnect();}catch(_){}musicSource=null;}
+ if(customMusic)customMusic.pause();
+}
+function syncAudio(){
+ $('bgm-toggle').textContent='♫ BGM '+(audioPrefs.bgm?'on':'off');$('bgm-toggle').setAttribute('aria-pressed',String(audioPrefs.bgm));
+ $('sfx-toggle').textContent='♪ SFX '+(audioPrefs.sfx?'on':'off');$('sfx-toggle').setAttribute('aria-pressed',String(audioPrefs.sfx));
+ $('music-track').value=selectedTrack;
+ const playing=state==='playing'&&audioPrefs.bgm;
+ if(!playing){stopMusic();return;}
+ if(selectedTrack!=='original'&&!customMusic)prepareTrack();
+ if(selectedTrack!=='original'&&!customMusic)return;
+ if(customMusic){if(customMusic.paused&&!customMusicStarting){customMusicStarting=true;const track=customMusic;const promise=track.play();if(promise&&promise.then)promise.then(()=>{if(customMusic!==track){track.pause();return;}customMusicStarting=false;if(state!=='playing'||!audioPrefs.bgm)track.pause();}).catch(()=>{if(customMusic!==track)return;customMusicStarting=false;$('music-status').textContent='Audio could not play. Select another track or use original BGM.';});else customMusicStarting=false;}return;}
+ if(!audioContext||audioContext.state!=='running'||musicSource)return;
+ try{if(!musicBuffer)musicBuffer=makeMusicBuffer();musicSource=audioContext.createBufferSource();musicSource.buffer=musicBuffer;musicSource.loop=true;musicSource.connect(musicGain);musicStarted=audioContext.currentTime;musicSource.start(0,musicOffset);}catch(_){}
+}
+function vibrateDamage(lostHP,shattered){
+ if(!isPhoneClient())return;
+ try{if(window.WordRainNative&&typeof window.WordRainNative.haptic==='function')window.WordRainNative.haptic(lostHP&&shattered?'both':lostHP?'hp':'shield');
+ else if(typeof navigator.vibrate==='function')navigator.vibrate(lostHP&&shattered?[110,50,60,35,60]:lostHP?[130]:[55,35,55]);}catch(_){}
+}
+function damageFeedback(beforeHP,beforeShield){const lost=lives<beforeHP,shattered=beforeShield>0&&shieldHealth===0;if(lost)sound('loseHP');if(shattered)sound('shatter');if(lost||shattered)vibrateDamage(lost,shattered);}
+$('bgm-toggle').onclick=()=>{unlockAudio();audioPrefs.bgm=!audioPrefs.bgm;saveAudio();syncAudio();};
+$('sfx-toggle').onclick=()=>{unlockAudio();audioPrefs.sfx=!audioPrefs.sfx;if(sfxGain)sfxGain.gain.value=audioPrefs.sfx?.22:0;saveAudio();syncAudio();};
+function chooseMusic(){if(state==='playing')pause();try{if(window.WordRainNative&&typeof window.WordRainNative.chooseMusic==='function')window.WordRainNative.chooseMusic();else $('music-file').click();}catch(_){$('music-status').textContent='Could not open the music picker.';}}
+function prepareTrack(){
+ const entry=musicTracks[selectedTrack],source=selectedTrack==='local'?localMusicSource:entry&&entry.src;
+ if(!source)return;
+ try{customMusic=new window.Audio(source);customMusic.loop=true;customMusic.volume=.35;customMusic.preload='metadata';customMusicStarting=false;
+ const track=customMusic;track.onerror=()=>{if(customMusic===track)$('music-status').textContent='Could not load this audio. Select another track or use original BGM.';};
+ }catch(_){$('music-status').textContent='Audio playback is unavailable. Use original BGM.';}
+}
+function selectMusic(id){
+ if(!Object.hasOwn(musicTracks,id)&&!(id==='local'&&localMusicSource))id='original';
+ stopMusic();if(customMusic){customMusic.removeAttribute('src');customMusic.load();}customMusic=null;customMusicStarting=false;
+ selectedTrack=id;audioPrefs.track=id==='local'?'original':id;saveAudio();
+ $('music-track').value=id;$('music-status').textContent=id==='local'?'Local BGM · This session only':musicTracks[id].title+' · '+musicTracks[id].author;
+ if(id!=='original')prepareTrack();syncAudio();
+}
+function loadCustomMusic(source){localMusicSource=source;$('local-music-option').disabled=false;audioPrefs.bgm=true;selectMusic('local');}
+$('music-track').onchange=()=>{unlockAudio();selectMusic($('music-track').value);};
+window.wordRainMusicData=loadCustomMusic;
+window.wordRainMusicError=()=>{$('music-status').textContent='Could not read this audio. Choose a file under 24 MB.';};
+$('choose-music').onclick=chooseMusic;
+$('music-file').onchange=event=>{const file=event.target.files&&event.target.files[0];if(!file)return;if(file.size>24*1024*1024){window.wordRainMusicError();return;}if(customMusicURL)URL.revokeObjectURL(customMusicURL);customMusicURL=URL.createObjectURL(file);loadCustomMusic(customMusicURL);event.target.value='';};
+$('reset-music').onclick=()=>selectMusic('original');
+
+let canvasPalette;
+function applyTheme(theme){document.documentElement.dataset.theme=theme;const paper=document.documentElement.dataset.handwriting==='true',light=theme==='light';$('theme-toggle').disabled=paper;$('theme-toggle').textContent=paper?'✎ Paper':light?'☾ Dark':'☀ Light';$('theme-toggle').setAttribute('aria-pressed',String(light));const styles=getComputedStyle(document.documentElement);document.querySelector('meta[name="theme-color"]').content=styles.getPropertyValue('--page').trim();canvasPalette={grid:styles.getPropertyValue('--grid').trim(),rain:styles.getPropertyValue('--rain').trim(),ground:styles.getPropertyValue('--ground').trim(),drop:styles.getPropertyValue('--drop').trim(),dropInk:styles.getPropertyValue('--drop-ink').trim()||'#17332b'};}
+applyTheme(document.documentElement.dataset.theme);
+$('theme-toggle').onclick=()=>{const theme=document.documentElement.dataset.theme==='light'?'dark':'light';applyTheme(theme);try{localStorage.setItem('word-rain-theme',theme)}catch(_){}};
+// Detect phones independently of the current viewport (including landscape phones).
+function isPhoneClient(){
+ const ua=navigator.userAgent||'';
+ if(/iPhone|iPod/i.test(ua))return true;
+ if(/iPad/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1))return false;
+ if(/Android/i.test(ua))return /Mobile/i.test(ua);
+ if(navigator.userAgentData&&typeof navigator.userAgentData.mobile==='boolean')return navigator.userAgentData.mobile;
+ const shortSide=Math.min(screen.width||0,screen.height||0);
+ return window.matchMedia('(pointer: coarse)').matches&&shortSide>0&&shortSide<=600;
+}
+$('custom-music-controls').hidden=!isPhoneClient();
+const preferredOrientation=isPhoneClient()?'portrait':'landscape';
+document.documentElement.dataset.device=preferredOrientation==='portrait'?'phone':'large';
+// Keep the vertical travel time identical; extend the horizontal field on PC.
+const fieldWidth=isPhoneClient()?480:848;
+canvas.width=fieldWidth;canvas.height=530;
+if(isPhoneClient())document.querySelector('.play-info .instructions').innerHTML='Drag your finger across the play area to move the basket.<br>Catch letters in order. Keep your hearts above zero.';
+async function applyPreferredOrientation(){
+ // Orientation locks need fullscreen on many browsers; unsupported locks are harmless.
+ try{if(screen.orientation&&typeof screen.orientation.lock==='function')await screen.orientation.lock(preferredOrientation);}catch(_){}
+}
+document.addEventListener('fullscreenchange',applyPreferredOrientation);
+window.addEventListener('pageshow',applyPreferredOrientation);
+applyPreferredOrientation();
+const wordSets={
+ classic:{name:'Classic',words:['PUNS','RAIN','WORD','PLAY','STAR','MOON','PUNNY','CLOUD','RAINY','WORDS','HAPPY','GAMES','CATCH','LETTER','PUZZLE','BASKET','SUNSET','PLANET','RIDDLE','RAINBOW','WHISPER','CATCHER','THUNDER','SPARKLE','JOURNEY']},
+ nature:{name:'Nature',words:['FERN','LEAF','TREE','MOSS','BLOOM','RIVER','OCEAN','MAPLE','PETAL','GROVE','FOREST','FLOWER','MEADOW','BREEZE','STREAM','ORCHARD','BLOSSOM','WILLOW','GLACIER','SEASIDE']},
+ space:{name:'Space',words:['STAR','MOON','MARS','NOVA','ORBIT','COMET','SOLAR','LUNAR','VENUS','EARTH','COSMOS','GALAXY','NEBULA','METEOR','ROCKET','SATURN','JUPITER','NEPTUNE','ECLIPSE','GRAVITY']},
+ tricky:{name:'Tricky',words:['QUIZ','LYNX','JINX','ONYX','QUEUE','GLYPH','NYMPH','VIXEN','QUICK','FJORD','RHYTHM','SPHINX','ZEPHYR','QUARTZ','JIGSAW','QUIZZES','JUKEBOX','ZIGZAGS','SQUEAKY','CRYPTIC']}
+};
+const allWords=[...new Set(Object.values(wordSets).flatMap(set=>set.words))];
+const ordinaryPalettes=['classic','nature','space','tricky'];
+let activeSet='classic',difficulty='normal',colorTheme='classic',handwriting=false,overcast=false,rickUnlocked=false;
+try{rickUnlocked=localStorage.getItem('word-rain-rick-unlocked-v1')==='true';}catch(_){}
+function allowedPalette(value){return ordinaryPalettes.includes(value)||(value==='rick'&&rickUnlocked);}
+function updateRickOption(){
+ const select=$('color-theme'),previous=select.value;
+ select.innerHTML='<option value="classic">Lime</option><option value="nature">Mint</option><option value="space">Blue</option><option value="tricky">Coral</option>'+(rickUnlocked?'<option value="rick" id="rick-theme-option">Rick · Copper</option>':'');
+ select.value=allowedPalette(previous)?previous:'classic';
+}
+updateRickOption();
+try{
+ const saved=JSON.parse(localStorage.getItem('word-rain-settings-v1'));
+ if(saved&&Object.hasOwn(wordSets,saved.wordSet))activeSet=saved.wordSet;
+ if(saved&&['normal','hard'].includes(saved.difficulty))difficulty=saved.difficulty;
+ // One-time migration from the old automatic word-set palette.
+ if(saved&&saved.colorTheme==='set')colorTheme=activeSet;
+ else if(saved&&allowedPalette(saved.colorTheme))colorTheme=saved.colorTheme;
+ handwriting=Boolean(saved&&saved.handwriting===true);
+ overcast=Boolean(saved&&saved.overcast===true);
+}catch(_){}
+const words=[];
+function saveSettings(){try{localStorage.setItem('word-rain-settings-v1',JSON.stringify({wordSet:activeSet,difficulty,colorTheme,handwriting,overcast}));}catch(_){} }
+function applyAppearance(){
+ // Preserve the selected palette while the handwriting override is active.
+ if(handwriting)$('color-theme').value=colorTheme;
+ colorTheme=allowedPalette($('color-theme').value)?$('color-theme').value:'classic';
+ handwriting=$('handwriting-mode').checked===true;
+ $('color-theme').disabled=handwriting;$('color-theme').setAttribute('aria-describedby','appearance-note');
+ $('appearance-note').textContent=handwriting?'Handwriting is on. Color theme is disabled; turn handwriting off to restore your selected colors.':'Colors and word sets can be chosen independently. Handwriting overrides colors while enabled.';
+ document.documentElement.dataset.palette=colorTheme;
+ document.documentElement.dataset.handwriting=String(handwriting);
+ applyTheme(document.documentElement.dataset.theme);saveSettings();
+}
+function setOvercast(enabled){
+ overcast=enabled===true;
+ $('overcast-mode').checked=overcast;
+ $('overcast-cloud').hidden=!overcast;
+ saveSettings();
+}
+function applyWordSettings(){
+ const chosen=$('word-set').value,level=$('difficulty').value;
+ activeSet=Object.hasOwn(wordSets,chosen)?chosen:'classic';difficulty=level==='hard'?'hard':'normal';
+ words.splice(0,words.length,...wordSets[activeSet].words.filter(word=>difficulty!=='hard'||word.length>=6));
+ document.documentElement.dataset.wordSet=activeSet;applyAppearance();
+ $('settings-description').textContent=wordSets[activeSet].name+' · '+(difficulty==='hard'?'Hard: 6–7 letters · 140–260% speed · Current letter 8%, next letter 5% · Wildcard mode 0.5% · Six perfect words unlock 2× points and recover one heart.':'Normal: 4–7 letters · Six perfect words unlock 2× points and recover one heart.');
+}
+$('word-set').value=activeSet;$('difficulty').value=difficulty;$('color-theme').value=colorTheme;$('handwriting-mode').checked=handwriting;setOvercast(overcast);applyWordSettings();
+$('color-theme').onchange=applyAppearance;$('handwriting-mode').onchange=applyAppearance;$('overcast-mode').onchange=()=>setOvercast($('overcast-mode').checked);
+
+function shuffleWords(previous){for(let i=words.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[words[i],words[j]]=[words[j],words[i]]}if(words[0]===previous){[words[0],words[1]]=[words[1],words[0]]}}
+let state='ready',score=0,lives=3,x=fieldWidth/2,target=fieldWidth/2,items=[],particles=[],spawn=0,elapsed=0,progress=0,wordIndex=0,last=0,invulnerable=0,wrongStreak=0,scoringPaused=false,speedMultiplier=baseSpeed(),perfectWords=0,wordPerfect=true,wildcardUnlocked=false,shieldHealth=0,perfectRun=0,doubleScore=false,rickChallenge=null,rickInput='';const rickSequence='dQw4w9WgXcQ';const keys=new Set();
+function syncPlayUI(){$('game-options').hidden=state==='playing';syncAudio();}
+function scorePoints(points){return points*(difficulty==='hard'?1.5:1);}
+function wrongLetterPoints(){return difficulty==='hard'?2:1;}
+function baseSpeed(){return difficulty==='hard'?1.4:1;}
+function maxSpeed(){return difficulty==='hard'?2.6:2.2;}
+function hud(){ syncPlayUI();$('give-up').disabled=state!=='playing'&&state!=='paused';$('word').classList.toggle('bonus',doubleScore&&!rickChallenge);$('bonus-status').classList.toggle('active',doubleScore);$('bonus-status').textContent=doubleScore?'2× ACTIVE · Correct +'+scorePoints(20)+' · Word +'+scorePoints(100):perfectRun+' / 6 perfect words toward 2×';const speedPercent=Math.round(speedMultiplier*100);$('regen').textContent=(perfectRun%6)+' / 6 perfect words · Streak '+perfectRun;$('shield-value').textContent=shieldHealth+' / 2';$('shield-fill').style.width=(shieldHealth*50)+'%';$('shield-meter').setAttribute('aria-valuenow',shieldHealth);$('shield-meter').setAttribute('aria-valuetext',shieldHealth===2?'Full shield':shieldHealth===1?'Half shield':'No shield');$('pace').textContent=speedPercent+'%';$('speed-fill').style.width=((speedPercent-baseSpeed()*100)/120*100)+'%';$('speed-meter').setAttribute('aria-valuemin',Math.round(baseSpeed()*100));$('speed-meter').setAttribute('aria-valuemax',Math.round(maxSpeed()*100));$('speed-meter').setAttribute('aria-valuenow',speedPercent);$('speed-streak').textContent='Perfect words: '+perfectWords+' / 2'+(speedMultiplier>=maxSpeed()?' · Maximum speed':'');$('wildcard-status').textContent=wildcardUnlocked?'Mode active · '+(difficulty==='hard'?'0.5%':'1%')+' random wildcards':'Mode inactive · Overlap wildcards still available';$('lives').classList.toggle('wildcard',wildcardUnlocked); $('score').textContent=score;$('lives').innerHTML=Array.from({length:3},(_,i)=>'<span aria-hidden="true"'+(i>=lives?' class="lost"':'')+'>'+(i<lives?'♥':'♡')+'</span>').join('');$('scoring').textContent=scoringPaused?'Scoring paused — catch '+words[wordIndex][progress]+' to resume.':'Wrong letters in a row: '+wrongStreak+' / 3';$('scoring').classList.toggle('penalty',scoringPaused);$('lives').setAttribute('aria-label',lives+' of 3 HP');$('word').innerHTML=words[wordIndex].split('').map((c,i)=>'<span class="'+(i===progress?'current':'')+'" style="'+(i<progress?'color:var(--accent)':i===progress?'color:var(--strong);border-bottom:3px solid var(--accent)':'color:var(--word-dim)')+'">'+c+'</span>').join(' ');if(rickChallenge){$('word').innerHTML=Array.from(rickSequence,(c,i)=>'<span class="'+(i===rickChallenge.next?'current':'')+'" style="'+(i<rickChallenge.next?'color:var(--accent)':i===rickChallenge.next?'color:var(--strong);border-bottom:3px solid var(--accent)':'color:var(--word-dim)')+'">'+c+'</span>').join(' ');$('scoring').textContent='Rick challenge · '+rickChallenge.caught+' / 11 caught · No points';$('bonus-status').textContent='Catch the sequence · Keep every symbol';$('bonus-status').classList.toggle('active',false);}
+// Reuse the exact target markup so catches, resets, bonus and Rick stay synchronized.
+$('arena-word').innerHTML=$('word').innerHTML;
+$('arena-word').classList.toggle('bonus',doubleScore&&!rickChallenge);
+$('arena-word').classList.toggle('sequence',Boolean(rickChallenge)); }
+function checkGameOver(){if(lives===0){state='over';show('Rain check?','You scored '+score+' points. The clouds have plenty more puns.','Play again →')}}
+function show(title,message,label){syncPlayUI();$('confirm-give-up').hidden=true;$('title').textContent=title;$('message').textContent=message;$('start').textContent=label;$('overlay').hidden=false}
+function start(){canvas.focus({preventScroll:true});unlockAudio();applyPreferredOrientation();$('confirm-give-up').hidden=true;if(state==='paused'){state='playing';$('overlay').hidden=true;$('pause').textContent='Ⅱ';$('pause').setAttribute('aria-label','Pause game');hud();return}score=0;lives=3;wrongStreak=0;scoringPaused=false;speedMultiplier=baseSpeed();perfectWords=0;wordPerfect=true;wildcardUnlocked=false;shieldHealth=0;perfectRun=0;doubleScore=false;rickChallenge=null;rickInput='';items=[];particles=[];elapsed=0;spawn=.4;resetSpawns();progress=0;shuffleWords();wordIndex=0;invulnerable=0;x=target=fieldWidth/2;keys.clear();state='playing';$('overlay').hidden=true;$('pause').textContent='Ⅱ';$('pause').setAttribute('aria-label','Pause game');$('feedback').textContent='Catch '+words[wordIndex][progress]+' next.';hud()}
+function pause(){if(state==='playing'){state='paused';keys.clear();$('pause').textContent='▶';$('pause').setAttribute('aria-label','Resume game');show('A break in the clouds.','Your letters can wait.','Keep playing →')}else if(state==='paused')start()}
+function burst(px,py,color){for(let i=0;i<12;i++)particles.push({x:px,y:py,vx:(Math.random()-.5)*190,vy:(Math.random()-.5)*190,life:.5,color})}
+// Classic drop attempts and falling speeds, with balanced target-letter selection.
+const WAVE_MEAN_SIZE=1.21,BASE_FALL_SCALE=.6;
+function spawnFrequency(speed=speedMultiplier){return 1+.03*Math.max(0,(speed-baseSpeed())/.2);}
+function nextDropInterval(){return Math.max(.28,.77-elapsed*.005)*WAVE_MEAN_SIZE/1.05/spawnFrequency();}
+let spawnBalances={};
+function resetSpawns(){spawnBalances={};}
+function balancedChoice(name,weights){
+ const signature=weights.join(','),total=weights.reduce((a,b)=>a+b,0);
+ let balance=spawnBalances[name];
+ if(!balance||balance.signature!==signature)balance=spawnBalances[name]={signature,credits:weights.map(()=>0)};
+ let selected=-1,best=-Infinity;
+ for(let i=0;i<weights.length;i++){
+  balance.credits[i]+=weights[i];if(!weights[i])continue;
+  const value=balance.credits[i];
+  if(value>best){best=value;selected=i;}
+ }
+ balance.credits[selected]-=total;return selected;
+}
+function spawnX(){return 28+Math.random()*(fieldWidth-56);}
+function randomLetter(){
+ const word=words[wordIndex],correct=word[progress],next=word[progress+1],currentChance=difficulty==='hard'?8:20,nextChance=next?5:0;
+ const slot=balancedChoice('letters',[currentChance,nextChance,100-currentChance-nextChance]);
+ const requested=slot===0?correct:slot===1?next:null;
+ // Letter shares stay even; several copies may be falling at once.
+ if(requested)return requested;
+ const others=Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ').filter(letter=>letter!==correct&&letter!==next);
+ return others[Math.floor(Math.random()*others.length)];
+}
+function breakPerfection(){wordPerfect=false;perfectWords=0;perfectRun=0;doubleScore=false;}
+function setSpeed(value){const previous=speedMultiplier;speedMultiplier=Math.max(baseSpeed(),Math.min(maxSpeed(),Math.round(value*100)/100));spawn*=spawnFrequency(previous)/spawnFrequency(speedMultiplier);for(const item of items)item.speed*=speedMultiplier/previous;if(speedMultiplier>previous)sound('speedUp');}
+function finishWord(){let healed=false;if(wordPerfect){perfectRun++;if(perfectRun>=6)doubleScore=true;perfectWords++;if(!wildcardUnlocked)sound('wildcardMode');wildcardUnlocked=true;if(perfectRun%6===0&&lives<3){lives++;healed=true;sound('regen');}}else{perfectWords=0;perfectRun=0;doubleScore=false;}if(perfectWords===2){perfectWords=0;setSpeed(speedMultiplier+.2);}wordPerfect=true;return healed;}
+// Share catch scoring, completion, sound and mobile records with overlap rewards.
+function collectCorrectLetter(a){sound(a.wild?'wildcard':'correct');const recovering=scoringPaused;scoringPaused=false;wrongStreak=0;if(!recovering)score+=scorePoints(doubleScore?20:10);progress++;burst(a.x,a.y,a.shield?'#58a6ff':a.wild?'#be85ff':canvasPalette.drop);if(progress===words[wordIndex].length){const completed=words[wordIndex];const wordPoints=scorePoints(doubleScore?100:50);sound(wordPerfect?'perfect':'completed');const healed=finishWord();score+=wordPoints;progress=0;wordIndex++;if(wordIndex===words.length){shuffleWords(completed);wordIndex=0;}$('feedback').textContent=completed+' complete! +'+wordPoints+(healed?' · ♥ +1 heart!':'')+' · Catch '+words[wordIndex][0]+' next.';}else{$('feedback').textContent=(recovering?'Scoring resumed! ':a.wild?'Wildcard! ':'Nice! ')+ 'Catch '+words[wordIndex][progress]+' next.'}}
+const DROP_HITBOX_WIDTH=36,DROP_HITBOX_HEIGHT=40;
+function blockKind(a){return a.shield?'shield':a.wild?'wild':a.bomb?'bomb':'letter';}
+function blocksOverlap(a,b){
+ return !a.caught&&!b.caught&&a.y>=0&&b.y>=0&&a.y<489&&b.y<489&&Math.abs(a.x-b.x)<DROP_HITBOX_WIDTH&&Math.abs(a.y-b.y)<DROP_HITBOX_HEIGHT;
+}
+function resolveBlockOverlaps(){
+ if(state!=='playing'||rickChallenge)return;
+ // Each resolution removes at least one block, so chains terminate without timers.
+ let changed=true;
+ while(changed){
+  changed=false;
+  scan:for(let i=0;i<items.length;i++)for(let j=i+1;j<items.length;j++){
+   const a=items[i],b=items[j];if(!blocksOverlap(a,b))continue;
+   const ka=blockKind(a),kb=blockKind(b),px=(a.x+b.x)/2,py=(a.y+b.y)/2;
+   let reward=0,merged=null,keep=null;
+   if(ka==='shield'||kb==='shield'){
+    if(ka==='shield'&&kb==='shield')merged={shield:true};
+    else keep=ka==='shield'?b:a;
+   }else if(ka==='wild'&&kb==='wild'){reward=2;}
+   else if((ka==='wild'&&kb==='bomb')||(kb==='wild'&&ka==='bomb')){reward=1;}
+   else if(ka==='letter'&&kb==='letter'){merged={wild:true};}
+   else if(ka==='bomb'&&kb==='bomb'){merged={bomb:true};}
+   else if(ka==='bomb'||kb==='bomb'){keep=ka==='bomb'?b:a;}
+   else {keep=ka==='wild'?a:b;} // Wildcard absorbs an overlapping ordinary letter.
+   if(keep){items.splice(keep===a?j:i,1);}
+   else {
+    items.splice(j,1);items.splice(i,1);
+    if(merged)items.push(Object.assign({x:px,y:py,speed:(a.speed+b.speed)/2,letter:'',bomb:false,wild:false,shield:false},merged));
+   }
+   if(reward){
+    rickInput='';
+    if(reward===2)wordPerfect=true;
+    const count=reward===2?words[wordIndex].length-progress:1;
+    for(let n=0;n<count;n++)collectCorrectLetter({wild:true,x:px,y:py});
+    $('feedback').textContent=(reward===2?'✦ + ✦ Perfect word! ':'✦ + × Letter filled! ')+$('feedback').textContent;
+    hud();
+   }
+   changed=true;break scan;
+  }
+ }
+}
+function spawnDrop(){
+ const bomb=Math.random()<.28;
+ if(bomb&&Math.random()>=.5)return;
+ if(!bomb&&Math.random()>=.65)return;
+ const pickup=bomb?1:Math.random(),shield=!bomb&&pickup<.03;
+ const wild=!bomb&&!shield&&wildcardUnlocked&&pickup<.03+(difficulty==='hard'?.005:.01);
+ const letter=bomb||wild||shield?'':randomLetter();
+ items.push({x:spawnX(),y:-25,bomb,wild,shield,letter,speed:(130+Math.min(160,elapsed*2)+Math.random()*45)*BASE_FALL_SCALE*speedMultiplier});
+}
+function spawnWave(){const roll=Math.random(),count=roll<.03?3:roll<.18?2:1;for(let i=0;i<count;i++)spawnDrop();}
+function collectWrongLetter(item){
+ const shielded=shieldHealth>0;
+ sound('wrong');
+ wrongStreak=Math.min(3,wrongStreak+1);
+ if(shielded){shieldHealth--;}
+ else{breakPerfection();wildcardUnlocked=false;}
+ const resetProgress=!shielded&&(difficulty==='hard'||wrongStreak>=3);
+ if(resetProgress)progress=0;
+ scoringPaused=wrongStreak>=3;
+ const points=scoringPaused?0:wrongLetterPoints();
+ score+=points;
+ setSpeed(speedMultiplier-.05);
+ burst(item.x,item.y,'#ffbd83');
+ const protection=shielded?(shieldHealth?'Half shield remaining; perfection kept. ':'Shield shattered; perfection kept. '):'Perfection lost. ';
+ $('feedback').textContent=(scoringPaused?'Three wrong letters! Scoring paused. ':'Wrong letter! +'+points+' points. ')+protection+(resetProgress?'Word progress reset. Start with ':'Word progress kept. Continue with ')+words[wordIndex][progress]+'. Speed '+Math.round(speedMultiplier*100)+'%.'+(wildcardUnlocked?' Purple mode kept.':' Purple mode locked.');
+}
+
+function update(dt){invulnerable=Math.max(0,invulnerable-dt);if(keys.has('ArrowLeft')||keys.has('a'))target-=360*fieldWidth/480*dt;if(keys.has('ArrowRight')||keys.has('d'))target+=360*fieldWidth/480*dt;target=Math.max(42,Math.min(fieldWidth-42,target));x+=(target-x)*Math.min(1,18*dt);if(rickChallenge){updateRickChallenge(dt);return;}elapsed+=dt;spawn-=dt;if(spawn<=0){spawnWave();spawn+=nextDropInterval()}
+for(const item of items)item.y+=item.speed*dt;
+resolveBlockOverlaps();
+for(let i=items.length-1;i>=0;i--){const a=items[i];if(a.y>446&&a.y<489&&Math.abs(a.x-x)<45){items.splice(i,1);const beforeHP=lives,beforeShield=shieldHealth;if(a.shield){sound('shield');const cost=shieldHealth===2?2:shieldHealth===1?1:0;lives=Math.max(0,lives-cost);shieldHealth=cost?(difficulty==='hard'&&shieldHealth===2?1:0):2;burst(a.x,a.y,'#58a6ff');$('feedback').textContent=cost?'🛡️ Shield overload! Lost '+cost+' heart'+(cost===1?'':'s')+'. '+(shieldHealth?'Half shield retained':'All shield removed')+'; perfection preserved.':'🛡️ Full shield equipped!';checkGameOver();}else if(a.bomb){const previousShield=shieldHealth;if(previousShield!==1)breakPerfection();if(previousShield!==2)lives--;if(previousShield===0)progress=0;shieldHealth=0;setSpeed(speedMultiplier-.2);$('feedback').textContent=(previousShield===2?'🛡️ Shield shattered! Heart saved. Perfection lost. ':previousShield===1?'🛡️ Half shield shattered! Heart lost; perfection preserved. ':'× caught! Word progress reset; perfection lost. ')+lives+' HP left. Speed '+Math.round(speedMultiplier*100)+'%.';invulnerable=1;burst(a.x,a.y,'#ff7c83');checkGameOver();}else if(a.wild||a.letter===words[wordIndex][progress]){collectCorrectLetter(a);}else{collectWrongLetter(a);}damageFeedback(beforeHP,beforeShield);if(state==='playing')trackRickCatch(a);hud();if(state==='over'||rickChallenge)break}else if(a.y>560){items.splice(i,1)}}
+for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.life<=0)particles.splice(i,1)}}
+function paperTile(offset=0){
+ ctx.beginPath();ctx.moveTo(-16+offset,-20);ctx.quadraticCurveTo(1,-23,15,-19+offset);ctx.quadraticCurveTo(22,-13,20,5);ctx.quadraticCurveTo(21,20,12,21);ctx.quadraticCurveTo(-7,24,-18,17);ctx.quadraticCurveTo(-23,5,-20,-10);ctx.quadraticCurveTo(-20,-18,-16+offset,-20);ctx.closePath();
+}
+function drawHandwriting(){
+ ctx.clearRect(0,0,fieldWidth,530);ctx.lineWidth=1;ctx.strokeStyle='#c3beb355';
+ for(let y=24;y<530;y+=31){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(fieldWidth,y+1);ctx.stroke();}
+ for(const a of items){
+  if(a.caught)continue;
+  ctx.save();ctx.translate(a.x,a.y);ctx.rotate(Math.sin(a.x*.07)*.035);
+  paperTile();ctx.fillStyle='#f6f2e7';ctx.fill();
+  if(a.bomb||a.shield){
+   ctx.save();paperTile();ctx.clip();ctx.strokeStyle=a.bomb?'#d5444d':'#345dc5';ctx.lineWidth=2.8;
+   for(let k=-38;k<45;k+=4){ctx.beginPath();ctx.moveTo(k,-25);ctx.lineTo(k+33,26);ctx.stroke();}ctx.restore();
+  }
+  ctx.strokeStyle='#322a2d';ctx.lineWidth=1.8;paperTile();ctx.stroke();ctx.globalAlpha=.4;ctx.lineWidth=.8;paperTile(1);ctx.stroke();ctx.globalAlpha=1;
+  ctx.fillStyle='#29232a';ctx.textAlign='center';ctx.textBaseline='middle';
+  if(a.shield){
+   ctx.beginPath();ctx.moveTo(-10,-11);ctx.quadraticCurveTo(0,-13,10,-11);ctx.lineTo(9,1);ctx.quadraticCurveTo(7,9,0,14);ctx.quadraticCurveTo(-8,9,-9,1);ctx.closePath();ctx.fillStyle='#f6f2e7';ctx.fill();ctx.stroke();
+  }else{ctx.font=(a.bomb?'bold 30px ':a.wild?'29px ':'31px ')+"'Word Rain Hand', cursive";ctx.fillText(a.bomb?'×':a.wild?'✦':a.letter,0,1);}
+  ctx.restore();
+ }
+ ctx.save();ctx.translate(x,0);ctx.strokeStyle='#31292c';ctx.lineWidth=2.4;ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.beginPath();ctx.moveTo(-39,456);ctx.lineTo(-33,480);ctx.quadraticCurveTo(0,485,34,480);ctx.lineTo(40,455);ctx.lineTo(34,456);ctx.lineTo(29,475);ctx.quadraticCurveTo(0,478,-28,475);ctx.lineTo(-33,456);ctx.closePath();ctx.stroke();ctx.restore();
+ for(const p of particles){ctx.globalAlpha=Math.max(0,p.life*2);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,2,3);}ctx.globalAlpha=1;
+}
+function draw(){if(handwriting){drawHandwriting();return;}ctx.clearRect(0,0,fieldWidth,530);ctx.strokeStyle=canvasPalette.grid;ctx.lineWidth=1;for(let i=25;i<fieldWidth;i+=40){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,530);ctx.stroke()}for(let i=20;i<530;i+=40){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(fieldWidth,i);ctx.stroke()}ctx.fillStyle=canvasPalette.rain;for(let i=0;i<28;i++){const px=(i*83)%fieldWidth,py=(i*67+elapsed*20)%530;ctx.fillRect(px,py,2,9)}for(const a of items){if(a.caught)continue;ctx.save();ctx.translate(a.x,a.y);ctx.shadowBlur=17;ctx.shadowColor=a.bomb?'#f26770':a.shield?'#58a6ff':a.wild?'#be85ff':canvasPalette.drop;ctx.fillStyle=a.bomb?'#ff7c83':a.shield?'#58a6ff':a.wild?'#be85ff':canvasPalette.drop;ctx.beginPath();ctx.roundRect(-18,-20,36,40,11);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=a.bomb||a.shield||a.wild?'#17332b':canvasPalette.dropInk;ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(a.bomb?'×':a.shield?'🛡️':a.wild?'✦':a.letter,0,0);ctx.restore()}ctx.save();ctx.globalAlpha=invulnerable>0?.45+Math.sin(elapsed*35)*.3:1;ctx.fillStyle=canvasPalette.drop;ctx.beginPath();ctx.roundRect(x-39,468,78,17,7);ctx.fill();ctx.strokeStyle=canvasPalette.drop;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x-39,456);ctx.lineTo(x-34,480);ctx.lineTo(x+34,480);ctx.lineTo(x+39,456);ctx.stroke();ctx.restore();for(const p of particles){ctx.globalAlpha=Math.max(0,p.life*2);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,4,4)}ctx.globalAlpha=1;ctx.fillStyle=canvasPalette.ground;ctx.fillRect(22,506,fieldWidth-44,1)}
+function trackRickCatch(item){
+ if(item.bomb||item.shield||item.wild){rickInput='';return;}
+ rickInput=(rickInput+item.letter).slice(-4);
+ if(rickInput==='RICK')beginRickChallenge();
+}
+function beginRickChallenge(){
+ rickInput='';items=[];particles=[];keys.clear();
+ rickChallenge={next:0,caught:0,missed:false,clock:.45};
+ $('feedback').textContent='A familiar forecast… Catch d Q w 4 w 9 W g X c Q. No points in this challenge.';
+}
+function updateRickChallenge(dt){
+ const challenge=rickChallenge;
+ if(!items.length){
+  challenge.clock-=dt;
+  if(challenge.clock<=0)items.push({x:42+Math.random()*(fieldWidth-84),y:-25,speed:170,letter:rickSequence[challenge.next],rick:true,caught:false});
+ }
+ const item=items[0];if(!item)return;
+ item.y+=item.speed*dt;
+ if(!item.caught&&item.y>446&&item.y<489&&Math.abs(item.x-x)<45){
+  item.caught=true;challenge.caught++;sound('correct');
+  $('feedback').textContent='Caught '+item.letter+' · '+challenge.caught+' / 11';hud();
+ }
+ // Even a caught symbol keeps an invisible flight until it passes the line.
+ // Earlier misses therefore cannot end the run before the last symbol passes.
+ if(item.y>489){
+  if(!item.caught)challenge.missed=true;
+  items=[];challenge.next++;challenge.clock=.2;
+  if(challenge.next===rickSequence.length){
+   const won=!challenge.missed&&challenge.caught===rickSequence.length;
+   rickChallenge=null;spawn=.65;
+   if(won){
+    rickUnlocked=true;updateRickOption();
+    try{localStorage.setItem('word-rain-rick-unlocked-v1','true');}catch(_){}
+    $('feedback').textContent='Rick theme unlocked! Choose it in Word set & difficulty. Catch '+words[wordIndex][0]+' next.';
+   }else{
+    state='over';keys.clear();show('Rick check failed.','A symbol slipped past. Your final score is '+score+'. Try again!','Play again →');
+   }
+  }
+  hud();
+ }
+}
+function requestGiveUp(){
+ if(state!=='playing'&&state!=='paused')return;
+ if(state==='playing')pause();
+ show('Give up this run?','Your final score will be '+score+'. Saved records and unlocked themes are kept.','Keep playing →');
+ $('confirm-give-up').hidden=false;
+}
+function confirmGiveUp(){
+ if($('confirm-give-up').hidden||state!=='paused')return;
+ state='over';rickChallenge=null;items=[];particles=[];keys.clear();
+ show('Rain check?','You gave up with '+score+' points. Saved records and themes are kept.','Play again →');hud();
+}
+$('give-up').onclick=requestGiveUp;$('confirm-give-up').onclick=confirmGiveUp;
+function frame(t){const dt=Math.min((t-last)/1000||0,.04);last=t;if(state==='playing')update(dt);draw();requestAnimationFrame(frame)}
+$('start').onclick=start;$('pause').onclick=pause;window.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('button,select,input,textarea,summary'))return;if(['ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(e.key.length===1?e.key.toLowerCase():e.key);if(e.code==='Space'&&!e.repeat){if(state==='playing'||state==='paused')pause();else start()}});window.addEventListener('keyup',e=>keys.delete(e.key.length===1?e.key.toLowerCase():e.key));window.addEventListener('blur',()=>{keys.clear();if(state==='playing')pause()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='playing')pause()});
+let dragPointer=null;
+function move(e){if(state!=='playing')return;const r=canvas.getBoundingClientRect();target=Math.max(42,Math.min(fieldWidth-42,(e.clientX-r.left)/r.width*fieldWidth))}
+canvas.onpointerdown=e=>{if(state!=='playing'||dragPointer!==null||(e.pointerType==='mouse'&&e.button!==0))return;dragPointer=e.pointerId;canvas.focus({preventScroll:true});canvas.setPointerCapture(e.pointerId);move(e)};
+canvas.onpointermove=e=>{if(e.pointerId===dragPointer)move(e)};
+canvas.onpointerup=canvas.onpointercancel=canvas.onlostpointercapture=e=>{if(e.pointerId===dragPointer)dragPointer=null};
+$('apply-settings').onclick=()=>{applyWordSettings();state='ready';start();};
+for(const [id,key] of [['left','ArrowLeft'],['right','ArrowRight']]){const b=$(id);b.onpointerdown=e=>{e.preventDefault();canvas.focus({preventScroll:true});b.setPointerCapture(e.pointerId);keys.add(key)};b.onpointerup=b.onpointercancel=b.onlostpointercapture=()=>keys.delete(key)}hud();requestAnimationFrame(frame);
+</script></body></html>
