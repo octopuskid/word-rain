@@ -12,6 +12,10 @@ A behind-the-scenes video about building Word Rain, refining its rules, and publ
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current version: **1.5.3**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
+## Add Word Rain to your website
+
+See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste iframe code, self-hosting steps, GitHub Pages setup and music credits.
+
 ## Run the game
 
 Play in a browser using either link above. For offline browser play, extract the repository ZIP with `assets/music/` intact and open `index.html`. Opening just the HTML keeps the original generated music; the two additional recordings require their MP3 files. The Lite HTML is self-contained and omits those recordings.
