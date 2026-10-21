@@ -208,3 +208,7 @@ Game code, the original handwriting font, **Pocket Forecast** and synthesized ef
 ## Mobile icon
 
 The launcher was redrawn from the author’s sketch: a yellow hatched W tile, purple hatched wildcard tile and black basket on paper. Android uses a resolution-independent vector with a 1024-unit viewport. A matching 1024×1024 PNG is included with release downloads. Rebuild the vector/SVG with `python tools/build_launcher_icon.py`; the optional PNG export requires CairoSVG.
+
+## Project statistics
+
+[Open the separate statistics dashboard](https://octopuskid.github.io/word-rain/stats/) for GitHub visitors, clones and release downloads, GitHub Pages visits, and itch.io page views and plays. Public download/page counters refresh automatically; private analytics are explicitly dated snapshots. [Definitions and maintenance](docs/STATS.md).
