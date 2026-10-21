@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.3.2 — HTML development prerelease
+
+- Replace the long start-screen paragraph with a two-sentence introduction so the Start button has more room on phones.
+- Add expandable Quick rules below the target word, covering unshielded hazards, mode-specific wrong letters, shield protection, scoring pause and six-perfect rewards. Keep the full rule reference below the game.
+- Gameplay scripts and saved-data keys are unchanged. GitHub Pages runs the development HTML; itch.io and APK remain stable 1.6.3.
+
 ## 1.6.3.1 — HTML development prerelease
 
 - Reduce self-contained HTML by 17.5% (99,248 → 81,887 bytes) with conservative code/style minification, exact cloud-path reuse and lossless WOFF2 font compression.

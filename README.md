@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.3**. Current HTML development build: **[1.6.3.1](https://github.com/octopuskid/word-rain/releases/tag/v1.6.3.1)** (size optimization). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.3**. Current HTML development build: **[1.6.3.2](https://github.com/octopuskid/word-rain/releases/tag/v1.6.3.2)** (shorter start screen). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -21,6 +21,8 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
 ## Smaller HTML development build
+
+Current dev 1.6.3.2 keeps that optimization and adds a short start-screen introduction plus expandable Quick rules below the target word (82,516 bytes).
 
 1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. This is an HTML-only GitHub prerelease; itch.io and the Android APK remain stable 1.6.3. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
 
@@ -34,7 +36,9 @@ The Android APK requires Android 8.0+ and bundles the game, original music and s
 
 ## How to play
 
-These rules apply to stable 1.6.3 and HTML development build 1.6.3.1. The development build changes packaging only; all gameplay rules below are identical.
+The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game.
+
+These rules apply to stable 1.6.3 and HTML development build 1.6.3.2. The development build changes packaging only; all gameplay rules below are identical.
 
 ### Controls and word sets
 

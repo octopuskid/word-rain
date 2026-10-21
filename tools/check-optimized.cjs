@@ -9,7 +9,7 @@ const scripts = text => [...text.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(
 assert.deepEqual(scripts(read('src/index.html')), scripts(read('word-rain-1.6.3.html')),
   'Readable gameplay scripts must match the stable release exactly');
 const delivered = read('index.html');
-assert.equal(delivered, read('word-rain-1.6.3.1.html'));
+assert.equal(delivered, read('word-rain-' + read('src/index.html').match(/v(\d+\.\d+\.\d+\.\d+) DEV/)[1] + '.html'));
 assert(Buffer.byteLength(delivered) < Buffer.byteLength(read('word-rain-1.6.3.html')));
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'word-rain-web-'));
 try {

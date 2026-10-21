@@ -18,7 +18,8 @@ const root = path.resolve(__dirname, '..');
       format: { comments: false, ascii_only: false, inline_script: true }
     }
   });
-  for (const name of ['index.html', 'word-rain-1.6.3.1.html'])
+  const version = source.match(/v(\d+\.\d+\.\d+\.\d+) DEV/)[1];
+  for (const name of ['index.html', `word-rain-${version}.html`])
     fs.writeFileSync(path.join(root, name), html + '\n');
   console.log(`HTML: ${Buffer.byteLength(source)} → ${Buffer.byteLength(html + '\n')} bytes`);
 })().catch(error => { console.error(error); process.exitCode = 1; });

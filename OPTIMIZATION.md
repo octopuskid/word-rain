@@ -1,13 +1,14 @@
 # HTML build and size optimization
 
-Development build **1.6.3.1** packages the same gameplay as stable 1.6.3.
+Development builds **1.6.3.1 / 1.6.3.2** package the same gameplay as stable 1.6.3.
 The downloadable HTML falls from 99,248 to 81,887 bytes: **17.5% smaller**.
+The shorter intro and expandable Quick rules in 1.6.3.2 bring its file to 82,516 bytes.
 No network loader, packed-code evaluator or gameplay feature removal is used.
 
 ## Build
 
 Edit `src/index.html`, the readable source. Run `npm ci` then `npm run build`.
-This regenerates `index.html` and `word-rain-1.6.3.1.html` byte-for-byte.
+This regenerates `index.html` and the matching versioned HTML file byte-for-byte.
 Keep the stable `word-rain-1.6.3.html` as an archive.
 The package lock pins the development build dependencies; they are not shipped
 or needed to play the game.
