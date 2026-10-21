@@ -516,4 +516,16 @@ canvas.onpointermove=e=>{if(e.pointerId===dragPointer)move(e)};
 canvas.onpointerup=canvas.onpointercancel=canvas.onlostpointercapture=e=>{if(e.pointerId===dragPointer)dragPointer=null};
 $('apply-settings').onclick=()=>{applyWordSettings();state='ready';start();};
 for(const [id,key] of [['left','ArrowLeft'],['right','ArrowRight']]){const b=$(id);b.onpointerdown=e=>{e.preventDefault();canvas.focus({preventScroll:true});b.setPointerCapture(e.pointerId);keys.add(key)};b.onpointerup=b.onpointercancel=b.onlostpointercapture=()=>keys.delete(key)}hud();requestAnimationFrame(frame);
-</script></body></html>
+</script>
+<script id="word-rain-page-counter">
+(function(){
+ if(location.hostname!=='octopuskid.github.io'||!['/word-rain/','/word-rain/index.html'].includes(location.pathname))return;
+ const p=document.createElement('p');p.className='instructions';p.setAttribute('data-project-counter','');
+ const a=document.createElement('a');a.href='/word-rain/stats/';a.textContent='Project statistics ↗';a.style.color='var(--accent)';
+ const image=new Image();image.alt='Game page visits counted by Hits';image.referrerPolicy='no-referrer';image.style.cssText='display:block;margin:8px auto;max-width:100%;height:20px';
+ image.onerror=()=>{image.remove()};
+ p.append(a,image);document.querySelector('main').append(p);
+ image.src='https://hits.sh/octopuskid.github.io/word-rain.svg?label=game%20page%20visits&color=caf17b&labelColor=314955';
+})();
+</script>
+</body></html>
