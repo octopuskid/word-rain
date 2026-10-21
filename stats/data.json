@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "github": {
+    "visitors": 6,
+    "views": 94,
+    "clones": 453,
+    "uniqueCloners": 164,
+    "period": "last 14 days",
+    "checkedAt": "2026-10-21T10:28:32Z"
+  },
+  "itch": {
+    "views": 22,
+    "plays": 1,
+    "period": "analytics dashboard, Last 30 days selected",
+    "checkedAt": "2026-10-21T10:28:32Z"
+  },
+  "downloads": {
+    "count": 27,
+    "period": "all currently published release assets, lifetime",
+    "checkedAt": "2026-10-21T10:28:32Z"
+  }
+}
