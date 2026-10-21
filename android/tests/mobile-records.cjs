@@ -1,10 +1,11 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const html=fs.readFileSync(process.argv[2]||require('path').join(__dirname,'../build/assets/index.html'),'utf8');
 const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(x=>x[1]);for(const s of scripts)new vm.Script(s);
-function session(store={},blocked=false,sourceScripts=scripts){
+function session(store={},blocked=false,sourceScripts=scripts,native=null){
  const elements=new Map(),events={};
  function el(id){if(!elements.has(id))elements.set(id,{id,textContent:'',innerHTML:'',hidden:id==='mobile-stats-panel'||id==='reset-stats-confirm',style:{},attributes:{},classList:{values:new Set(),toggle(name,on){if(on)this.values.add(name);else this.values.delete(name)},contains(name){return this.values.has(name)}},setAttribute(k,v){this.attributes[k]=String(v)},focus(){},addEventListener(k,v){events[id+':'+k]=v},getContext(){return new Proxy({},{get:()=>()=>{}})}});return elements.get(id)}
  const c=vm.createContext({Math,Set,Array,String,Object,Number,JSON,console,navigator:{userAgent:'Android Mobile'},screen:{width:412,height:915},document:{documentElement:{dataset:{}},querySelector:q=>el(q==='canvas'?'game':'meta'),getElementById:el,addEventListener(){}},window:{matchMedia:()=>({matches:false}),addEventListener(){}},localStorage:{getItem(k){if(blocked)throw Error('blocked');return store[k]||null},setItem(k,v){if(blocked)throw Error('blocked');store[k]=v}},getComputedStyle:()=>({getPropertyValue:()=> '#ffffff06'}),requestAnimationFrame(){}});
+ if(native)c.window.WordRainNative=native;
  for(const s of sourceScripts)vm.runInContext(s,c);
  return {c,el,store,run:s=>vm.runInContext(s,c)};
 }
@@ -213,16 +214,19 @@ for(const source of [webScripts,scripts]){
  t.el('color-theme').value='nature';t.el('color-theme').onchange();assert.equal(t.run('colorTheme'),'space','paper keeps chosen palette');
  t.el('handwriting-mode').checked=false;t.el('handwriting-mode').onchange();assert.equal(t.el('color-theme').disabled,false);assert.equal(t.el('color-theme').value,'space');
  t.run("window.Audio=class {constructor(src){this.src=src;this.paused=true;}play(){this.paused=false;}pause(){this.paused=true;}removeAttribute(){}load(){}};start();score=42;progress=1;perfectRun=2;");
- if(t.run("Object.hasOwn(musicTracks,'carefree')")){
+ t.run("window.confirm=()=>false;window.WordRainNative={downloadMusic(){throw Error('must not download without consent')}}");
  for(const id of ['carefree','monkeys']){
-  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('selectedTrack'),id);assert(t.run('customMusic.src').endsWith('.mp3'));assert.equal(t.run('musicSource'),null);
-  assert.equal(t.run('score'),42);assert.equal(t.run('progress'),1);assert.equal(t.run('perfectRun'),2,'changing music does not alter play');
-  const reload=session(t.store,false,source);assert.equal(reload.run('selectedTrack'),id,'track persists');assert(reload.el('music-status').textContent.includes('Kevin MacLeod'));
+  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('selectedTrack'),id==='carefree'?'original':'carefree');assert(!t.run('musicTracks.'+id+'.src'),'cancel does not fetch or attach audio');assert.equal(t.run('state'),'paused');
+  t.run("window.confirm=()=>true;window.WordRainNative={downloadMusic(id){window.requested=id}};");
+  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('downloadingMusic'),id);assert.equal(t.run('window.requested'),id);assert.equal(t.run('selectedTrack'),id==='carefree'?'original':'carefree','wait for verified download');
+  t.run('window.wordRainDownloadReady('+JSON.stringify(id)+')');assert.equal(t.run('selectedTrack'),id);assert(t.run('customMusic.src').endsWith('.mp3'));
+  assert.equal(t.run('score'),42);assert.equal(t.run('progress'),1);assert.equal(t.run('perfectRun'),2,'download never alters game records');
+  assert.equal(session(t.store,false,source).run('selectedTrack'),'original','missing downloaded track falls back without fetching');
+  const reload=session(t.store,false,source,{hasMusic:()=>true});assert.equal(reload.run('selectedTrack'),id,'cached native selection survives update/reopen');
  }
- t.el('bgm-toggle').onclick();assert(!t.run('customMusic.paused'));t.run('pause()');assert(t.run('customMusic.paused'));t.run('start()');assert(!t.run('customMusic.paused'));
- }else{assert.deepEqual(Array.from(t.run('Object.keys(musicTracks)')),['original'],'Lite keeps original music only');}
+ t.el('bgm-toggle').onclick();t.run('start()');assert(!t.run('customMusic.paused'));t.run('pause()');assert(t.run('customMusic.paused'));
  t.run("loadCustomMusic('data:audio/mpeg;base64,AAAA')");assert.equal(t.run('selectedTrack'),'local');assert.equal(t.el('local-music-option').disabled,false);assert.equal(session(t.store,false,source).run('selectedTrack'),'original','local files are not saved');
  t.el('reset-music').onclick();assert.equal(t.run('selectedTrack'),'original');assert.equal(t.run('customMusic'),null);
  const invalid=session({'word-rain-audio-v1':JSON.stringify({bgm:false,sfx:true,track:'__proto__'})},false,source);assert.equal(invalid.run('selectedTrack'),'original','saved track is whitelisted');
 }
-console.log('PASS: handwriting disables/restores palette without changing selection; three music options, saved selection, pause/resume, local override/reset, invalid-track fallback and unchanged live scores/streaks.');
+console.log('PASS: handwriting disables/restores palette without changing selection; optional music consent/cancel, verified native completion, offline selection, pause/resume, local override/reset, invalid-track fallback and unchanged live scores/streaks.');

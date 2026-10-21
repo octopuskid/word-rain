@@ -40,12 +40,12 @@ This embed depends on the official host being available and may change with futu
 ## 2. Host the files on your website
 
 1. Open [Releases](https://github.com/octopuskid/word-rain/releases) and choose a version.
-2. Download **word-rain.zip** for Full, or the versioned **Lite ZIP**. These are browser packages; the APK files are for Android installation.
+2. Download **word-rain.zip** (the single merged edition). These are browser packages; the APK files are for Android installation.
 3. Extract the ZIP on your device. Upload the extracted contents into a new folder on your website, such as `games/word-rain/`. Do not overwrite your site's existing home page.
-4. Keep the package's relative paths intact. Full needs `index.html` and `assets/music/` in the same arrangement as the ZIP. Keep `LICENSE`, and keep `MUSIC-LICENSES.md` with Full.
+4. Keep the package's relative paths intact. The game HTML is self-contained; optional recordings download from the Word Rain repository only after confirmation. Keep `LICENSE`, and keep `MUSIC-LICENSES.md` for optional music credits.
 5. Visit the uploaded `games/word-rain/index.html` using your site's HTTPS address.
 
-Full contains the additional Kevin MacLeod recordings. Lite keeps the original generated music, sound effects and local music importing without those recordings. Its game HTML is self-contained. The handwriting font is embedded in the HTML.
+The single edition includes the original generated music, effects and local importing. Kevin MacLeod recordings are not packaged; players can approve optional downloads from the repository. The handwriting font is embedded in the HTML.
 
 Link directly to your uploaded game, or use the iframe example above and change its source to your own game path:
 
@@ -67,7 +67,7 @@ That relative path assumes the page containing the iframe is in your site's root
 For a new static website:
 
 1. Create a public GitHub repository.
-2. Extract a browser release ZIP and upload its contents to the repository. Put `index.html` at the root, rather than inside an extra enclosing folder. Include the music folder and notices for Full.
+2. Extract a browser release ZIP and upload its contents to the repository. Put `index.html` at the root, rather than inside an extra enclosing folder. Include the license notices. No MP3 folder is required.
 3. Commit the files to your `main` branch.
 4. Open the repository's **Settings → Pages**.
 5. Under **Build and deployment**, choose **Deploy from a branch**. Select **main** and **/ (root)**, then save.
@@ -83,7 +83,7 @@ See [GitHub's publishing-source guide](https://docs.github.com/en/pages/getting-
 - Start a game and try dragging, keyboard controls and pause/resume.
 - Make sure the frame can scroll and its controls are reachable.
 - Turn BGM and SFX on after interacting with the game.
-- If Full's additional music is missing, check the spelling, capitalization and relative location of `assets/music/`.
+- Optional music downloads need an internet connection and access to raw.githubusercontent.com. On file:// pages, browser security may prevent the download; host over HTTPS or use the APK. The original music always remains available.
 - If your site builder removes the iframe, use a direct link or a supported embed block.
 - If an iframe is blocked by your site's content-security policy, configure the relevant frame policy or offer a direct link. Do not remove security headers indiscriminately.
 
@@ -91,7 +91,7 @@ See [GitHub's publishing-source guide](https://docs.github.com/en/pages/getting-
 
 For self-hosted updates, replace the game and matching assets together while preserving the same site address and storage keys. Device settings and unlocks are stored by the browser; moving to a different domain, browser profile or embedding context may use separate storage. Browser privacy settings may restrict storage inside a third-party iframe. Android personal-best and word-stat records belong to the Android app and do not transfer through an iframe.
 
-The code, original handwriting font, original generated music and synthesized effects use the repository's [MIT license](LICENSE). Retain its copyright and permission notice when redistributing them. Full's two additional recordings have separate attribution requirements: retain their credits, license links and modification notices from [MUSIC-LICENSES.md](MUSIC-LICENSES.md).
+The code, original handwriting font, original generated music and synthesized effects use the repository's [MIT license](LICENSE). Retain its copyright and permission notice when redistributing them. The optional repository recordings have separate attribution requirements: retain their credits, license links and modification notices from [MUSIC-LICENSES.md](MUSIC-LICENSES.md).
 
 A visible link back to [the project](https://github.com/octopuskid/word-rain) is appreciated. Check the included licenses before redistributing a modified package.
 

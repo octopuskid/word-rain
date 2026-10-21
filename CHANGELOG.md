@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.3 — Stable, merged edition
+
+- Restore the earlier rounded cloud shapes, highlights and pencil outlines; change their layout to large staggered overlapping stacks based on the creator’s sketch.
+- Merge Full and Lite into one HTML/ZIP/APK with Pocket Forecast, effects and importing. Do not bundle Kevin MacLeod recordings. Offer a confirmation before downloading either recording from the repository; verify size/SHA-256. Android keeps private offline copies; browser copies last for the session.
+- Update the native release checker to recognize a single APK. Older 1.6.2 requires a one-time manual update because it expects both retired variants.
+- Preserve player records, signing, identity and storage keys. APK code 32. Update GitHub/itch.io instructions and hosting tutorial.
+
 ## 1.6.2 — Stable
 
 - Redraw Overcast as one large cloud bank: irregular overlapping layers, scalloped boundaries and matching pencil contours, based on the creator’s new sketch. Remove the repeated stamped-cloud appearance.

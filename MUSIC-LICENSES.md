@@ -5,7 +5,9 @@
 Pocket Forecast — Word Rain / octopuskid & ChatGPT. MIT, as in LICENSE.
 The generated tune and synthesized sound effects remain part of the game.
 
-## Third-party recordings — CC BY 4.0
+## Optional repository downloads — CC BY 4.0
+
+From 1.6.3 onward these files are hosted in the repository but are not bundled in HTML/ZIP/APK releases. The player must approve a download first. Android retains verified copies privately; browsers retain them for the current session.
 
 Carefree — Kevin MacLeod (incompetech.com)
 Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037
@@ -22,7 +24,7 @@ https://creativecommons.org/licenses/by/4.0/
 Legal terms: https://creativecommons.org/licenses/by/4.0/legalcode.en
 
 Changes: re-encoded from the official MP3 downloads to 80 kbps mono MP3 to
-reduce package size. Full tracks retained; playback loops and uses reduced
+reduce download size. Full tracks retained; playback loops and uses reduced
 volume within the game. No endorsement by Kevin MacLeod or Incompetech is implied.
 
 The license permits sharing and adaptation, including commercial use, with

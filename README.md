@@ -2,7 +2,7 @@
 
 Catch letters, spell words, and survive with shields and wildcards.
 
-**[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download Full or Lite](https://github.com/octopuskid/word-rain/releases/latest)**
+**[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download the game](https://github.com/octopuskid/word-rain/releases/latest)**
 
 ## Watch how it was made
 
@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.2**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.3**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -18,19 +18,19 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 ## Stable and development releases
 
-Stable releases include Full and Lite HTML and APKs. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.2.1`, `1.6.2.2`. Development builds are marked unverified if runtime testing is unavailable.
+Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
 ## Run the game
 
-Play in a browser using either link above. For offline browser play, extract the repository ZIP with `assets/music/` intact and open `index.html`. Opening just the HTML keeps the original generated music; the two additional recordings require their MP3 files. The Lite HTML is self-contained and omits those recordings.
+Play in a browser using either link above. For offline browser play, open the release `index.html`, or extract `word-rain.zip`. The game, original music, effects and handwriting font are self-contained. Optional recordings require an explicit download and an internet connection.
 
-The Android APK requires Android 8.0+ and bundles the game for offline play. **Full** includes all three built-in tracks. **Lite** keeps the original music, sound effects and local-music importing, without the two additional recordings. Both editions share the same app identity and replace each other rather than installing side by side.
+The Android APK requires Android 8.0+ and bundles the game, original music and sound effects for offline play, with local music importing. The single APK replaces either older Full or Lite in place.
 
 **Install updates over your existing APK to keep scores, word stats, settings and unlocks. Do not uninstall first.** See [Android source and build instructions](android/README.md).
 
 ## How to play
 
-These rules apply to the 1.6.2 stable HTML and Android editions.
+These rules apply to the 1.6.3 stable HTML and Android editions.
 
 ### Controls and word sets
 
@@ -49,13 +49,15 @@ Open **Word set & difficulty** while ready, paused or finished to choose Classic
 
 ### Automatic Android update checks
 
-Full and Lite APKs check the public GitHub **latest stable release** while the app is open, when a validated Wi-Fi/mobile connection is available. Checks run at most once every six hours after success; temporary failures retry after five minutes while open. Reconnecting triggers a check when due. Nothing runs after the app is closed, and offline play is unchanged.
+The APK checks the public GitHub **latest stable release** while the app is open, when a validated Wi-Fi/mobile connection is available. Checks run at most once every six hours after success; temporary failures retry after five minutes while open. Reconnecting triggers a check when due. Nothing runs after the app is closed, and offline play is unchanged.
 
-Development tags, drafts, prereleases and releases without both APK editions are ignored. A newer stable version pauses the game and offers **View update** or **Later**, once per version. View update opens the GitHub release page in your browser; downloads and installation remain your choice. This small request sends no scores, word records, music, account credentials or device identifiers. GitHub receives the normal network request, including your IP address. Install the matching edition over the existing APK to retain records; do not uninstall first.
+Development tags, drafts, prereleases and releases without the standard APK are ignored. A newer stable version pauses the game and offers **View update** or **Later**, once per version. View update opens the GitHub release page in your browser; downloads and installation remain your choice. This small request sends no scores, word records, music, account credentials or device identifiers. GitHub receives the normal network request, including your IP address. Install the new APK over the existing app to retain records; do not uninstall first.
+
+**Upgrading from 1.6.2:** install 1.6.3 manually from the release page once. The old 1.6.2 checker requires both Full/Lite assets and cannot recognize this merged release. The 1.6.3 checker accepts the single APK for later stable releases.
 
 ### Optional Overcast challenge
 
-Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. Regular and Handwriting styles use one large cloud bank with irregular overlapping layers and scalloped outer edges, based on the creator’s sketch. It scales across the middle band instead of repeating small cloud stamps. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
+Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. The earlier rounded cloud design, blue shading/highlights and pencil outlines are retained. Large puffs overlap in staggered back-to-front stacks like the creator’s sketch, rather than repeating small stamps or using continuous wave-shaped strips. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
 
 ### Score and hearts
 
@@ -155,7 +157,7 @@ Word sets and colors are independent. Choose Lime, Mint, Blue or Coral, plus lig
 
 The header keeps the theme, **BGM** and **SFX** switches in one row. Music is initially off and effects on; preferences are saved. Audio starts after a player gesture. Music follows active play and pauses with the game, Stats, game over or backgrounding.
 
-Both editions include the original generated tune **Pocket Forecast** and synthesized effects for catches, word completion/perfection, wildcard activation, speed increases, healing, heart loss and shield shattering. Wrong-letter catches play a distinct descending two-tone cue when **SFX is on**, including shielded mistakes, the third consecutive wrong catch and catches while scoring is paused. Its higher pitch and stronger attack help it stand out on phone speakers. SFX off mutes it; BGM can remain off independently. Perfect words play the perfect cue instead of the ordinary completion cue. Full also offers **Carefree** and **Monkeys Spinning Monkeys** by Kevin MacLeod. The built-in track choice is saved; an unavailable Full track falls back to Pocket Forecast in Lite.
+The single edition includes the original generated tune **Pocket Forecast** and synthesized effects for catches, word completion/perfection, wildcard activation, speed increases, healing, heart loss and shield shattering. Wrong-letter catches play a distinct descending two-tone cue when **SFX is on**, including shielded mistakes, the third consecutive wrong catch and catches while scoring is paused. Its higher pitch and stronger attack help it stand out on phone speakers. SFX off mutes it; BGM can remain off independently. Perfect words play the perfect cue instead of the ordinary completion cue. **Carefree** and **Monkeys Spinning Monkeys** by Kevin MacLeod are optional downloads from this GitHub repository. Selecting an undownloaded song pauses play and asks before using Wi-Fi/mobile data (about 2.1 MB or 1.3 MB). Cancel makes no request. Downloads are checked against their expected size and SHA-256. Android retains verified tracks in private app storage for offline playback and updates; browsers keep them for the current session. Failed downloads leave original music available and can be retried. No recording is included in the HTML/ZIP/APK. Previously saved but unavailable tracks fall back to Pocket Forecast without a silent download.
 
 Phone players can use **Choose local BGM** below the rules to select an audio file up to 24 MB for the current session. Nothing is uploaded. Select it again after reopening, or use **Use original BGM** to restore Pocket Forecast. Codec support depends on the browser/WebView. Actual heart loss and shield shattering request vibration on supported phones, independently of SFX.
 
@@ -169,13 +171,13 @@ Opening **Word Stats** pauses play and hides pause/resume, Give up, BGM and SFX.
 
 The shared game is in `index.html`; Android adds its records UI during packaging. There are no accounts, ads, analytics, tracking or databases. The browser stores appearance/audio settings and the Rick unlock locally; the APK also stores personal best and word records. Clearing app data or uninstalling removes device records.
 
-The original handwriting font is embedded for offline use. Rebuild it with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable asset. Reference photographs are not bundled or published. Android reads only audio selected through its document picker; no storage permission is requested. INTERNET and ACCESS_NETWORK_STATE support the native update checker, and VIBRATE supports haptics. The bundled game WebView still blocks network loads.
+The original handwriting font is embedded for offline use. Rebuild it with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable asset. Reference photographs are not bundled or published. Android reads only audio selected through its document picker; no storage permission is requested. INTERNET and ACCESS_NETWORK_STATE support native update checks and player-approved optional music downloads, and VIBRATE supports haptics. The bundled game WebView still blocks network loads.
 
 ## Credits and licenses
 
 Game code, the original handwriting font, **Pocket Forecast** and synthesized effects: **MIT**, as in [LICENSE](LICENSE).
 
-**Carefree** and **Monkeys Spinning Monkeys** by **Kevin MacLeod (incompetech.com)** are separately licensed under **Creative Commons Attribution 4.0 International**. Full tracks are re-encoded to 80 kbps mono MP3 for package size and loop during play. See [MUSIC-LICENSES.md](MUSIC-LICENSES.md) for source links, attribution and conversion notices. No artist endorsement is implied.
+**Carefree** and **Monkeys Spinning Monkeys** by **Kevin MacLeod (incompetech.com)** are separately licensed under **Creative Commons Attribution 4.0 International**. The optional repository recordings are re-encoded to 80 kbps mono MP3 for download size and loop during play. See [MUSIC-LICENSES.md](MUSIC-LICENSES.md) for source links, attribution and conversion notices. No artist endorsement is implied.
 
 ## Mobile icon
 

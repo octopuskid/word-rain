@@ -12,6 +12,10 @@ import android.os.Looper;
 import android.os.SystemClock;
 import org.json.JSONArray;
 import java.net.URL;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.security.MessageDigest;
 import javax.net.ssl.HttpsURLConnection;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -26,6 +30,8 @@ import android.os.Vibrator;
 import android.os.VibrationEffect;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.JsResult;
 import org.json.JSONObject;
 import android.view.WindowInsets;
 import android.view.View;
@@ -44,11 +50,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-/** Bundled offline game. Native HTTPS checks public stable releases; WebView network stays blocked. */
+/** Bundled offline game. Native HTTPS checks public stable releases and downloads approved music; WebView network stays blocked. */
 public final class MainActivity extends Activity {
     private WebView game;
     private static final int MUSIC_PICKER = 132;
     private boolean choosingMusic;
+    private boolean downloadingMusic;
     private final Handler updates = new Handler(Looper.getMainLooper());
     private ConnectivityManager connectivity;
     private ConnectivityManager.NetworkCallback networkCallback;
@@ -129,13 +136,12 @@ public final class MainActivity extends Activity {
                     String number = tag.replaceFirst("^v", "");
                     JSONArray assets = release.getJSONArray("assets");
                     // Ignore HTML-only releases even if someone marks one as Latest.
-                    boolean full = false, lite = false;
+                    boolean apk = false;
                     for (int i = 0; i < assets.length(); i++) {
                         String name = assets.getJSONObject(i).getString("name");
-                        full |= name.equals("word-rain-" + number + ".apk");
-                        lite |= name.equals("word-rain-" + number + "-lite.apk");
+                        apk |= name.equals("word-rain-" + number + ".apk");
                     }
-                    if (full && lite) found = tag;
+                    if (apk) found = tag;
                 }
                 succeeded = true;
             } catch (Exception unavailable) { /* Offline, timeout, invalid response or API limit: keep playing. */ }
@@ -152,7 +158,7 @@ public final class MainActivity extends Activity {
                 game.evaluateJavascript("if(typeof state!=='undefined'&&state==='playing')pause();", null);
                 new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Word Rain " + version + " is available")
-                    .setMessage("Open GitHub to choose Full or Lite? Install over this app to keep your records. Downloading uses your Wi-Fi or mobile data. The game will stay paused.")
+                    .setMessage("Open GitHub to download the update? Install over this app to keep your records. Downloading uses your Wi-Fi or mobile data. The game will stay paused.")
                     .setNegativeButton("Later", null)
                     .setPositiveButton("View update", new DialogInterface.OnClickListener() {
                         @Override public void onClick(DialogInterface dialog, int which) {
@@ -164,7 +170,61 @@ public final class MainActivity extends Activity {
         }}, "WordRainUpdateCheck").start();
     }
 
+    private String musicFile(String id) {
+        return "carefree".equals(id) ? "carefree.mp3" : "monkeys".equals(id) ? "monkeys-spinning-monkeys.mp3" : null;
+    }
+    private File downloadedMusic(String name) { return new File(new File(getFilesDir(), "optional-music"), name); }
+
     public final class GameBridge {
+        @JavascriptInterface public boolean hasMusic(String id) {
+            String name = musicFile(id);
+            return name != null && downloadedMusic(name).isFile();
+        }
+        @JavascriptInterface public void downloadMusic(final String id) {
+            if (musicFile(id) == null) return;
+            runOnUiThread(new Runnable() { @Override public void run() {
+                if (downloadingMusic || game == null) return;
+                downloadingMusic = true;
+                new Thread(new Runnable() { @Override public void run() {
+                    HttpsURLConnection connection = null;
+                    boolean success = false;
+                    String name = musicFile(id);
+                    File target = downloadedMusic(name), partial = new File(target.getPath() + ".part");
+                    try {
+                        File directory = target.getParentFile();
+                        if (!directory.isDirectory() && !directory.mkdirs()) throw new java.io.IOException("No download directory");
+                        connection = (HttpsURLConnection) new URL("https://raw.githubusercontent.com/octopuskid/word-rain/main/assets/music/" + name).openConnection();
+                        connection.setConnectTimeout(10000); connection.setReadTimeout(15000);
+                        connection.setInstanceFollowRedirects(false);
+                        connection.setRequestProperty("User-Agent", "WordRain-Android");
+                        if (connection.getResponseCode() != 200) throw new java.io.IOException("Download unavailable");
+                        int expectedSize = "carefree".equals(id) ? 2052446 : 1251775;
+                        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                        int total = 0;
+                        try (InputStream input = connection.getInputStream(); FileOutputStream output = new FileOutputStream(partial)) {
+                            byte[] buffer = new byte[8192]; int count;
+                            while ((count = input.read(buffer)) != -1) {
+                                total += count;
+                                if (total > expectedSize) throw new java.io.IOException("Invalid music size");
+                                output.write(buffer, 0, count); digest.update(buffer, 0, count);
+                            }
+                        }
+                        StringBuilder hash = new StringBuilder();
+                        for (byte value : digest.digest()) hash.append(String.format(java.util.Locale.ROOT, "%02x", value & 255));
+                        String expectedHash = "carefree".equals(id) ? "390e7c47e2cb540809d8c6b0ebf53bb4d22cda5f3ab900325e08187995422457" : "daf792a2d3bc1a592b5b30eab9b61170c1da9b578e28695ace8329238cb81488";
+                        if (total != expectedSize || !expectedHash.equals(hash.toString()) || !partial.renameTo(target)) throw new java.io.IOException("Music verification failed");
+                        success = true;
+                    } catch (Exception unavailable) { /* Keep original music and allow retry. */ }
+                    finally { if (connection != null) connection.disconnect(); partial.delete(); }
+                    final boolean ready = success;
+                    runOnUiThread(new Runnable() { @Override public void run() {
+                        downloadingMusic = false;
+                        if (game != null) game.evaluateJavascript(ready ? "window.wordRainDownloadReady(" + JSONObject.quote(id) + ");" : "window.wordRainDownloadFailed();", null);
+                    }});
+                }}, "WordRainMusicDownload").start();
+            }});
+        }
+
         @JavascriptInterface public void haptic(String kind) {
             if (!"hp".equals(kind) && !"shield".equals(kind) && !"both".equals(kind)) return;
             if (getResources().getConfiguration().smallestScreenWidthDp >= 600) return;
@@ -206,6 +266,20 @@ public final class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setBlockNetworkLoads(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        game.setWebChromeClient(new WebChromeClient() {
+            @Override public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+                if (isFinishing() || isDestroyed()) { result.cancel(); return true; }
+                new AlertDialog.Builder(MainActivity.this).setTitle("Optional music download").setMessage(message)
+                    .setPositiveButton("Download", new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) { result.confirm(); }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) { result.cancel(); }
+                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override public void onCancel(DialogInterface dialog) { result.cancel(); }
+                    }).show();
+                return true;
+            }
+        });
         game.setWebViewClient(new WebViewClient() {
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
@@ -215,7 +289,7 @@ public final class MainActivity extends Activity {
                 String range = null;
                 for (Map.Entry<String,String> header : request.getRequestHeaders().entrySet())
                     if ("Range".equalsIgnoreCase(header.getKey())) range = header.getValue();
-                return bundledMusic(path.substring("/assets/".length()), range);
+                return cachedMusic(path.substring("/assets/music/".length()), range);
             }
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
@@ -275,9 +349,9 @@ public final class MainActivity extends Activity {
         }
     }
 
-    private WebResourceResponse bundledMusic(String name, String range) {
-        // Resolve only the two bundled recordings. No network or device-file access.
-        try (InputStream input = getAssets().open(name)) {
+    private WebResourceResponse cachedMusic(String name, String range) {
+        // Resolve only the two approved, verified private downloads. WebView never fetches remote files.
+        try (InputStream input = new FileInputStream(downloadedMusic(name))) {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] chunk = new byte[8192]; int count;
             while ((count = input.read(chunk)) != -1) output.write(chunk, 0, count);

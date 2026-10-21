@@ -1,22 +1,14 @@
 # Word Rain for Android
 
-Offline Android wrapper for the HTML game in the repository root. Android 8.0 (API 26) or newer and an up-to-date Android System WebView are required.
+Current stable: **1.6.3**, version code **32**. One APK replaces either older Full or Lite in place. Install over the existing app to keep personal best, word records, settings and Rick unlocks. App ID, signing certificate, stable HTTPS WebView origin and storage keys are unchanged. Do not uninstall first.
 
-- The APK embeds the game and MIT license. It does not fetch the game from a website.
-- VIBRATE supports haptics. INTERNET and ACCESS_NETWORK_STATE support native stable-release checks over Wi-Fi/mobile data while open. No storage permission is requested.
-- JavaScript and local theme storage are enabled; file/content access and network loads are disabled. A narrow JavaScript bridge exposes only vibration and the player-initiated audio document picker. Only bundled game content is loaded; external pages cannot run in this WebView.
-- Phones (smallest width below 600dp) request sensor portrait; larger devices request sensor landscape. Android may override orientation requests in multitasking or on large screens.
-- Move the basket by dragging across the play area. The Android UI hides the left/right buttons and shows a touch-specific tip; attached-keyboard controls remain available.
-- The game pauses when the Activity goes into the background.
-- A native container reserves system-bar/cutout insets plus 6dp top and bottom breathing room. The WebView viewport and fixed bottom tabs stay inside this area, away from the status and navigation bars.
-- User-selected itch.io/GitHub/music-credit/license links open in the installed browser, separately from the offline game.
-- The Game screen shows a persistent personal best. Bottom tabs switch between Game and Word Stats; opening the table pauses active play. The pause/resume and Give up buttons are hidden in Word Stats, and the game stays paused when returning until the player chooses to resume. Keyboard shortcuts cannot resume play behind the table.
-- The mobile header uses a smaller title and spacing while retaining native safe-area clearance. Reset word stats in the Stats tab asks for confirmation, clears only word encounters/perfect counts, and keeps the personal best, theme and current game.
-- Word sets and difficulty match the browser game. Records include all sets and keep old entries even when another set is selected. Switching settings starts a new round without deleting the personal best or word records.
-- The Word Stats table stores how often each word became the target and how often it was perfected. A wrong-letter restart or pause/resume does not add an encounter. Perfect counts follow the existing shield exceptions.
-- High score, word records, and theme preference are stored only in the app’s local WebView storage. Updating with the same app ID and signing key preserves them; uninstalling or clearing app data removes them. There is no MySQL/server or online leaderboard.
-- The Rick unlock and selected word set/difficulty/color theme are also saved locally. Reset word stats keeps all of these. Rick challenge symbols do not add scores or word records.
-- If local storage is unavailable, a notice explains that records last only for the current session.
+The game, Pocket Forecast and sound effects are bundled for offline play. Neither Kevin MacLeod recording is packaged. Selecting an optional song asks for download permission, then fetches only that approved track from the Word Rain GitHub repository. Size/SHA-256 checks precede an atomic private-file save. Verified tracks survive reopening and in-place updates. Failed downloads leave original music usable and can be retried. Only the two catalog IDs/files/URLs are accepted by the native bridge; private cached audio supports byte ranges through the existing local HTTPS origin. Local audio importing still reads only the selected document, up to 24 MB, with no upload.
+
+The native checker queries the latest stable GitHub release while open with validated connectivity, at most once every six hours after success; temporary failures retry after five minutes. Dev/draft/prerelease entries are ignored, and a standard APK asset is required. A newer version pauses play and offers the release page; APK downloading/installation is manual. **1.6.2 users must manually install 1.6.3 once** because that older checker requires both retired APK variants.
+
+Normal permissions: INTERNET and ACCESS_NETWORK_STATE for update checks and approved music downloads, VIBRATE for HP loss/shield shattering. No storage permission, analytics, accounts, player-data upload or background service. GitHub receives ordinary requests including IP address. WebView network loads and file/content access remain blocked. Only bundled HTML runs with the native bridge; external links open separately in the browser.
+
+Phones use portrait, larger devices landscape. Native insets keep the header/footer away from system bars. Drag to move; on-screen arrows are hidden on phones. Opening Stats pauses play and hides pause/Give up/BGM/SFX; returning stays paused. Stats reset asks first and preserves personal best. All saved game data stays local; clearing app data/uninstalling removes it.
 
 ## Build
 
@@ -33,71 +25,12 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.6.0.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.6.3.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
-## Records tests
+## Validation
 
-After building, run `node android/tests/mobile-records.cjs` (Node.js required). The checks exercise real game catches, score persistence/migration, all word sets and difficulties, yellow 2× scoring boundaries, shield/purple behavior, exact wildcard roll chances, the complete Rick sequence and delayed failures, unlock persistence, Give up confirmation, tab pause behavior, and corrupt or unavailable storage in both web and bundled Android game code.
+Run all `android/tests/*.cjs` suites against `android/build/assets/index.html`. They cover gameplay, saves/migration, stats, shield and hazard rules, sounds, Overcast and optional music confirmation/cancel/native completion. UpdatePolicyTest.java covers numeric stable ordering and development-tag rejection. Release checks include compilation, signatures, alignment, embedded HTML identity and absence of packaged MP3s. Physical Android connectivity, dialogs, audio codecs, haptics and installation still require a device smoke test.
 
-## Validation and limitations
-
-Release checks verify compilation, APK signatures, ZIP alignment, embedded game bytes, launch Activity, SDK versions, and the three declared normal permissions (VIBRATE, INTERNET, ACCESS_NETWORK_STATE). These checks do not replace testing on a real Android device. This first APK has not been tested on physical Android hardware or an Android emulator in the build environment.
-
-## Audio in 1.3.2
-
-Original offline BGM: **Pocket Forecast**, Word Rain / octopuskid & ChatGPT (MIT). Header switches control BGM and synthesized SFX independently. A phone-only local BGM picker below the rules accepts audio up to 24 MB for the current session; files are never uploaded or bundled into future releases. Android uses ACTION_OPEN_DOCUMENT with a read-only temporary grant, then reads only that selected file into memory. No persistent document permission is retained. Use original BGM restores the built-in tune. Playback and codec support depend on Android System WebView.
-
-The added automated checks cover audio event routing, perfect-versus-ordinary completion, capped rewards, actual HP/shield haptics, original music generation and transport, independent mute preferences, local music replacement, Hard 1.5× scoring and half-point best preservation. Native picker, speakers and vibration still require testing on a physical phone.
-
-MIT license, as in the repository root.
-
-## Bundled music in 1.3.4
-
-Pocket Forecast remains the default. The music selector also offers Carefree and Monkeys Spinning Monkeys by Kevin MacLeod (incompetech.com), CC BY 4.0. Full credits, source URLs and conversion notices are in MUSIC-LICENSES.md and the in-game Music credits & licenses section. The two MP3 recordings are packaged under assets/music/ and are licensed separately from the MIT code.
-
-A local-only WebView resource handler serves exactly those two bundled MP3 paths under the app's existing HTTPS origin, including media byte-range responses. Network loads and file/content access remain disabled, with no WebView network access or storage permission. The picker and vibration bridge are unchanged. Audio codecs and haptics still need physical-device verification.
-
-## Lightweight edition
-
-Add `--lite` to the normal build command. Output goes to `android/build-lite/word-rain-1.3.4-lite.apk` with `SHA256SUMS-lite.txt`, leaving the full build untouched. The shared-source transform in variants.py removes the bundled-track catalog entries/options/credits; no MP3 assets are packaged. Generated Pocket Forecast, SFX, local importing, vibration and saved records stay available.
-
-Full and Lite use the same app ID, signing key and versionCode and can replace one another in place. They cannot be installed side by side. Install over the existing app to keep data.
-
-
-1.3.5 (version code 15) uses uniform spawning in both full and Lite builds. App identity, signing key, origin and storage keys remain unchanged. Install over the existing app to preserve records.
-
-1.4.0 (version code 16) compacts handwriting text and the ready/pause overlay. Existing saves are retained by in-place updates in both editions.
-
-1.4.1 (version code 17) adds bounded spawning randomness, a 5% higher base rate and speed-linked frequency. Both editions preserve saved records on in-place updates.
-
-1.4.2 (version code 18) restores classic random dropping with occasional multi-block waves and evenly distributed target-letter opportunities. Existing save keys and app identity remain unchanged.
-
-1.4.3 (version code 19) replaces the RICK target with a manual catch sequence and improves Copper contrast. Legacy RICK statistics and all existing saves are preserved.
-
-1.4.4 (version code 21, fresh rebuild) scales ordinary falling speeds to 60% of the original pace while keeping the HUD baseline at 100%. Install over the existing APK to retain records.
-
-1.4.5 (version code 22) awards +2 for active-scoring wrong-letter catches in Hard, while Normal remains +1. The third consecutive wrong catch and recovery catch remain unscored. Legacy half-point best scores and all saved data are preserved.
-
-1.4.6 (version code 23) uses Hard speeds of 140–260% and current/following letter shares of 8% / 5%. App identity, signing certificate and storage keys remain unchanged.
-
-1.4.7 (version code 24) adds a synchronized faint target word behind the falling letters in Full and Lite. Existing scores, word stats, settings and unlocks are kept with in-place updates.
-
-1.5.0 (version code 25) adds falling-block overlap resolution and automatic wildcard rewards through the shared completion/statistics paths. Wildcard mode now works in both difficulties, with random wildcard chances of 1% Normal / 0.5% Hard. Collision-created wildcards do not require the mode. Run `node android/tests/overlap-150.cjs` against both build assets in addition to the existing tests. App identity, signing key, storage origin and keys are unchanged.
-
-1.5.1 (version code 26) preserves word progress as well as perfection when a wrong-letter catch consumes half a shield, including the catch that shatters it. Scoring and speed penalties still apply. Run `node android/tests/shield-progress-151.cjs` against Full and Lite build assets. App identity, signing key and storage keys are unchanged.
-
-1.5.2 (version code 27) makes the existing wrong-letter SFX a clearer, higher-pitched descending two-tone cue. It applies to every wrong-letter catch, including shielded and scoring-paused catches, and respects SFX mute independently of BGM. Verify with `node android/tests/wrong-sound-152.cjs` against both build assets. App identity, signing key and saved data keys are unchanged.
-
-1.5.3 (version code 28): unshielded × catches lose one heart, break perfection and reset word progress. Unshielded wrong letters keep progress but still break perfection and purple mode. Shield rules, scoring and speed penalties are unchanged. App identity, signing certificate and storage keys are preserved.
-
-1.6.0 (version code 29) adds optional Overcast clouds with regular and handwriting textures, saved in the existing settings object. Normal unshielded wrong letters reset progress on the third consecutive mistake; Hard resets each time. Shields keep their protection. Storage keys, app identity and signing certificate are unchanged.
-
-1.6.1 (code 30) includes the mode-specific wrong-letter handling, saved Overcast option, seamless regular/handwriting cloud textures and hidden BGM/SFX controls on Stats. The launcher is a scalable 1024-unit vector redrawn from the author’s sketch. Regenerate with `python tools/build_launcher_icon.py`; CairoSVG also exports a 1024×1024 PNG. Signing identity and saved data keys stay unchanged.
-
-## 1.6.2 updates
-
-Version code 31. Large irregular layered cloud banks replace repeated puff stamps in both appearances. A native HTTPS checker observes validated default-network connectivity while the Activity is visible. It queries GitHub’s public latest stable release at most every six hours after success, or retries failed checks after five minutes. It excludes dev/prerelease/draft entries and requires both APK assets. A newer version pauses the game and offers the release page once per version. No automatic APK download/install, background service, analytics or player-data upload. WebView network loads remain blocked. INTERNET and ACCESS_NETWORK_STATE are normal permissions; no runtime permission dialog is required. GitHub sees the request’s IP address.
-
-UpdatePolicy.java is independently tested for numeric version ordering and dev-tag rejection. Physical connectivity changes, update dialogs and installation still require a real-device smoke test.
+Cloud generation: `python tools/build_cloud_textures.py`; launcher generation: `python tools/build_launcher_icon.py`. Earlier release details are in [CHANGELOG.md](../CHANGELOG.md).
