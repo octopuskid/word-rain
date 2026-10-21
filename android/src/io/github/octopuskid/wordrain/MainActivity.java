@@ -30,8 +30,6 @@ import android.os.Vibrator;
 import android.os.VibrationEffect;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.JsResult;
 import org.json.JSONObject;
 import android.view.WindowInsets;
 import android.view.View;
@@ -266,20 +264,6 @@ public final class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setBlockNetworkLoads(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        game.setWebChromeClient(new WebChromeClient() {
-            @Override public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-                if (isFinishing() || isDestroyed()) { result.cancel(); return true; }
-                new AlertDialog.Builder(MainActivity.this).setTitle("Optional music download").setMessage(message)
-                    .setPositiveButton("Download", new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) { result.confirm(); }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) { result.cancel(); }
-                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override public void onCancel(DialogInterface dialog) { result.cancel(); }
-                    }).show();
-                return true;
-            }
-        });
         game.setWebViewClient(new WebViewClient() {
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();

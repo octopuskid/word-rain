@@ -216,9 +216,9 @@ for(const source of [webScripts,scripts]){
  t.run("window.Audio=class {constructor(src){this.src=src;this.paused=true;}play(){this.paused=false;}pause(){this.paused=true;}removeAttribute(){}load(){}};start();score=42;progress=1;perfectRun=2;");
  t.run("window.confirm=()=>false;window.WordRainNative={downloadMusic(){throw Error('must not download without consent')}}");
  for(const id of ['carefree','monkeys']){
-  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('selectedTrack'),id==='carefree'?'original':'carefree');assert(!t.run('musicTracks.'+id+'.src'),'cancel does not fetch or attach audio');assert.equal(t.run('state'),'paused');
+  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('pendingMusicDownload'),id);t.el('cancel-music-download').onclick();assert.equal(t.run('selectedTrack'),id==='carefree'?'original':'carefree');assert(!t.run('musicTracks.'+id+'.src'),'cancel does not fetch or attach audio');assert.equal(t.run('state'),'paused');
   t.run("window.confirm=()=>true;window.WordRainNative={downloadMusic(id){window.requested=id}};");
-  t.el('music-track').value=id;t.el('music-track').onchange();assert.equal(t.run('downloadingMusic'),id);assert.equal(t.run('window.requested'),id);assert.equal(t.run('selectedTrack'),id==='carefree'?'original':'carefree','wait for verified download');
+  t.el('music-track').value=id;t.el('music-track').onchange();t.el('confirm-music-download').onclick();assert.equal(t.run('downloadingMusic'),id);assert.equal(t.run('window.requested'),id);assert.equal(t.run('selectedTrack'),id==='carefree'?'original':'carefree','wait for verified download');
   t.run('window.wordRainDownloadReady('+JSON.stringify(id)+')');assert.equal(t.run('selectedTrack'),id);assert(t.run('customMusic.src').endsWith('.mp3'));
   assert.equal(t.run('score'),42);assert.equal(t.run('progress'),1);assert.equal(t.run('perfectRun'),2,'download never alters game records');
   assert.equal(session(t.store,false,source).run('selectedTrack'),'original','missing downloaded track falls back without fetching');
