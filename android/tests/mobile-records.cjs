@@ -139,7 +139,7 @@ for(const source of [webScripts,scripts]){
  const migrated=session({'word-rain-settings-v1':JSON.stringify({wordSet:'nature',difficulty:'hard',colorTheme:'set'})},false,source);assert.equal(migrated.run('colorTheme'),'nature','old automatic palette migrated');migrated.el('word-set').value='tricky';migrated.el('apply-settings').onclick();assert.equal(migrated.run('colorTheme'),'nature');
  const unlocked=session({'word-rain-rick-unlocked-v1':'true','word-rain-settings-v1':JSON.stringify({wordSet:'classic',colorTheme:'rick',handwriting:true})},false,source);assert(unlocked.el('color-theme').innerHTML.includes('value="rick"'));assert.equal(unlocked.run('colorTheme'),'rick');assert(unlocked.run('handwriting'));
 }
-assert(!webScripts.join('').includes('Rick · Locked'));assert(html.includes('data:font/woff;base64,'),'font is offline and bundled');
+assert(!webScripts.join('').includes('Rick · Locked'));assert(/data:font\/woff2?;base64,/.test(html),'font is offline and bundled');
 console.log('PASS: Rick absent until unlock; independent palettes, legacy settings migration, handwriting save/override/restore without changing live game; paper canvas renders with bundled font.');
 
 for(const source of [webScripts,scripts])for(const mode of ['normal','hard']){

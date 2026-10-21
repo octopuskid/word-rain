@@ -96,3 +96,7 @@ The code, original handwriting font, original generated music and synthesized ef
 A visible link back to [the project](https://github.com/octopuskid/word-rain) is appreciated. Check the included licenses before redistributing a modified package.
 
 Reference: [MDN's iframe documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe).
+
+## Optimized development HTML
+
+The GitHub Pages demo currently runs HTML development build 1.6.3.1. Stable 1.6.3 remains available from its release and itch.io. Use the single `word-rain-1.6.3.1.html` file from the development prerelease for the smaller self-contained game; no extra assets or music downloads are required for basic offline play. Optional tracks still ask for consent. To rebuild this file from the readable source, see [OPTIMIZATION.md](OPTIMIZATION.md).

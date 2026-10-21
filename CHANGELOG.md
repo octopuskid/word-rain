@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.3.1 — HTML development prerelease
+
+- Reduce self-contained HTML by 17.5% (99,248 → 81,887 bytes) with conservative code/style minification, exact cloud-path reuse and lossless WOFF2 font compression.
+- Preserve gameplay, original music, sound effects, theme geometry, offline behavior and player-save keys. Keep readable source and a reproducible build.
+- Verify gameplay/save/audio/overlap regressions against both web HTML and a generated mobile HTML test fixture; no APK is built or released. Stable Android and itch.io remain 1.6.3.
+
 ## 1.6.3 — Stable, merged edition
 
 - Restore the earlier rounded cloud shapes, highlights and pencil outlines; change their layout to large staggered overlapping stacks based on the creator’s sketch.

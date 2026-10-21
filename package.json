@@ -1,0 +1,12 @@
+{
+  "name": "word-rain",
+  "version": "1.6.3-dev.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "node tools/build-web.cjs"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "7.2.0"
+  }
+}
