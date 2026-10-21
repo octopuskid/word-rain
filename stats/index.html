@@ -45,20 +45,22 @@ async function downloads(){
  throw Error('Release pagination limit');
 }
 async function pages(){
- try{const counts=await json(HITS);$('gh-pages').textContent=number(valid(counts.total));$('pages-mode').textContent='Automatic';$('pages-mode').className='pill live';$('pages-date').textContent=stamp(new Date().toISOString())+' · read-only';}
- catch(e){
-  // A server-rendered badge can read the same total even if the JSON endpoint blocks CORS.
-  const img=document.createElement('img');img.className='counter-badge';img.alt='Read-only page-visit total';img.referrerPolicy='no-referrer';
-  img.src='https://img.shields.io/badge/dynamic/json?url='+encodeURIComponent(HITS)+'&query='+encodeURIComponent('$.total')+'&label=page%20visits&color=caf17b&labelColor=314955&cacheSeconds=300';
-  $('gh-pages').replaceChildren(img);$('pages-mode').textContent='Read-only badge';$('pages-mode').className='pill';$('pages-date').textContent='Badge may be cached for 5 minutes. An unavailable badge is not zero.';
-  img.onerror=()=>{$('gh-pages').textContent='Unavailable';$('pages-date').textContent='Counter service unavailable. No value has been guessed.'};
- }
+ const img=document.createElement('img');img.className='counter-badge';img.alt='Read-only page-visit total';img.referrerPolicy='no-referrer';
+ img.src='https://img.shields.io/badge/dynamic/json?url='+encodeURIComponent(HITS)+'&query='+encodeURIComponent('$.total')+'&label=page%20visits&color=caf17b&labelColor=314955&cacheSeconds=300';
+ $('gh-pages').replaceChildren(img);$('pages-mode').textContent='Automatic · badge';$('pages-mode').className='pill live';$('pages-date').textContent='Read-only counter · cached up to 5 minutes. An unavailable badge is not zero.';
+ img.onerror=()=>{$('gh-pages').textContent='Unavailable';$('pages-mode').textContent='Unavailable';$('pages-mode').className='pill';$('pages-date').textContent='Counter service unavailable. No value has been guessed.'};
+}
+function downloadBadge(){
+ const img=document.createElement('img');img.className='counter-badge';img.alt='GitHub release download total';img.referrerPolicy='no-referrer';
+ img.src='https://img.shields.io/github/downloads/octopuskid/word-rain/total?label=downloads&color=caf17b&labelColor=314955&cacheSeconds=300';
+ $('gh-downloads').replaceChildren(img);$('download-mode').textContent='Automatic · badge';$('download-mode').className='pill live';$('download-date').textContent='Public GitHub total via Shields · may be cached. Last saved check: '+(snapshot?number(snapshot.downloads.count)+' on '+date(snapshot.downloads.checkedAt):'unavailable');
+ img.onerror=()=>{if(snapshot){$('gh-downloads').textContent=number(snapshot.downloads.count);$('download-mode').textContent='Snapshot';$('download-mode').className='pill snapshot';$('download-date').textContent=stamp(snapshot.downloads.checkedAt)+' · services unavailable; saved snapshot shown'}else{$('gh-downloads').textContent='Unavailable';$('download-mode').textContent='Unavailable'}};
 }
 async function refresh(){
  $('refresh').disabled=true;$('status').textContent='Refreshing public counters…';
  try{snapshot=await json('./data.json');showSnapshot(snapshot)}catch(e){$('status').textContent='Snapshot data unavailable. Public counters will still be checked.'}
  const results=await Promise.allSettled([downloads(),pages()]);
- if(results[0].status==='rejected'){$('download-date').classList.add('warn');$('download-date').textContent=snapshot?stamp(snapshot.downloads.checkedAt)+' · API unavailable; saved snapshot shown':'Download count unavailable';}
+ if(results[0].status==='rejected')downloadBadge();
  $('status').textContent='Private analytics show dated snapshots. Public counters checked just now.';$('refresh').disabled=false;
 }
 $('refresh').onclick=refresh;refresh();
