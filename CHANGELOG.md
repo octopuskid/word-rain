@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.4 — Stable
+
+- Promote the 1.6.3.3 game to Android and stable web: smaller embedded assets/code, short opening text, Quick rules below the word and purple handwriting wildcard tiles.
+- APK version code 33; existing app ID, signing certificate and local save keys retained. One merged APK; optional music remains a consent-based download.
+- Add a separate GitHub Pages `test.html` with manual block spawning, speed/frequency/wave/position controls, overlap stacking, custom words, clear/reset and optional safe hearts. Separate storage keys. Never bundled in the APK or uploaded to itch.io.
+- Update stable HTML/ZIP/APK, itch.io and How to play. Verify gameplay/save/audio suites, sandbox controls and signing. Physical Android installation/audio/haptics still require device testing.
+
 ## 1.6.3.3 — HTML development prerelease
 
 - Color handwriting wildcard tiles lavender with darker purple pencil hatching, retaining the dark ✦ symbol and hand-drawn outline.

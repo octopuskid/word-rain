@@ -1,6 +1,6 @@
 # HTML build and size optimization
 
-Development builds **1.6.3.1–1.6.3.3** retain the gameplay rules of stable 1.6.3. Version 1.6.3.3 colors paper wildcard tiles purple.
+Stable **1.6.4** promotes development builds 1.6.3.1–1.6.3.3, including purple paper wildcard tiles, a short intro and Quick rules. Its HTML is 82,552 bytes.
 The downloadable HTML falls from 99,248 to 81,887 bytes: **17.5% smaller**.
 The shorter intro and expandable Quick rules in 1.6.3.2 bring its file to 82,516 bytes.
 No network loader, packed-code evaluator or gameplay feature removal is used.
@@ -56,5 +56,4 @@ Deployed browser smoke checks cover desktop controls, the paper font and
 Overcast. Mobile behavior is covered by the generated HTML fixture; physical
 Android installation testing is outside this HTML release.
 
-Stable APK 1.6.3, its signing certificate and existing installed app data are
-unchanged. Development releases do not trigger the Android stable-update checker.
+Stable APK 1.6.4 uses the same signing certificate and save-data keys as 1.6.3. Development releases do not trigger the Android stable-update checker.

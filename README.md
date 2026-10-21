@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.3**. Current HTML development build: **[1.6.3.3](https://github.com/octopuskid/word-rain/releases/tag/v1.6.3.3)** (purple paper wildcard). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.4**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -22,9 +22,9 @@ Stable releases include one HTML package and one APK. Full and Lite were merged 
 
 ## Smaller HTML development build
 
-Current dev 1.6.3.2 keeps that optimization and adds a short start-screen introduction plus expandable Quick rules below the target word (82,516 bytes).
+Stable 1.6.4 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
 
-1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. This is an HTML-only GitHub prerelease; itch.io and the Android APK remain stable 1.6.3. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
+1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. Those changes are now included in stable 1.6.4 on itch.io and Android. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
 
 ## Run the game
 
@@ -34,11 +34,17 @@ The Android APK requires Android 8.0+ and bundles the game, original music and s
 
 **Install updates over your existing APK to keep scores, word stats, settings and unlocks. Do not uninstall first.** See [Android source and build instructions](android/README.md).
 
+## Browser test lab
+
+[**Open the GitHub Pages test lab**](https://octopuskid.github.io/word-rain/test.html) to drop current/following/random letters, ×, shields or wildcards. Set fixed falling speed (10–1,000 px/s), scheduled wave interval (0.1–10 seconds), count, position and overlap stacking. Automatic waves are optional; the interval is waves per second, not guaranteed drops when using the game's random-wave option. Pausing freezes the clock. The fixed speed deliberately overrides gameplay speed changes.
+
+Enter 1–200 custom words of 2–16 letters A–Z, separated by spaces, commas or new lines. Apply resets the test run. One word can repeat safely. Keep hearts at 3 is on by default; turn it off for damage testing. The test lab has separate settings/records and does not alter regular game saves. No test APK is built, and the test page is not uploaded to itch.io. It uses the same collision/scoring code as the game. Build it with `npm run build:test` after `npm run build`.
+
 ## How to play
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable 1.6.3 and HTML development build 1.6.3.3. The development build changes packaging only; all gameplay rules below are identical.
+These rules apply to stable 1.6.4 on web and Android. It promotes the smaller HTML, short intro/Quick rules and purple paper wildcard from the 1.6.3 development builds.
 
 ### Controls and word sets
 

@@ -18,7 +18,7 @@ const root = path.resolve(__dirname, '..');
       format: { comments: false, ascii_only: false, inline_script: true }
     }
   });
-  const version = source.match(/v(\d+\.\d+\.\d+\.\d+) DEV/)[1];
+  const version = source.match(/v(\d+\.\d+\.\d+(?:\.\d+)?)(?: DEV)? · NO UMBRELLA/)[1];
   for (const name of ['index.html', `word-rain-${version}.html`])
     fs.writeFileSync(path.join(root, name), html + '\n');
   console.log(`HTML: ${Buffer.byteLength(source)} → ${Buffer.byteLength(html + '\n')} bytes`);

@@ -10,7 +10,7 @@ const withoutPaperDrawing = text => text.replace(/function drawHandwriting\(\)\{
 assert.deepEqual(scripts(withoutPaperDrawing(read('src/index.html'))), scripts(withoutPaperDrawing(read('word-rain-1.6.3.html'))),
   'Only handwriting rendering may differ from the stable gameplay scripts');
 const delivered = read('index.html');
-assert.equal(delivered, read('word-rain-' + read('src/index.html').match(/v(\d+\.\d+\.\d+\.\d+) DEV/)[1] + '.html'));
+assert.equal(delivered, read('word-rain-' + read('src/index.html').match(/v(\d+\.\d+\.\d+(?:\.\d+)?)(?: DEV)? · NO UMBRELLA/)[1] + '.html'));
 assert(Buffer.byteLength(delivered) < Buffer.byteLength(read('word-rain-1.6.3.html')));
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'word-rain-web-'));
 try {

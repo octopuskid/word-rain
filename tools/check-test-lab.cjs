@@ -1,0 +1,27 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+const helper=fs.readFileSync(path.join(root,'android/tests/mobile-records.cjs'),'utf8').split('const a=session();')[0];
+const checks=String.raw`
+const labHtml=fs.readFileSync(require('path').join(__dirname,'../../test.html'),'utf8');
+const labScripts=[...labHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
+const t=session({},false,labScripts);
+for(const [id,value]of Object.entries({'lab-speed':'180','lab-interval':'0.5','lab-count':'2','lab-type':'target','lab-position':'50'}))t.el(id).value=value;
+t.el('lab-safe').checked=true;
+t.el('lab-words').value='RAIN';t.el('lab-apply-words').onclick();
+assert.equal(t.run('words.join()'),'RAIN');assert.equal(t.run('state'),'playing');
+t.el('lab-wild').onclick();assert.equal(t.run('items.length'),1);assert(t.run('items[0].wild'));assert.equal(t.run('items[0].speed'),180);
+t.el('lab-clear').onclick();t.el('lab-auto').checked=true;t.el('lab-auto').onchange();
+const previousWaves=t.run('labWaves');t.run('update(.25)');assert.equal(t.run('items.length'),0);t.run('update(.25)');assert.equal(t.run('items.length'),2);assert.equal(t.run('labWaves'),previousWaves+1);
+assert(t.run('items.every(a=>a.speed===180)'));
+t.el('lab-auto').checked=false;t.el('lab-auto').onchange();t.el('lab-clear').onclick();t.run('update(1)');assert.equal(t.run('items.length'),0,'automatic game spawn is disabled');
+t.run('progress=3');t.el('lab-next').onclick();assert.equal(t.run('items.length'),0,'last letter has no following drop');
+t.run('progress=0');t.el('lab-next').onclick();assert.equal(t.run('items[0].letter'),'A');
+t.el('lab-clear').onclick();t.el('lab-stack').checked=true;t.run('labDrop("letter",2)');assert.equal(t.run('items[0].x'),t.run('items[1].x'));t.run('items.forEach(item=>item.y=100);update(0)');assert.equal(t.run('items.length'),1);assert(t.run('items[0].wild'),'test blocks use real overlaps');
+t.run('items=[];progress=3;collectCorrectLetter({x:0,y:0});hud()');assert.equal(t.run('words[0]'),'RAIN');assert.equal(t.run('wordIndex'),0,'one custom word repeats safely');
+t.el('lab-words').value='<script>';t.el('lab-apply-words').onclick();assert.equal(t.run('words[0]'),'RAIN','reject invalid custom words');
+t.run('items=[{bomb:true,x:240,y:460,speed:0}];x=target=240;lives=1;update(0)');assert.equal(t.run('lives'),3);assert.equal(t.run('state'),'playing');
+for(const key of Object.keys(t.store))assert(key.startsWith('word-rain-lab-'),'isolated lab save key: '+key);
+const production=fs.readFileSync(require('path').join(__dirname,'../../index.html'),'utf8');assert(!production.includes('labOriginalUpdate'));assert(!production.includes('Word Rain test lab'));
+console.log('PASS test lab: manual/next/wildcard drops, fixed speed, timed waves, no normal auto spawn, overlap conversion, single custom word repetition, input validation, safe HP, isolated saves and production exclusion.');
+`;
+new Function('require','__dirname','process',helper+'\n'+checks)(require,path.join(root,'android/tests'),{argv:[...process.argv.slice(0,2),path.join(root,'index.html')]});

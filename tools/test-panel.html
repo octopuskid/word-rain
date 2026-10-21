@@ -1,0 +1,24 @@
+<aside class="sandbox" aria-label="Gameplay test controls">
+<h2>Word Rain test lab</h2>
+<p>Sandbox only · Separate settings and records · Never included in the APK.</p>
+<details open><summary>Block, speed &amp; word controls</summary>
+<div class="sandbox-fields">
+<label>Falling speed (px/s)<input id="lab-speed" type="number" min="10" max="1000" value="100"></label>
+<label>Wave interval (seconds)<input id="lab-interval" type="number" min="0.1" max="10" step="0.1" value="1"></label>
+<label>Blocks per wave<input id="lab-count" type="number" min="1" max="10" value="1"></label>
+<label>Automatic block type<select id="lab-type"><option value="target">Current letter</option><option value="next">Following letter</option><option value="letter">Random letter</option><option value="bomb">× hazard</option><option value="shield">Shield</option><option value="wild">Wildcard</option><option value="mixed">Game's random wave</option></select></label>
+<label>Drop position (% across arena)<input id="lab-position" type="range" min="0" max="100" value="50"></label>
+<label><span><input id="lab-stack" type="checkbox"> Stack drops to test overlaps</span></label>
+<label><span><input id="lab-auto" type="checkbox"> Automatic waves</span></label>
+<label><span><input id="lab-safe" type="checkbox" checked> Keep hearts at 3</span></label>
+</div>
+<div class="sandbox-buttons">
+<button id="lab-target" type="button">Drop current</button><button id="lab-next" type="button">Drop next</button><button id="lab-letter" type="button">Drop random</button><button id="lab-bomb" type="button">Drop ×</button><button id="lab-shield" type="button">Drop shield</button><button id="lab-wild" type="button">Drop wildcard</button><button id="lab-wave" type="button">Drop wave</button><button id="lab-clear" type="button">Clear blocks</button><button id="lab-restart" type="button">Reset test run</button>
+</div>
+<label for="lab-words">Custom words (A–Z, 2–16 letters; separate with spaces, commas or new lines)</label>
+<textarea id="lab-words" rows="2" spellcheck="false">RAIN CLOUD SHIELD WILDCARD</textarea>
+<button id="lab-apply-words" type="button">Apply words &amp; reset run</button>
+<p id="lab-status" role="status">Automatic waves off. Drop blocks manually or set an interval.</p>
+<p>Fixed speed overrides acceleration and penalties in this lab. Hz means scheduled waves per second; random game waves can skip drops. Pausing freezes the timer. Manual drops resume play. Gameplay collision and scoring rules are active. Optional music still requires consent.</p>
+<p><a href="./">Return to the regular game</a></p>
+</details></aside>
