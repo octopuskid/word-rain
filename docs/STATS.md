@@ -6,7 +6,7 @@ The separate public dashboard is at **https://octopuskid.github.io/word-rain/sta
 | --- | --- | --- |
 | GitHub visitors | Unique visitors to the repository over GitHub's last 14 days; also shows views | Dated owner-verified snapshot in `stats/data.json` |
 | GitHub clones | Full repository clones over the last 14 days; also shows unique cloners | Dated owner-verified snapshot |
-| GitHub downloads | Sum of `download_count` for assets on all currently published releases, including prereleases | Public GitHub API on dashboard load / Refresh |
+| GitHub downloads | Sum of `download_count` for assets on all currently published releases, including prereleases | Public GitHub API on dashboard load / Refresh, with a Shields download-total badge fallback |
 | GitHub Pages visits | Approximate game-page loads since counter installation on 21 October 2026 | Hits badge in the main game; dashboard reads without incrementing |
 | itch.io visitors | Page views, **not** unique people | Dated owner-verified Analytics snapshot |
 | itch.io plays | Browser plays; does not count offline or APK play sessions | Dated owner-verified Analytics snapshot |
@@ -23,7 +23,7 @@ Snapshots intentionally **do not update automatically**. A public GitHub Pages s
 
 Only the canonical web game's `/word-rain/` and `/word-rain/index.html` routes on `octopuskid.github.io` load the Hits badge. The statistics page, test lab, version archives, itch.io, other hosts and APK do not count. A visible footer links to the dashboard and labels the service. The badge is requested once per document load with no referrer; it does not read saved scores or word records. It is optional and cannot block gameplay. Earlier untracked visits cannot be recovered.
 
-The dashboard reads `https://hits.sh/api/urns/octopuskid.github.io/word-rain` (read-only). If direct JSON reading is unavailable, a Shields dynamic JSON badge reads that same total server-side; refreshing the dashboard never requests the incrementing Hits SVG. An error is shown as unavailable, not zero. Blockers, service outages and public counter manipulation mean this is an approximate hit count, not a reliable unique-person count.
+The dashboard uses a Shields dynamic JSON badge to read `https://hits.sh/api/urns/octopuskid.github.io/word-rain` server-side (the Hits JSON endpoint does not provide browser CORS headers); refreshing the dashboard never requests the incrementing Hits SVG. An error is shown as unavailable, not zero. Blockers, service outages and public counter manipulation mean this is an approximate hit count, not a reliable unique-person count.
 
 ## Sources
 
@@ -34,3 +34,5 @@ The dashboard reads `https://hits.sh/api/urns/octopuskid.github.io/word-rain` (r
 - [Hits privacy policy](https://hits.sh/privacy/)
 
 No new game release, APK, save format or gameplay change is needed for this dashboard.
+
+- [Shields GitHub download-total badge](https://shields.io/badges/git-hub-downloads-all-assets-all-releases) is used when a browser cannot read the GitHub API directly. Both badge services may cache counts.
