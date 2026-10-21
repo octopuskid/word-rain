@@ -51,8 +51,9 @@ Run `node tools/check-optimized.cjs` to confirm this and test compiled behavior.
 It generates an HTML-only mobile fixture, checks the old saved-data keys and
 runs the existing gameplay/save/audio/overlap/cloud/Rick regression suites
 against the optimized web and mobile markup. It does not compile an APK.
-Runtime browser checks cover desktop controls, phone layout, paper font and
-Overcast. Physical Android installation testing is outside this HTML release.
+Deployed browser smoke checks cover desktop controls, the paper font and
+Overcast. Mobile behavior is covered by the generated HTML fixture; physical
+Android installation testing is outside this HTML release.
 
 Stable APK 1.6.3, its signing certificate and existing installed app data are
 unchanged. Development releases do not trigger the Android stable-update checker.
