@@ -47,13 +47,12 @@ markup to the readable source before running the build.
 
 ## Verification
 
-The gameplay scripts in the readable source match stable 1.6.3 except for the handwriting drawing function.
-Run `node tools/check-optimized.cjs` to confirm this and test compiled behavior.
-It generates an HTML-only mobile fixture, checks the old saved-data keys and
-runs the existing gameplay/save/audio/overlap/cloud/Rick regression suites
-against the optimized web and mobile markup. It does not compile an APK.
-Deployed browser smoke checks cover desktop controls, the paper font and
-Overcast. Mobile behavior is covered by the generated HTML fixture; physical
-Android installation testing is outside this HTML release.
+Run `node tools/check-optimized.cjs` for the current dev scoring matrix and
+unchanged target/spawning checks, including a generated mobile HTML fixture.
+Run `node tools/check-test-lab.cjs` for the browser sandbox controls and storage
+isolation. Historical 1.6.4 suites assert the earlier fixed score amounts; their
+original versions remain in the stable tag. The current 1.6.4.1 formula and
+upward rounding are tested in `android/tests/scoring-1641.cjs`.
+Physical Android installation is outside this HTML development release.
 
 Stable APK 1.6.4 uses the same signing certificate and save-data keys as 1.6.3. Development releases do not trigger the Android stable-update checker.

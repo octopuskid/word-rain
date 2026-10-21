@@ -2,6 +2,14 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.4.1 — HTML development prerelease
+
+- Score each award as `ceil(base × mode × Overcast × current speed)`: Normal 1 / Hard 2, clear 1 / Overcast 2, 180% speed = 1.8. Round upward after multiplication. Hard + Overcast at 180% earns 72 for a correct letter; 181% earns 73.
+- Preserve the perfect bonus (double correct/word bases), scoring pauses, all saved records and legacy fractional bests. Compute catch awards before penalties or completion speed rewards.
+- Show current factors near the HUD and update in-game/README rules. Keep a separate stable 1.6.4 scoring reference.
+- Update only GitHub Pages game/test lab and HTML prerelease. Stable itch.io and APK stay 1.6.4.
+- Verify the full factor matrix, ceiling/float boundaries, correct/wrong/wildcard/word/overlap awards, protected catches, scoring recovery, sixth-perfect boundary, saved data, spawning and test lab.
+
 ## 1.6.4 — Stable
 
 - Promote the 1.6.3.3 game to Android and stable web: smaller embedded assets/code, short opening text, Quick rules below the word and purple handwriting wildcard tiles.

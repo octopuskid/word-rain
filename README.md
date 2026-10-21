@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.4**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.4**. Current HTML dev: **[1.6.4.1](https://github.com/octopuskid/word-rain/releases/tag/v1.6.4.1)**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -44,7 +44,7 @@ Enter 1–200 custom words of 2–16 letters A–Z, separated by spaces, commas 
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable 1.6.4 on web and Android. It promotes the smaller HTML, short intro/Quick rules and purple paper wildcard from the 1.6.3 development builds.
+These rules describe GitHub Pages development build **1.6.4.1**, including the new score multipliers. itch.io and the APK remain on stable **1.6.4**, using the [stable scoring reference](docs/HOW-TO-PLAY-1.6.4.md).
 
 ### Controls and word sets
 
@@ -71,19 +71,31 @@ Development tags, drafts, prereleases and releases without the standard APK are 
 
 ### Optional Overcast challenge
 
-Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. The earlier rounded cloud design, blue shading/highlights and pencil outlines are retained. Large puffs overlap in staggered back-to-front stacks like the creator’s sketch, rather than repeating small stamps or using continuous wave-shaped strips. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed, spawning or points. There is no extra score multiplier.
+Enable **Overcast** in **Word set & difficulty** while ready, paused or finished. Opaque clouds cover the middle 50% of the playfield, leaving the upper and lower 25% clear. The earlier rounded cloud design, blue shading/highlights and pencil outlines are retained. Large puffs overlap in staggered back-to-front stacks like the creator’s sketch, rather than repeating small stamps or using continuous wave-shaped strips. Pause and confirmation dialogs always appear above the cloud layer. Both textures are embedded for offline play. The option defaults off, saves on this device, and can be changed while paused without restarting or resuming the run. It works in Normal, Hard and the Rick challenge. Clouds do not block drag controls or alter collisions, speed or spawning. Enabling Overcast multiplies newly earned points by 2 in 1.6.4.1.
 
 ### Score and hearts
 
-| Event | Normal | Hard |
-| --- | --- | --- |
-| Correct letter | +10 | +15 |
-| Completed word | +50 | +75 |
-| Correct letter with the 2× perfect bonus | +20 | +30 |
-| Completed word with the 2× perfect bonus | +100 | +150 |
-| Wrong letter while scoring is active | +1 | +2 |
+**Each award = ceil(base points × mode × Overcast × current speed).**
 
-Hard awards 1.5× Normal points for correct letters and word completions. Active-scoring wrong-letter catches award +2 in Hard (+1 in Normal); these points never receive the 2× perfect bonus. Existing saved scores, including legacy half-points, are preserved. After three consecutive wrong letters, scoring pauses: the third wrong catch earns nothing. The next correct letter or wildcard clears the pause without awarding letter points; subsequent catches score normally.
+| Factor | Value |
+| --- | --- |
+| Normal / Hard | 1 / 2 |
+| Overcast off / on | 1 / 2 |
+| Current speed | Displayed percentage ÷ 100 (180% = 1.8) |
+
+| Event | Base points |
+| --- | --- |
+| Correct letter or wildcard | 10 |
+| Completed word | 50 |
+| Correct letter with perfect bonus | 20 |
+| Completed word with perfect bonus | 100 |
+| Wrong letter while scoring is active | 1 (never doubled by perfect bonus) |
+
+Apply all factors, then **round each individual award upward to a whole point**, rather than rounding the total run score. Example: a correct catch in Hard + Overcast at 180% earns `ceil(10 × 2 × 2 × 1.8) = 72`; at 181% it earns `ceil(72.4) = 73`. A Normal clear-sky wrong catch at 135% earns `ceil(1.35) = 2`.
+
+Use the current speed **before that catch changes speed**. The final letter and its word-completion bonus use the same pre-reward speed and pre-completion perfect-bonus state. After the sixth perfect word, subsequent awards use doubled base points. Existing saved best scores, including legacy fractions, are preserved and are never retroactively multiplied or rounded.
+
+Three wrong letters in a row pause scoring: the third earns zero. The next correct letter or wildcard clears the pause without letter points; any resulting word-completion bonus still follows the formula. Later catches score normally. Hazards, shield pickups and the Rick challenge itself award no points.
 
 Start with three hearts. Reaching zero ends the game. The shield table below explains heart loss and protection.
 
