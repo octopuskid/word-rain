@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.3**. Current HTML development build: **[1.6.3.2](https://github.com/octopuskid/word-rain/releases/tag/v1.6.3.2)** (shorter start screen). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.3**. Current HTML development build: **[1.6.3.3](https://github.com/octopuskid/word-rain/releases/tag/v1.6.3.3)** (purple paper wildcard). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -36,9 +36,9 @@ The Android APK requires Android 8.0+ and bundles the game, original music and s
 
 ## How to play
 
-The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game.
+The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable 1.6.3 and HTML development build 1.6.3.2. The development build changes packaging only; all gameplay rules below are identical.
+These rules apply to stable 1.6.3 and HTML development build 1.6.3.3. The development build changes packaging only; all gameplay rules below are identical.
 
 ### Controls and word sets
 

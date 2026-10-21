@@ -6,8 +6,9 @@ const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const read = name => fs.readFileSync(path.join(root, name), 'utf8');
 const scripts = text => [...text.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
-assert.deepEqual(scripts(read('src/index.html')), scripts(read('word-rain-1.6.3.html')),
-  'Readable gameplay scripts must match the stable release exactly');
+const withoutPaperDrawing = text => text.replace(/function drawHandwriting\(\)\{[\s\S]*?\nfunction draw\(\)/, 'function draw()');
+assert.deepEqual(scripts(withoutPaperDrawing(read('src/index.html'))), scripts(withoutPaperDrawing(read('word-rain-1.6.3.html'))),
+  'Only handwriting rendering may differ from the stable gameplay scripts');
 const delivered = read('index.html');
 assert.equal(delivered, read('word-rain-' + read('src/index.html').match(/v(\d+\.\d+\.\d+\.\d+) DEV/)[1] + '.html'));
 assert(Buffer.byteLength(delivered) < Buffer.byteLength(read('word-rain-1.6.3.html')));

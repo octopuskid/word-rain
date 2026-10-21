@@ -1,6 +1,6 @@
 # HTML build and size optimization
 
-Development builds **1.6.3.1 / 1.6.3.2** package the same gameplay as stable 1.6.3.
+Development builds **1.6.3.1–1.6.3.3** retain the gameplay rules of stable 1.6.3. Version 1.6.3.3 colors paper wildcard tiles purple.
 The downloadable HTML falls from 99,248 to 81,887 bytes: **17.5% smaller**.
 The shorter intro and expandable Quick rules in 1.6.3.2 bring its file to 82,516 bytes.
 No network loader, packed-code evaluator or gameplay feature removal is used.
@@ -47,7 +47,7 @@ markup to the readable source before running the build.
 
 ## Verification
 
-The gameplay scripts in the readable source are identical to stable 1.6.3.
+The gameplay scripts in the readable source match stable 1.6.3 except for the handwriting drawing function.
 Run `node tools/check-optimized.cjs` to confirm this and test compiled behavior.
 It generates an HTML-only mobile fixture, checks the old saved-data keys and
 runs the existing gameplay/save/audio/overlap/cloud/Rick regression suites

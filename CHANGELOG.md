@@ -2,6 +2,11 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.3.3 — HTML development prerelease
+
+- Color handwriting wildcard tiles lavender with darker purple pencil hatching, retaining the dark ✦ symbol and hand-drawn outline.
+- Drawing-only change; gameplay, saved data and wildcard probabilities are unchanged. GitHub Pages receives this dev HTML; itch.io and APK remain stable 1.6.3.
+
 ## 1.6.3.2 — HTML development prerelease
 
 - Replace the long start-screen paragraph with a two-sentence introduction so the Start button has more room on phones.
