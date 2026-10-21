@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.4**. Current HTML dev: **[1.6.4.1](https://github.com/octopuskid/word-rain/releases/tag/v1.6.4.1)**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.5**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -22,9 +22,9 @@ Stable releases include one HTML package and one APK. Full and Lite were merged 
 
 ## Smaller HTML development build
 
-Stable 1.6.4 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
+Stable 1.6.5 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
 
-1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. Those changes are now included in stable 1.6.4 on itch.io and Android. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
+1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. Those changes are now included in stable 1.6.5 on itch.io and Android. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
 
 ## Run the game
 
@@ -44,7 +44,7 @@ Enter 1–200 custom words of 2–16 letters A–Z, separated by spaces, commas 
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules describe GitHub Pages development build **1.6.4.1**, including the new score multipliers. itch.io and the APK remain on stable **1.6.4**, using the [stable scoring reference](docs/HOW-TO-PLAY-1.6.4.md).
+These rules apply to stable **1.6.5** on GitHub Pages, itch.io and Android, including mode, Overcast and speed score multipliers.
 
 ### Controls and word sets
 

@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.5 — Stable
+
+- Promote the 1.6.4.1 mode/Overcast/current-speed multiplier scoring to web and Android.
+- One signed APK, version code 34; preserve app ID, original certificate and saved-data keys.
+- Synchronize HTML/APK on GitHub Releases and itch.io, with the HTML on GitHub Pages.
+- New scoring matrix, spawning, sound and target-display checks pass; legacy suites retain old score expectations. APK signing, alignment and payload checks pass. Physical Android installation remains untested.
+
 ## 1.6.4.1 — HTML development prerelease
 
 - Score each award as `ceil(base × mode × Overcast × current speed)`: Normal 1 / Hard 2, clear 1 / Overcast 2, 180% speed = 1.8. Round upward after multiplication. Hard + Overcast at 180% earns 72 for a correct letter; 181% earns 73.
