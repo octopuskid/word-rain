@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.6 — Stable
+
+- Recover BGM after unexpected media ends/pauses and interrupted Web Audio contexts. Keep original, downloaded and local tracks looping during play.
+- Stop retired tracks cleanly; pause, BGM off, Stats and backgrounding still stop playback.
+- Retain update checks, consent-based music downloads, verification, offline cache and saved game data. APK version code 35, original signing certificate.
+- BGM lifecycle tests and current scoring/display/spawning/SFX suites pass. Browser playtesting checks gameplay, optional download confirmation, loop wrap and pause/resume before stable publication. Physical Android playback remains device-dependent and untested here.
+
 ## 1.6.5 — Stable
 
 - Promote the 1.6.4.1 mode/Overcast/current-speed multiplier scoring to web and Android.

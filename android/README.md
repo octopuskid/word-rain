@@ -1,6 +1,6 @@
 # Word Rain for Android
 
-Current stable: **1.6.5**, version code **34**. One APK replaces either older Full or Lite in place. Install over the existing app to keep personal best, word records, settings and Rick unlocks. App ID, signing certificate, stable HTTPS WebView origin and storage keys are unchanged. Do not uninstall first.
+Current stable: **1.6.6**, version code **35**. One APK replaces either older Full or Lite in place. Install over the existing app to keep personal best, word records, settings and Rick unlocks. App ID, signing certificate, stable HTTPS WebView origin and storage keys are unchanged. Do not uninstall first.
 
 The game, Pocket Forecast and sound effects are bundled for offline play. Neither Kevin MacLeod recording is packaged. Selecting an optional song asks for download permission, then fetches only that approved track from the Word Rain GitHub repository. Size/SHA-256 checks precede an atomic private-file save. Verified tracks survive reopening and in-place updates. Failed downloads leave original music usable and can be retried. Only the two catalog IDs/files/URLs are accepted by the native bridge; private cached audio supports byte ranges through the existing local HTTPS origin. Local audio importing still reads only the selected document, up to 24 MB, with no upload.
 
@@ -25,7 +25,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output: `android/build/word-rain-1.6.5.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output: `android/build/word-rain-1.6.6.apk` and `SHA256SUMS.txt`. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
@@ -37,4 +37,4 @@ Cloud generation: `python tools/build_cloud_textures.py`; launcher generation: `
 
 1.6.4 (code 33) promotes 1.6.3.3: compressed self-contained HTML, shorter intro, Quick rules and purple paper wildcards. No lab tools are present in the APK. The separate GitHub Pages test lab is browser only.
 
-1.6.5 (code 34) promotes the 1.6.4.1 scoring changes: ceil(base × mode × Overcast × current speed), with Hard and Overcast each multiplying by 2.
+1.6.6 (code 35) promotes the 1.6.4.1 scoring changes: ceil(base × mode × Overcast × current speed), with Hard and Overcast each multiplying by 2.
