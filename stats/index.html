@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Word Rain's GitHub and itch.io audience, downloads and plays, with sources and reporting periods.">
+<title>Word Rain · Project stats</title>
+<style>
+:root{color-scheme:dark;--bg:#101c28;--panel:#182c39;--text:#ecf5ed;--muted:#a9bec4;--line:#314955;--lime:#caf17b;--blue:#94d8fa;--pink:#eab4dd}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:52px 24px 32px}a{color:var(--lime);text-underline-offset:4px}nav{display:flex;gap:22px;flex-wrap:wrap;font-size:14px}header{margin:42px 0 32px}.eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--muted)}h1{font-size:clamp(36px,7vw,64px);letter-spacing:-.05em;line-height:1.05;margin:12px 0 18px}h1 span{color:var(--lime)}header p{max-width:620px;color:var(--muted);margin-bottom:22px}button{background:var(--lime);color:#10231a;border:0;border-radius:10px;font:inherit;font-weight:700;padding:11px 18px;cursor:pointer}button:disabled{opacity:.6;cursor:wait}button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:5px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;min-width:0}.card h2{font-size:17px;margin:0 0 14px}.value{font-size:48px;line-height:1.1;font-weight:750;letter-spacing:-.05em;min-height:58px;margin:8px 0 13px}.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--muted);font-size:11px;letter-spacing:.05em;text-transform:uppercase}.pill.live{color:var(--lime)}.pill.snapshot{color:var(--blue)}.card p{font-size:13px;color:var(--muted);margin:7px 0}.stamp{font-size:12px!important}.warn{color:#ffd49a!important}.counter-badge{max-width:100%;height:28px;vertical-align:middle}.notes{margin-top:28px;padding:24px 0;border-top:1px solid var(--line);color:var(--muted)}.notes h2{font-size:18px;color:var(--text)}.notes p{max-width:900px;font-size:14px}footer{color:var(--muted);font-size:12px;margin-top:24px}#status{color:var(--muted);font-size:13px;min-height:24px;margin:14px 0}#updated{color:var(--muted);font-size:13px}noscript p{padding:20px;border:1px solid var(--line)}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:500px){main{padding:28px 18px}header{margin-top:30px}.grid{grid-template-columns:1fr}.card{padding:22px}.value{font-size:44px}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Project links"><a href="../">Play Word Rain ↗</a><a href="https://github.com/octopuskid/word-rain">GitHub ↗</a><a href="https://octopuskid.itch.io/word-rain">itch.io ↗</a></nav>
+<header><div class="eyebrow">A little pocket arcade / audience</div><h1>Word Rain<span>.</span><br>By the numbers.</h1><p>One place for the project's visitors, clones, downloads and plays. Each counter shows what it measures and when it was checked.</p><button id="refresh" type="button">Refresh available counters ↻</button><div id="status" role="status" aria-live="polite">Loading counters…</div></header>
+<section class="grid" aria-label="Audience counters">
+<article class="card"><span class="pill snapshot">Snapshot</span><h2>GitHub visitors</h2><div class="value" id="gh-visitors">—</div><p>Unique repository visitors · last 14 days</p><p id="gh-views"></p><p class="stamp" id="gh-date"></p></article>
+<article class="card"><span class="pill snapshot">Snapshot</span><h2>GitHub clones</h2><div class="value" id="gh-clones">—</div><p>Repository clones · last 14 days</p><p id="gh-cloners"></p><p class="stamp" id="clone-date"></p></article>
+<article class="card"><span class="pill" id="download-mode">Loading</span><h2>GitHub downloads</h2><div class="value" id="gh-downloads">—</div><p>All currently published release assets · lifetime</p><p>Includes repeat downloads, old versions and non-game assets. Excludes source ZIP/tar downloads.</p><p class="stamp" id="download-date"></p></article>
+<article class="card"><span class="pill" id="pages-mode">Loading</span><h2>GitHub Pages visits</h2><div class="value" id="gh-pages">—</div><p>Game page loads · tracking starts 21 Oct 2026</p><p>Approximate hits, not unique people. This stats page and the test lab do not increment it.</p><p class="stamp" id="pages-date"></p></article>
+<article class="card"><span class="pill snapshot">Snapshot</span><h2>itch.io visitors</h2><div class="value" id="itch-visitors">—</div><p>Page views · unique visitors not provided</p><p>Analytics snapshot with Last 30 days selected.</p><p class="stamp" id="itch-date"></p></article>
+<article class="card"><span class="pill snapshot">Snapshot</span><h2>itch.io plays</h2><div class="value" id="itch-plays">—</div><p>Browser plays reported by itch.io</p><p>Analytics snapshot with Last 30 days selected. APK sessions are not included.</p><p class="stamp" id="play-date"></p></article>
+</section>
+<noscript><p>JavaScript is needed to load these counters. The latest checked figures are available in <a href="data.json">the public stats data</a>.</p></noscript>
+<section class="notes"><h2>What these numbers mean</h2><p>Views, clones, downloads and plays are different events; don't add them together as a total player count. Maintainer activity, automated tools and repeat visits may be included.</p><p><strong>Snapshot</strong> counters come from private analytics and retain their check date. Refreshing this page does not sign in to GitHub or itch.io or update those private figures. They are not live counters. GitHub's 14-day figures are rolling totals and can decrease.</p><p><strong>Automatic</strong> counters use the public GitHub releases API and the <a href="https://hits.sh/">Hits</a> counter. Page-load counting begins when the counter is installed; earlier visits cannot be recovered. Blockers, offline visits and service outages can cause undercounting; public hit counters can also be inflated. No player account or saved-game data is sent by our counter code.</p><p>Sources: <a href="https://github.com/octopuskid/word-rain/graphs/traffic">GitHub Traffic (owner access)</a> · <a href="https://github.com/octopuskid/word-rain/releases">Release downloads</a> · <a href="https://itch.io/game/summary/5179831">itch.io Analytics (owner access)</a> · <a href="https://github.com/octopuskid/word-rain/blob/main/docs/STATS.md">Counter maintenance</a> · <a href="https://hits.sh/privacy/">Hits privacy policy</a></p></section>
+<footer>Word Rain · Aggregate project statistics. No scores or word records are stored on this page.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), number=n=>new Intl.NumberFormat().format(n);
+const date=t=>new Date(t).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'});
+const stamp=t=>'Checked '+date(t);
+const API='https://api.github.com/repos/octopuskid/word-rain/releases';
+const HITS='https://hits.sh/api/urns/octopuskid.github.io/word-rain';
+let snapshot=null;
+async function json(url){const r=await fetch(url,{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(12000)});if(!r.ok)throw Error('HTTP '+r.status);return r.json()}
+function valid(n){if(!Number.isSafeInteger(n)||n<0)throw Error('Invalid counter');return n}
+function showSnapshot(s){
+ $('gh-visitors').textContent=number(valid(s.github.visitors));$('gh-views').textContent=number(valid(s.github.views))+' repository views';$('gh-date').textContent=stamp(s.github.checkedAt);$('clone-date').textContent=stamp(s.github.checkedAt);
+ $('gh-clones').textContent=number(valid(s.github.clones));$('gh-cloners').textContent=number(valid(s.github.uniqueCloners))+' unique cloners';
+ $('itch-visitors').textContent=number(valid(s.itch.views));$('itch-plays').textContent=number(valid(s.itch.plays));$('itch-date').textContent=stamp(s.itch.checkedAt);$('play-date').textContent=stamp(s.itch.checkedAt);
+ $('gh-downloads').textContent=number(valid(s.downloads.count));$('download-date').textContent=stamp(s.downloads.checkedAt)+' · saved snapshot';$('download-mode').textContent='Snapshot';$('download-mode').className='pill snapshot';
+}
+async function downloads(){
+ let total=0;
+ for(let page=1;page<=100;page++){const releases=await json(API+'?per_page=100&page='+page);if(!Array.isArray(releases))throw Error('Invalid releases');for(const release of releases){if(!release.draft)for(const asset of release.assets||[])total+=valid(asset.download_count)}if(releases.length<100){$('gh-downloads').textContent=number(valid(total));$('download-mode').textContent='Automatic';$('download-mode').className='pill live';$('download-date').textContent=stamp(new Date().toISOString());return}}
+ throw Error('Release pagination limit');
+}
+async function pages(){
+ try{const counts=await json(HITS);$('gh-pages').textContent=number(valid(counts.total));$('pages-mode').textContent='Automatic';$('pages-mode').className='pill live';$('pages-date').textContent=stamp(new Date().toISOString())+' · read-only';}
+ catch(e){
+  // A server-rendered badge can read the same total even if the JSON endpoint blocks CORS.
+  const img=document.createElement('img');img.className='counter-badge';img.alt='Read-only page-visit total';img.referrerPolicy='no-referrer';
+  img.src='https://img.shields.io/badge/dynamic/json?url='+encodeURIComponent(HITS)+'&query='+encodeURIComponent('$.total')+'&label=page%20visits&color=caf17b&labelColor=314955&cacheSeconds=300';
+  $('gh-pages').replaceChildren(img);$('pages-mode').textContent='Read-only badge';$('pages-mode').className='pill';$('pages-date').textContent='Badge may be cached for 5 minutes. An unavailable badge is not zero.';
+  img.onerror=()=>{$('gh-pages').textContent='Unavailable';$('pages-date').textContent='Counter service unavailable. No value has been guessed.'};
+ }
+}
+async function refresh(){
+ $('refresh').disabled=true;$('status').textContent='Refreshing public counters…';
+ try{snapshot=await json('./data.json');showSnapshot(snapshot)}catch(e){$('status').textContent='Snapshot data unavailable. Public counters will still be checked.'}
+ const results=await Promise.allSettled([downloads(),pages()]);
+ if(results[0].status==='rejected'){$('download-date').classList.add('warn');$('download-date').textContent=snapshot?stamp(snapshot.downloads.checkedAt)+' · API unavailable; saved snapshot shown':'Download count unavailable';}
+ $('status').textContent='Private analytics show dated snapshots. Public counters checked just now.';$('refresh').disabled=false;
+}
+$('refresh').onclick=refresh;refresh();
+</script></body></html>
