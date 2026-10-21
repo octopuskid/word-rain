@@ -1,0 +1,90 @@
+name: Bug report
+description: Report a problem with Word Rain.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Word Rain! Please check existing issues first.
+        Do not include passwords, verification codes, or private account details.
+  - type: input
+    id: version
+    attributes:
+      label: Game version
+      description: Use the version shown at the bottom of the game.
+      placeholder: "For example: 1.6.6 or 1.6.6.1 DEV"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Where are you playing?
+      options:
+        - Android APK
+        - GitHub Pages
+        - itch.io browser game
+        - Downloaded HTML / self-hosted game
+        - GitHub Pages test lab
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Device, operating system, and browser
+      placeholder: "For example: Nothing Phone 3, Android 16, APK; or Windows 11, Chrome"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Explain how someone else can make the problem happen.
+      placeholder: |
+        1. Open the game.
+        2. ...
+        3. The problem happens.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What should happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include any error message and whether it happens every time or occasionally.
+      placeholder: What happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Game settings
+      description: If relevant, include difficulty, word set, Overcast, drawing style, and BGM/SFX settings.
+  - type: textarea
+    id: audio
+    attributes:
+      label: Audio details (for music or sound problems)
+      description: |
+        Which track (Pocket Forecast, Carefree, Monkeys Spinning Monkeys, or a local file)?
+        How long before it stops? Does it happen at the end, after pausing, switching apps,
+        turning off the screen, or opening Stats? Does SFX still work?
+        For local files, include the audio format if known.
+  - type: textarea
+    id: updates
+    attributes:
+      label: Update-check or download details (if relevant)
+      description: |
+        Include installed and expected versions, Wi-Fi/mobile connection, any VPN,
+        approximate time since the last check, and whether you previously chose Later.
+        For music downloads, describe what happens after confirming the download.
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Screenshots, recordings, or additional details
+      description: You can attach screenshots or a short recording here. Remove private information first.
