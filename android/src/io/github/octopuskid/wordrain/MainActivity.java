@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.Looper;
@@ -55,43 +54,23 @@ public final class MainActivity extends Activity {
     private boolean downloadingMusic;
     private final Handler updates = new Handler(Looper.getMainLooper());
     private ConnectivityManager connectivity;
-    private ConnectivityManager.NetworkCallback networkCallback;
-    private boolean foreground, checkingUpdate;
-    // Background polling interval only; launch/reconnect checks never wait for it.
-    private static final long POLL_INTERVAL = 5 * 60 * 1000L;
-    private final Runnable periodicUpdate = new Runnable() {
-        @Override public void run() { checkForUpdate(); }
-    };
+    private boolean foreground, checkingUpdate, launchUpdateAttempted;
 
     @Override protected void onStart() {
         super.onStart();
         foreground = true;
-        connectivity = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        networkCallback = new ConnectivityManager.NetworkCallback() {
-            @Override public void onCapabilitiesChanged(Network network, NetworkCapabilities capabilities) {
-                if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED))
-                    updates.post(new Runnable() { @Override public void run() { checkForUpdate(); }});
-            }
-        };
-        try { connectivity.registerDefaultNetworkCallback(networkCallback); }
-        catch (RuntimeException unavailable) { networkCallback = null; }
-        checkForUpdate();
+        // One attempt for this launch, including offline/failure. Returning from another
+        // app or reconnecting must not start another request during the same session.
+        if (!launchUpdateAttempted) {
+            launchUpdateAttempted = true;
+            connectivity = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            checkForUpdate();
+        }
     }
 
     @Override protected void onStop() {
         foreground = false;
-        updates.removeCallbacks(periodicUpdate);
-        if (connectivity != null && networkCallback != null) {
-            try { connectivity.unregisterNetworkCallback(networkCallback); }
-            catch (RuntimeException unavailable) { /* Already unregistered. */ }
-        }
-        networkCallback = null;
         super.onStop();
-    }
-
-    private void scheduleUpdate(long delay) {
-        updates.removeCallbacks(periodicUpdate);
-        if (foreground) updates.postDelayed(periodicUpdate, Math.max(1000L, delay));
     }
 
     private void checkForUpdate() {
@@ -137,7 +116,6 @@ public final class MainActivity extends Activity {
             final String version = found;
             updates.post(new Runnable() { @Override public void run() {
                 checkingUpdate = false;
-                scheduleUpdate(POLL_INTERVAL);
                 if (version == null || !foreground || isFinishing() || isDestroyed() || game == null) return;
                 if (version.equals(prefs.getString("offered-version", ""))) return;
                 prefs.edit().putString("offered-version", version).apply();

@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.8 — Stable
+
+- Attempt one Android update check when the app opens. Returning from another app does not trigger another check during that session.
+- Remove periodic polling, retry scheduling and connectivity callbacks. Offline/failed attempts wait for the next fresh launch.
+- Retain stable/APK filtering, music downloads/offline cache, BGM loop fixes and all saved-data keys. APK code 37 uses the original certificate.
+- Native build/signature/payload verification and browser gameplay smoke testing precede publication. Physical Android lifecycle/network behavior still needs device verification.
+
 ## 1.6.7 — Stable
 
 - Remove the persisted six-hour success cooldown and five-minute attempt gate from the Android update checker. Launches and validated network reconnections check immediately; only overlapping in-flight requests are suppressed.

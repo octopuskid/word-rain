@@ -99,7 +99,7 @@ Reference: [MDN's iframe documentation](https://developer.mozilla.org/en-US/docs
 
 ## Optimized development HTML
 
-GitHub Pages, itch.io and Android now use stable 1.6.7 with multiplier scoring. Use the single `word-rain-1.6.7.html` file from the stable release for the smaller self-contained game; no extra assets or music downloads are required for basic offline play. Optional tracks still ask for consent. To rebuild this file from the readable source, see [OPTIMIZATION.md](OPTIMIZATION.md).
+GitHub Pages, itch.io and Android now use stable 1.6.8 with multiplier scoring. Use the single `word-rain-1.6.8.html` file from the stable release for the smaller self-contained game; no extra assets or music downloads are required for basic offline play. Optional tracks still ask for consent. To rebuild this file from the readable source, see [OPTIMIZATION.md](OPTIMIZATION.md).
 
 ## Test page
 
