@@ -87,7 +87,8 @@ hud=function(){
  $('lab-speed-slider').max=Math.round(maxSpeed()*100);
  $('lab-speed-slider').value=Math.round(speedMultiplier*100);
 };
-$('lab-hp').onchange=()=>{
+$('lab-hp').oninput=$('lab-hp').onchange=()=>{
+ if($('lab-hp').value==='')return;
  lives=Math.round(labNumber('lab-hp',0,3,3));$('lab-safe').checked=false;
  if(lives===0)checkGameOver();hud();labStatus('Hearts set; keep-hearts protection off');
 };
