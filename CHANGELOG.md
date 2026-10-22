@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.8.2 — HTML development prerelease
+
+- Keep the current run’s Overcast clouds and scoring multiplier fixed when changing the checkbox while paused. Resume keeps the original setting; a new game uses the selected setting.
+- Save the next-game preference using the existing settings key. Appearance changes do not overwrite it.
+- Publish synchronized game/test HTML on GitHub Pages and the standalone snapshot under `versions/`. Stable APK and itch.io stay on 1.6.8.
+
 ## Test page maintenance — no game release
 
 - Add a faint, non-interactive TEST MODE watermark across the test playfield and a visible maintenance notice.

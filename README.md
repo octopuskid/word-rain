@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.6.8.1**, with 60 words in each of the four sets (240 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.6.8.2**, with 60 words in each of the four sets (240 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -46,7 +46,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable **1.6.8** on itch.io and Android and development **1.6.8.1** on GitHub Pages, including mode, Overcast and speed score multipliers.
+These rules apply to stable **1.6.8** on itch.io and Android and development **1.6.8.2** on GitHub Pages, including mode, Overcast and speed score multipliers.
 
 ### Controls and word sets
 
@@ -214,3 +214,5 @@ The launcher was redrawn from the author’s sketch: a yellow hatched W tile, pu
 ## Project statistics
 
 [Open the separate statistics dashboard](https://octopuskid.github.io/word-rain/stats/) for GitHub visitors, clones and release downloads, GitHub Pages visits, and itch.io page views and plays. Public download/page counters refresh automatically; private analytics are explicitly dated snapshots. [Definitions and maintenance](docs/STATS.md).
+
+Overcast changes apply to the next new game. Toggling it while paused keeps the current run’s cloud visibility and scoring multiplier unchanged. **Apply & start new game** uses the selected setting; resuming the paused run keeps its original setting.

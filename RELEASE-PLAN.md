@@ -2,7 +2,7 @@
 
 Current stable: **1.6.8**.
 
-Current HTML development version: **1.6.8.1** — expanded word sets.
+Current HTML development version: **1.6.8.2** — Overcast changes apply to the next new game.
 
 Unless the user mentions APK or stable, publish an HTML-only development prerelease to GitHub Releases and GitHub Pages. Do not build an APK or update itch.io. Dev versions append a sequence to current stable, such as 1.6.8.1.
 
