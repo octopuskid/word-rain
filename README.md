@@ -1,10 +1,10 @@
 # Word Rain
 
-**[Open the test page](https://octopuskid.github.io/word-rain/test.html)** — sandbox controls with separate settings and records.
-
 Catch letters, spell words, and survive with shields and wildcards.
 
 **[Play on itch.io](https://octopuskid.itch.io/word-rain)** · **[Play on GitHub Pages](https://octopuskid.github.io/word-rain/)** · **[Download the game](https://github.com/octopuskid/word-rain/releases/latest)**
+
+**[Open the test page](https://octopuskid.github.io/word-rain/test.html)** — sandbox controls with separate settings and records.
 
 ## Watch how it was made
 
