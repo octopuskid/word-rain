@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## Test page maintenance — no game release
+
+- Add a faint, non-interactive TEST MODE watermark across the test playfield and a visible maintenance notice.
+- Rebuild the test page automatically whenever `npm run build` builds the game, keeping its gameplay and word sets synchronized.
+- Move all 17 versioned HTML snapshots from the repository root into `versions/`; future builds use that folder. Live `index.html` and `test.html` URLs stay unchanged.
+- No version bump, GitHub release, APK or itch.io update.
+
 ## 1.6.8.1 — HTML development prerelease
 
 - Expand Classic, Nature, Space and Tricky to 60 words each (240 entries, up from 85), retaining every original word.

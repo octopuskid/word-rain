@@ -19,7 +19,9 @@ const root = path.resolve(__dirname, '..');
     }
   });
   const version = source.match(/v(\d+\.\d+\.\d+(?:\.\d+)?)(?: DEV)? · NO UMBRELLA/)[1];
-  for (const name of ['index.html', `word-rain-${version}.html`])
+  fs.mkdirSync(path.join(root, 'versions'), { recursive: true });
+  for (const name of ['index.html', `versions/word-rain-${version}.html`])
     fs.writeFileSync(path.join(root, name), html + '\n');
+  require('./build-test.cjs');
   console.log(`HTML: ${Buffer.byteLength(source)} → ${Buffer.byteLength(html + '\n')} bytes`);
 })().catch(error => { console.error(error); process.exitCode = 1; });

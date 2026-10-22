@@ -9,3 +9,5 @@ Unless the user mentions APK or stable, publish an HTML-only development prerele
 For an APK or stable request, synchronize APK and HTML to GitHub Releases and itch.io, and publish the HTML game on GitHub Pages. Preserve the Android app ID, signing certificate and storage keys. Use the requested stable number, or increment the stable patch when omitted.
 
 The separate browser test lab stays on GitHub Pages only, outside release APKs and itch.io packages.
+
+Always rebuild and publish the browser test page alongside game updates. Test-page-only maintenance gets a notice on the test page and in CHANGELOG.md, without a new dev/stable release or version bump. Store versioned HTML snapshots under `versions/`.

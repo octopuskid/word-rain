@@ -99,8 +99,8 @@ Reference: [MDN's iframe documentation](https://developer.mozilla.org/en-US/docs
 
 ## Optimized development HTML
 
-GitHub Pages, itch.io and Android now use stable 1.6.8 with multiplier scoring. Use the single `word-rain-1.6.8.html` file from the stable release for the smaller self-contained game; no extra assets or music downloads are required for basic offline play. Optional tracks still ask for consent. To rebuild this file from the readable source, see [OPTIMIZATION.md](OPTIMIZATION.md).
+itch.io and Android use stable 1.6.8 with multiplier scoring; GitHub Pages currently runs development 1.6.8.1 with expanded word sets. Use the single `word-rain-1.6.8.html` file from the stable release for the smaller self-contained game; no extra assets or music downloads are required for basic offline play. Optional tracks still ask for consent. To rebuild this file from the readable source, see [OPTIMIZATION.md](OPTIMIZATION.md).
 
 ## Test page
 
-The separate [test lab](https://octopuskid.github.io/word-rain/test.html) lives only on GitHub Pages. It is intentionally excluded from the stable ZIP and APK. `npm run build:test` builds it from the regular HTML and the test panel files. Browser settings use `word-rain-lab-*` keys; the regular game keys remain untouched.
+The separate [test lab](https://octopuskid.github.io/word-rain/test.html) lives only on GitHub Pages. It is intentionally excluded from the stable ZIP and APK. `npm run build` automatically rebuilds it from the regular HTML and test panel files. `npm run build:test` supports test-only maintenance; the test playfield displays a faint TEST MODE watermark. Versioned HTML snapshots live in `versions/`. Browser settings use `word-rain-lab-*` keys; the regular game keys remain untouched.
