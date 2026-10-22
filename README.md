@@ -16,6 +16,8 @@ A behind-the-scenes video about building Word Rain, refining its rules, and publ
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.6.8.2**, with 60 words in each of the four sets (240 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
+**Continuing development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
+
 ## Add Word Rain to your website
 
 See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste iframe code, self-hosting steps, GitHub Pages setup and music credits.
