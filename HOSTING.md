@@ -103,4 +103,4 @@ itch.io and Android use stable 1.6.8 with multiplier scoring; GitHub Pages curre
 
 ## Test page
 
-The separate [test lab](https://octopuskid.github.io/word-rain/test.html) lives only on GitHub Pages. It is intentionally excluded from the stable ZIP and APK. `npm run build` automatically rebuilds it from the regular HTML and test panel files. `npm run build:test` supports test-only maintenance; the test playfield displays a faint TEST MODE watermark. Versioned HTML snapshots live in `versions/`. Browser settings use `word-rain-lab-*` keys; the regular game keys remain untouched.
+The separate [test lab](https://octopuskid.github.io/word-rain/test.html) lives only on GitHub Pages. It is intentionally excluded from the stable ZIP and APK. `npm run build` automatically rebuilds it from the regular HTML and test panel files. `npm run build:test` supports test-only maintenance; the test playfield displays a top-left TEST MODE badge. Versioned HTML snapshots live in `versions/`. Browser settings use `word-rain-lab-*` keys; the regular game keys remain untouched.

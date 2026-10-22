@@ -2,6 +2,11 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## Test page badge maintenance — no game release
+
+- Replace the diagonal watermark with a small TEST MODE badge in the playfield’s top-left corner. The badge does not intercept controls and remains visible over clouds and pause overlays.
+- Update the test-page maintenance notice. No version bump or release.
+
 ## 1.6.8.2 — HTML development prerelease
 
 - Keep the current run’s Overcast clouds and scoring multiplier fixed when changing the checkbox while paused. Resume keeps the original setting; a new game uses the selected setting.
