@@ -14,7 +14,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.6.8.2**, with 60 words in each of the four sets (240 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.7.0-pre1**, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 **Continuing development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -52,7 +52,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable **1.6.8** on itch.io and Android and development **1.6.8.2** on GitHub Pages, including mode, Overcast and speed score multipliers.
+These rules apply to stable **1.6.8** on itch.io and Android and development **1.7.0-pre1** on GitHub Pages, including mode, Overcast and speed score multipliers.
 
 ### Controls and word sets
 
@@ -67,7 +67,7 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
-Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Development 1.6.8.1 expands each set to 60 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
+Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Development 1.7.0-pre1 expands each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
 
 ### Automatic Android update checks
 

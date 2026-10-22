@@ -1,6 +1,6 @@
 # Word Rain — project handover
 
-Handover prepared on **22 October 2026**. This is a maintainer reference, not a new game release. Read it with the current source and the latest instructions from the project owner; version numbers and platform state below are a dated snapshot.
+Handover prepared on **22 October 2026**, updated for **1.7.0-pre1 on 23 October 2026**. This is a maintainer reference, not a new game release. Read it with the current source and the latest instructions from the project owner; version numbers and platform state below are a dated snapshot.
 
 ## 1. The idea and who directs it
 
@@ -17,18 +17,20 @@ The project is open source and free. It is not built around ads, player accounts
 | Destination | URL / identity | State at this handover |
 | --- | --- | --- |
 | Repository | https://github.com/octopuskid/word-rain | Main source and maintenance documentation |
-| Browser game | https://octopuskid.github.io/word-rain/ | HTML development **1.6.8.2** |
+| Browser game | https://octopuskid.github.io/word-rain/ | HTML development **1.7.0-pre1** |
 | Browser test lab | https://octopuskid.github.io/word-rain/test.html | Shared current game plus test-only controls; maintenance changes have no separate release |
 | Statistics | https://octopuskid.github.io/word-rain/stats/ | Public counters and dated private-analytics snapshots |
 | itch.io | https://octopuskid.itch.io/word-rain | Stable **1.6.8**, HTML and APK |
 | Stable release | https://github.com/octopuskid/word-rain/releases/tag/v1.6.8 | Android version code **37**, single merged APK |
-| Latest web dev release at handover | https://github.com/octopuskid/word-rain/releases/tag/v1.6.8.2 | HTML-only prerelease |
+| Latest web dev release at handover | https://github.com/octopuskid/word-rain/releases/tag/v1.7.0-pre1 | HTML-only prerelease |
 | Bluesky | https://bsky.app/profile/octopuskid.bsky.social | Project promotion account |
 | YouTube | https://www.youtube.com/@octopuskid-arcade | Project channel |
 
 Verify current state before another release. Do not infer that every platform has the same version: development updates deliberately run ahead of stable Android/itch.io.
 
 Recent changes:
+
+- **1.7.0-pre1 DEV:** 120 entries per preset set (480 across four sets), preserving all earlier entries. This explicit owner-requested semantic prerelease name supersedes the usual appended dev-number convention for this release.
 
 - **1.6.5:** promoted the mode × Overcast × speed scoring formula to stable web and Android.
 - **1.6.6:** fixed BGM loop/recovery problems, including unexpected media pauses/ends and interrupted audio contexts.

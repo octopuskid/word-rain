@@ -2,7 +2,7 @@
 
 Current stable: **1.6.8**.
 
-Current HTML development version: **1.6.8.2** — Overcast changes apply to the next new game.
+Current HTML development version: **1.7.0-pre1** — 120 words per set; explicit owner-requested prerelease name.
 
 Unless the user mentions APK or stable, publish an HTML-only development prerelease to GitHub Releases and GitHub Pages. Do not build an APK or update itch.io. Dev versions append a sequence to current stable, such as 1.6.8.1.
 
@@ -11,3 +11,5 @@ For an APK or stable request, synchronize APK and HTML to GitHub Releases and it
 The separate browser test lab stays on GitHub Pages only, outside release APKs and itch.io packages.
 
 Always rebuild and publish the browser test page alongside game updates. Test-page-only maintenance gets a notice on the test page and in CHANGELOG.md, without a new dev/stable release or version bump. Store versioned HTML snapshots under `versions/`.
+
+The owner may request a semantic prerelease name such as `1.7.0-pre1`; use that exact version and mark it as a prerelease. Dev releases skip issue checks and dashboard updates.

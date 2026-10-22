@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.7.0-pre1 — HTML development prerelease
+
+- Expand Classic, Nature, Space and Tricky from 60 to 120 entries each (480 across the four sets), retaining all existing entries.
+- Preserve Normal 4–7 letter and Hard 6–7 letter filtering, shuffled targets and saved settings/records.
+- Support semantic prerelease suffixes in the web builder; store the standalone snapshot in `versions/` and rebuild the current test lab alongside the game.
+- HTML-only prerelease on GitHub and Pages. Stable APK/itch.io stay on 1.6.8. No issue/dashboard checks for this dev release.
+
 ## Test mode selectors maintenance — no game release
 
 - Add Normal/Hard and Overcast controls directly to the test panel. Apply modes & reset run starts a fresh test using the shared rules; custom words remain available.
