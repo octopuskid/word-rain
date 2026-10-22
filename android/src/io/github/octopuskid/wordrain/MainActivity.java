@@ -9,7 +9,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import org.json.JSONArray;
 import java.net.URL;
 import java.io.File;
@@ -58,8 +57,8 @@ public final class MainActivity extends Activity {
     private ConnectivityManager connectivity;
     private ConnectivityManager.NetworkCallback networkCallback;
     private boolean foreground, checkingUpdate;
-    private long lastAttempt = -300000L;
-    private static final long CHECK_INTERVAL = 6 * 60 * 60 * 1000L;
+    // Background polling interval only; launch/reconnect checks never wait for it.
+    private static final long POLL_INTERVAL = 5 * 60 * 1000L;
     private final Runnable periodicUpdate = new Runnable() {
         @Override public void run() { checkForUpdate(); }
     };
@@ -100,17 +99,9 @@ public final class MainActivity extends Activity {
         NetworkCapabilities caps = connectivity.getNetworkCapabilities(connectivity.getActiveNetwork());
         if (caps == null || !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) return;
         final SharedPreferences prefs = getSharedPreferences("release-check", MODE_PRIVATE);
-        long sinceSuccess = System.currentTimeMillis() - prefs.getLong("last-success", 0);
-        if (sinceSuccess >= 0 && sinceSuccess < CHECK_INTERVAL) {
-            scheduleUpdate(CHECK_INTERVAL - sinceSuccess); return;
-        }
-        long sinceAttempt = SystemClock.elapsedRealtime() - lastAttempt;
-        if (sinceAttempt < 300000L) { scheduleUpdate(300000L - sinceAttempt); return; }
-        lastAttempt = SystemClock.elapsedRealtime();
         checkingUpdate = true;
         new Thread(new Runnable() { @Override public void run() {
             HttpsURLConnection connection = null;
-            boolean succeeded = false;
             String found = null;
             try {
                 connection = (HttpsURLConnection) new URL("https://api.github.com/repos/octopuskid/word-rain/releases/latest").openConnection();
@@ -141,15 +132,12 @@ public final class MainActivity extends Activity {
                     }
                     if (apk) found = tag;
                 }
-                succeeded = true;
             } catch (Exception unavailable) { /* Offline, timeout, invalid response or API limit: keep playing. */ }
             finally { if (connection != null) connection.disconnect(); }
             final String version = found;
-            final boolean success = succeeded;
             updates.post(new Runnable() { @Override public void run() {
                 checkingUpdate = false;
-                if (success) prefs.edit().putLong("last-success", System.currentTimeMillis()).apply();
-                scheduleUpdate(success ? CHECK_INTERVAL : 300000L);
+                scheduleUpdate(POLL_INTERVAL);
                 if (version == null || !foreground || isFinishing() || isDestroyed() || game == null) return;
                 if (version.equals(prefs.getString("offered-version", ""))) return;
                 prefs.edit().putString("offered-version", version).apply();

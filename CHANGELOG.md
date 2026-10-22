@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.7 — Stable
+
+- Remove the persisted six-hour success cooldown and five-minute attempt gate from the Android update checker. Launches and validated network reconnections check immediately; only overlapping in-flight requests are suppressed.
+- Keep five-minute periodic polling/retries while the app is open, plus stable-version/APK filtering and the existing once-per-version prompt.
+- Preserve BGM loop recovery, optional music downloads/confirmation/offline cache, app identity and saved data. APK version code 36, original certificate.
+- Native compilation/signing, stable version comparison, APK payload checks and browser gameplay smoke testing precede publication. Physical Android network/dialog behavior remains untested here.
+
 ## 1.6.6 — Stable
 
 - Recover BGM after unexpected media ends/pauses and interrupted Web Audio contexts. Keep original, downloaded and local tracks looping during play.

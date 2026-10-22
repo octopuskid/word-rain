@@ -10,7 +10,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.6**. See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.7**. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Add Word Rain to your website
 
@@ -22,9 +22,9 @@ Stable releases include one HTML package and one APK. Full and Lite were merged 
 
 ## Smaller HTML development build
 
-Stable 1.6.6 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
+Stable 1.6.7 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
 
-1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. Those changes are now included in stable 1.6.6 on itch.io and Android. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
+1.6.3.1 reduces the self-contained HTML from **99,248 to 81,887 bytes (17.5%)**. It minifies JavaScript/CSS/HTML, reuses identical embedded cloud paths and losslessly repacks the handwriting font as WOFF2. Original music, effects, all themes, offline play and the existing saved-data keys remain intact. Those changes are now included in stable 1.6.7 on itch.io and Android. See [OPTIMIZATION.md](OPTIMIZATION.md) for the build and verification details.
 
 ## Run the game
 
@@ -44,7 +44,7 @@ Enter 1–200 custom words of 2–16 letters A–Z, separated by spaces, commas 
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable **1.6.6** on GitHub Pages, itch.io and Android, including mode, Overcast and speed score multipliers.
+These rules apply to stable **1.6.7** on GitHub Pages, itch.io and Android, including mode, Overcast and speed score multipliers.
 
 ### Controls and word sets
 
@@ -63,7 +63,7 @@ Open **Word set & difficulty** while ready, paused or finished to choose Classic
 
 ### Automatic Android update checks
 
-The APK checks the public GitHub **latest stable release** while the app is open, when a validated Wi-Fi/mobile connection is available. Checks run at most once every six hours after success; temporary failures retry after five minutes while open. Reconnecting triggers a check when due. Nothing runs after the app is closed, and offline play is unchanged.
+The APK checks the public GitHub **latest stable release** while the app is open, when a validated Wi-Fi/mobile connection is available. Each launch and validated reconnection checks immediately, without a saved cooldown. Additional checks and temporary-failure retries run every five minutes while open. Nothing runs after the app is closed, and offline play is unchanged.
 
 Development tags, drafts, prereleases and releases without the standard APK are ignored. A newer stable version pauses the game and offers **View update** or **Later**, once per version. View update opens the GitHub release page in your browser; downloads and installation remain your choice. This small request sends no scores, word records, music, account credentials or device identifiers. GitHub receives the normal network request, including your IP address. Install the new APK over the existing app to retain records; do not uninstall first.
 
