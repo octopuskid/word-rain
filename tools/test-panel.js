@@ -77,3 +77,13 @@ $('lab-speed-slider').oninput=()=>{
  hud();labStatus('Speed and falling blocks adjusted');
 };
 hud();
+
+// Convenient test-panel mode selectors; use the shared new-game settings path.
+$('lab-difficulty').value=difficulty;
+$('lab-overcast').checked=pendingOvercast;
+$('lab-apply-modes').onclick=()=>{
+ $('difficulty').value=$('lab-difficulty').value==='hard'?'hard':'normal';
+ $('overcast-mode').checked=$('lab-overcast').checked===true;
+ $('overcast-mode').onchange();
+ applyWordSettings();labReset();labStatus('Test modes applied');
+};

@@ -2,6 +2,12 @@
 <h2>Word Rain test lab</h2>
 <p>Sandbox only · Separate settings and records · Never included in the APK.</p>
 <p role="status"><strong>Test page notice:</strong> Set Test HP beside the hearts; drag the shield and speed bars to adjust the live test run. Changing HP turns off keep-hearts protection. This page is rebuilt alongside the game; test-page maintenance does not create a game release.</p>
+<div class="sandbox-fields">
+<label>Test difficulty<select id="lab-difficulty"><option value="normal">Normal</option><option value="hard">Hard</option></select></label>
+<label><span><input id="lab-overcast" type="checkbox"> Test Overcast</span></label>
+</div>
+<button type="button" id="lab-apply-modes">Apply modes &amp; reset run</button>
+<p>Mode selections apply to a fresh test run. Hard uses 6–7 letter preset words and 140–260% speed. Overcast adds clouds and doubles points. Custom test words remain available.</p>
 <details open><summary>Block, speed &amp; word controls</summary>
 <div class="sandbox-fields">
 <label>Falling speed (px/s)<input id="lab-speed" type="number" min="10" max="1000" value="100"></label>
@@ -102,4 +108,14 @@ $('lab-speed-slider').oninput=()=>{
  hud();labStatus('Speed and falling blocks adjusted');
 };
 hud();
+
+// Convenient test-panel mode selectors; use the shared new-game settings path.
+$('lab-difficulty').value=difficulty;
+$('lab-overcast').checked=pendingOvercast;
+$('lab-apply-modes').onclick=()=>{
+ $('difficulty').value=$('lab-difficulty').value==='hard'?'hard':'normal';
+ $('overcast-mode').checked=$('lab-overcast').checked===true;
+ $('overcast-mode').onchange();
+ applyWordSettings();labReset();labStatus('Test modes applied');
+};
 </script></body></html> 

@@ -2,6 +2,11 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## Test mode selectors maintenance — no game release
+
+- Add Normal/Hard and Overcast controls directly to the test panel. Apply modes & reset run starts a fresh test using the shared rules; custom words remain available.
+- No game version change or release.
+
 ## Test HUD controls maintenance — no game release
 
 - Add Test HP (0–3) beside the hearts; manual changes disable keep-hearts protection, and zero hearts ends the test run.

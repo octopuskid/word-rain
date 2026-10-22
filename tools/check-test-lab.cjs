@@ -28,6 +28,8 @@ t.el('lab-hp').value='0';t.el('lab-hp').onchange();assert.equal(t.run('state'),'
 t.el('difficulty').value='hard';t.el('apply-settings').onclick();assert.equal(t.el('lab-speed-slider').min,140);assert.equal(t.el('lab-speed-slider').max,260);
 t.el('lab-speed-slider').value='100';t.el('lab-speed-slider').oninput();assert.equal(t.run('speedMultiplier'),1.4);
 t.el('lab-safe').checked=true;t.el('lab-safe').onchange();assert.equal(t.run('lives'),3);
+t.el('lab-difficulty').value='hard';t.el('lab-overcast').checked=true;t.el('lab-apply-modes').onclick();assert.equal(t.run('difficulty'),'hard');assert(t.run('overcast'));assert(!t.el('overcast-cloud').hidden);assert.equal(t.run('speedMultiplier'),1.4);assert.equal(t.run('scoreFactor()'),5.6);assert.equal(t.run('score'),0);
+t.el('lab-difficulty').value='normal';t.el('lab-overcast').checked=false;t.el('lab-apply-modes').onclick();assert.equal(t.run('difficulty'),'normal');assert(!t.run('overcast'));assert(t.el('overcast-cloud').hidden);assert.equal(t.run('scoreFactor()'),1);
 for(const key of Object.keys(t.store))assert(key.startsWith('word-rain-lab-'),'isolated lab save key: '+key);
 const production=fs.readFileSync(require('path').join(__dirname,'../../index.html'),'utf8');assert(!production.includes('labOriginalUpdate'));assert(!production.includes('Word Rain test lab'));
 console.log('PASS test lab: manual/next/wildcard drops, fixed speed, timed waves, no normal auto spawn, overlap conversion, single custom word repetition, input validation, safe HP, isolated saves and production exclusion.');
