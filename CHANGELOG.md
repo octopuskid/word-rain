@@ -2,6 +2,13 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## 1.6.8.1 — HTML development prerelease
+
+- Expand Classic, Nature, Space and Tricky to 60 words each (240 entries, up from 85), retaining every original word.
+- Keep Normal at 4–7 letters and Hard at 6–7 letters. Existing saved settings and word records remain compatible.
+- Validate all word entries and retention, pass scoring/spawning/test-lab regressions, and playtest the expanded sets in the browser.
+- Publish the development HTML and test lab on GitHub Pages and an HTML-only GitHub prerelease. Stable 1.6.8 APK and itch.io remain current.
+
 ## 1.6.8 — Stable
 
 - Attempt one Android update check when the app opens. Returning from another app does not trigger another check during that session.
