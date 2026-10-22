@@ -20,6 +20,14 @@ t.el('lab-clear').onclick();t.el('lab-stack').checked=true;t.run('labDrop("lette
 t.run('items=[];progress=3;collectCorrectLetter({x:0,y:0});hud()');assert.equal(t.run('words[0]'),'RAIN');assert.equal(t.run('wordIndex'),0,'one custom word repeats safely');
 t.el('lab-words').value='<script>';t.el('lab-apply-words').onclick();assert.equal(t.run('words[0]'),'RAIN','reject invalid custom words');
 t.run('items=[{bomb:true,x:240,y:460,speed:0}];x=target=240;lives=1;update(0)');assert.equal(t.run('lives'),3);assert.equal(t.run('state'),'playing');
+t.run('pause()');t.el('lab-hp').value='1';t.el('lab-hp').onchange();assert.equal(t.run('lives'),1);assert(!t.el('lab-safe').checked);assert.equal(t.run('state'),'paused');
+t.el('lab-shield-slider').value='1';t.el('lab-shield-slider').oninput();assert.equal(t.run('shieldHealth'),1);
+t.el('lab-speed').value='100';t.el('lab-speed-slider').value='180';t.el('lab-speed-slider').oninput();assert.equal(t.run('speedMultiplier'),1.8);assert.equal(Number(t.el('lab-speed').value),180);assert.equal(t.run('state'),'paused');
+t.el('lab-speed-slider').value='999';t.el('lab-speed-slider').oninput();assert.equal(t.run('speedMultiplier'),2.2);
+t.el('lab-hp').value='0';t.el('lab-hp').onchange();assert.equal(t.run('state'),'over');
+t.el('difficulty').value='hard';t.el('apply-settings').onclick();assert.equal(t.el('lab-speed-slider').min,140);assert.equal(t.el('lab-speed-slider').max,260);
+t.el('lab-speed-slider').value='100';t.el('lab-speed-slider').oninput();assert.equal(t.run('speedMultiplier'),1.4);
+t.el('lab-safe').checked=true;t.el('lab-safe').onchange();assert.equal(t.run('lives'),3);
 for(const key of Object.keys(t.store))assert(key.startsWith('word-rain-lab-'),'isolated lab save key: '+key);
 const production=fs.readFileSync(require('path').join(__dirname,'../../index.html'),'utf8');assert(!production.includes('labOriginalUpdate'));assert(!production.includes('Word Rain test lab'));
 console.log('PASS test lab: manual/next/wildcard drops, fixed speed, timed waves, no normal auto spawn, overlap conversion, single custom word repetition, input validation, safe HP, isolated saves and production exclusion.');

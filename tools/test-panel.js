@@ -51,3 +51,28 @@ $('lab-apply-words').onclick=()=>{
 };
 $('start').onclick=start;
 labStatus();
+
+// Set live test state without restarting or resuming a paused run.
+const labOriginalHud=hud;
+hud=function(){
+ labOriginalHud();
+ $('lab-hp').value=lives;
+ $('lab-shield-slider').value=shieldHealth;
+ $('lab-speed-slider').min=Math.round(baseSpeed()*100);
+ $('lab-speed-slider').max=Math.round(maxSpeed()*100);
+ $('lab-speed-slider').value=Math.round(speedMultiplier*100);
+};
+$('lab-hp').onchange=()=>{
+ lives=Math.round(labNumber('lab-hp',0,3,3));$('lab-safe').checked=false;
+ if(lives===0)checkGameOver();hud();labStatus('Hearts set; keep-hearts protection off');
+};
+$('lab-safe').onchange=()=>{if($('lab-safe').checked)lives=3;hud();};
+$('lab-shield-slider').oninput=()=>{shieldHealth=Math.round(labNumber('lab-shield-slider',0,2,0));hud();};
+$('lab-speed-slider').oninput=()=>{
+ const previous=speedMultiplier;
+ setSpeed(labNumber('lab-speed-slider',baseSpeed()*100,maxSpeed()*100,baseSpeed()*100)/100);
+ $('lab-speed').value=Math.round(Math.max(10,Math.min(1000,labSpeed()*speedMultiplier/previous)));
+ for(const item of items)item.speed=labSpeed();
+ hud();labStatus('Speed and falling blocks adjusted');
+};
+hud();

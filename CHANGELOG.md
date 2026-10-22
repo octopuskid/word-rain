@@ -2,6 +2,12 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
+## Test HUD controls maintenance — no game release
+
+- Add Test HP (0–3) beside the hearts; manual changes disable keep-hearts protection, and zero hearts ends the test run.
+- Make the shield and speed bars draggable in test mode. Speed respects Normal/Hard limits and adjusts the fixed block speed proportionally; scoring follows the displayed multiplier.
+- Controls keep paused runs paused. Regular game HTML, version snapshots, APK and releases are unchanged.
+
 ## Test page badge maintenance — no game release
 
 - Replace the diagonal watermark with a small TEST MODE badge in the playfield’s top-left corner. The badge does not intercept controls and remains visible over clouds and pause overlays.
