@@ -1,6 +1,6 @@
 # Word Rain — project handover
 
-Handover prepared on **22 October 2026**, updated for **1.7.0 stable HTML on 23 October 2026**. This is a maintainer reference, not a new game release. Read it with the current source and the latest instructions from the project owner; version numbers and platform state below are a dated snapshot.
+Handover prepared on **22 October 2026**, updated for **1.7.0 stable HTML and Android on 23 October 2026**. This is a maintainer reference, not a new game release. Read it with the current source and the latest instructions from the project owner; version numbers and platform state below are a dated snapshot.
 
 ## 1. The idea and who directs it
 
@@ -20,8 +20,8 @@ The project is open source and free. It is not built around ads, player accounts
 | Browser game | https://octopuskid.github.io/word-rain/ | Stable HTML **1.7.0** |
 | Browser test lab | https://octopuskid.github.io/word-rain/test.html | Shared current game plus test-only controls; maintenance changes have no separate release |
 | Statistics | https://octopuskid.github.io/word-rain/stats/ | Public counters and dated private-analytics snapshots |
-| itch.io | https://octopuskid.itch.io/word-rain | Stable HTML **1.7.0**; APK **1.6.8** pending original signing key |
-| Stable release | https://github.com/octopuskid/word-rain/releases/tag/v1.7.0 | HTML **1.7.0**; available APK **1.6.8**, version code **37** |
+| itch.io | https://octopuskid.itch.io/word-rain | Stable **1.7.0**, HTML and APK |
+| Stable release | https://github.com/octopuskid/word-rain/releases/tag/v1.7.0 | HTML and APK **1.7.0**, Android version code **38** |
 | Latest web dev release at handover | https://github.com/octopuskid/word-rain/releases/tag/v1.7.0-pre1 | Superseded by stable HTML 1.7.0 |
 | Bluesky | https://bsky.app/profile/octopuskid.bsky.social | Project promotion account |
 | YouTube | https://www.youtube.com/@octopuskid-arcade | Project channel |
@@ -30,7 +30,7 @@ Verify current state before another release. Do not infer that every platform ha
 
 Recent changes:
 
-- **1.7.0 stable:** smaller self-contained HTML (83,102 bytes versus 88,361), minified synchronized lab (93,219 versus 99,179), pixel-identical SVG cloud group reuse, compact word lists and cached persistent UI elements. Global extension bindings remain available for Android/lab code. `tools/minify-options.cjs` supplies the shared safe policy; `build-web.cjs` awaits the exported asynchronous `build-test.cjs` function. The owner explicitly specified that 1.7.0 is stable. Browser regression and live tests passed. Android synchronization is blocked because the original production signing key is missing; do not create a replacement key. Restore the original key and its password file before building an in-place-compatible APK.
+- **1.7.0 stable:** smaller self-contained HTML (83,102 bytes versus 88,361), minified synchronized lab (93,219 versus 99,179), pixel-identical SVG cloud group reuse, compact word lists and cached persistent UI elements. Global extension bindings remain available for Android/lab code. `tools/minify-options.cjs` supplies the shared safe policy; `build-web.cjs` awaits the exported asynchronous `build-test.cjs` function. The owner explicitly specified that 1.7.0 is stable. Browser regression and live tests passed. The owner restored the original production signing backup. Android 1.7.0 (code 38) is compiled and signed with the same certificate as 1.6.8, preserving signing compatibility. Keep signing files private and outside Git; never replace the production identity. Signature, alignment and payload checks pass; physical-device installation is not available in this environment.
 
 - **1.7.0-pre1 DEV:** 120 entries per preset set (480 across four sets), preserving all earlier entries. This explicit owner-requested semantic prerelease name supersedes the usual appended dev-number convention for this release.
 
@@ -128,7 +128,7 @@ Resolve overlaps before catches. Chains matter. Merged blocks use midpoint posit
 
 Overcast hides the middle half of the arena with opaque embedded clouds and multiplies awards by two. It must not block input or change collision/spawn rules. Pause/confirmation overlays appear above it.
 
-In **1.6.8.2**, `pendingOvercast` is the saved next-game choice; `overcast` is the current run’s active value. Checkbox changes do not change the active clouds or multiplier during pause/resume. A fresh start, including Apply & start new game, commits the choice. Appearance saves must preserve the pending preference. Stable HTML 1.7.0 includes this change; the available Android 1.6.8 APK does not.
+In **1.6.8.2**, `pendingOvercast` is the saved next-game choice; `overcast` is the current run’s active value. Checkbox changes do not change the active clouds or multiplier during pause/resume. A fresh start, including Apply & start new game, commits the choice. Appearance saves must preserve the pending preference. Stable HTML and Android 1.7.0 include this change.
 
 Light/dark mode and Lime/Mint/Blue/Coral palettes are supported. Handwriting uses lined paper, an embedded custom font and sketched elements, overriding the color theme while enabled. Keep handwriting wildcard tiles purple. Rick/Copper is a saved unlock.
 

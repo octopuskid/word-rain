@@ -9,7 +9,7 @@ Release history is listed newest first. These entries describe changes at the ti
 - Cache persistent game UI elements to avoid repeated DOM searches during HUD updates. Keep Android/lab extension bindings and saved-data keys unchanged.
 - Share safe minification options between the normal build and test lab; minify test-only code and await the lab build before reporting success.
 - Update optimization/word-set checks for versioned files in `versions/`, and refresh historical overlap score expectations to the current Hard ×2 and 140% starting speed.
-- Stable release, as explicitly specified by the owner. Publish the tested HTML to GitHub Releases, Pages and itch.io. Android synchronization remains blocked: the original production signing key is missing from the current workspace. Keep the existing 1.6.8 APK available; never substitute a new signing identity.
+- Stable release for HTML and Android, as explicitly specified by the owner. Android version code 38 includes the 120-word sets and next-game Overcast behavior. The restored original production key matches the 1.6.8 certificate; signature schemes v2/v3, alignment and packaged HTML identity are verified. Sync APK and HTML to GitHub Releases, Pages and itch.io.
 
 ## 1.7.0-pre1 — HTML development prerelease
 
