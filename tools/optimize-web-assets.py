@@ -23,6 +23,17 @@ def compact_svg(match):
     if definitions:
         end = svg.index('>') + 1
         svg = svg[:end] + '<defs>' + ''.join(definitions) + '</defs>' + svg[end:]
+    # Reuse the whole styled cloud, not only its paths. Keep every transform,
+    # path, paint and layer order unchanged; repeated passes are idempotent.
+    groups = Counter(re.findall(r'<g transform="[^"]+">(.*?)</g>', svg))
+    for i, (content, count) in enumerate(groups.items()):
+        if count < 2:
+            continue
+        identifier = f'cloud{i}'
+        svg = re.sub(r'<g transform="([^"]+)">' + re.escape(content) + r'</g>',
+                     lambda m: f'<use href="#{identifier}" transform="{m[1]}"/>', svg)
+        definition = f'<g id="{identifier}">{content}</g>'
+        svg = svg.replace('</defs>', definition + '</defs>', 1)
     # Only URI/CSS-sensitive bytes need escaping inside this double-quoted URL.
     return 'data:image/svg+xml,' + quote(svg, safe=" /:=,;()'-._")
 
@@ -31,6 +42,4 @@ font = base64.b64encode((ROOT / 'assets/word-rain-hand.woff2').read_bytes()).dec
 html = re.sub(r'data:font/woff(?:2)?;base64,[A-Za-z0-9+/=]+',
               'data:font/woff2;base64,' + font, html)
 html = html.replace("format('woff')", "format('woff2')")
-html = html.replace('v1.6.3 · NO UMBRELLA REQUIRED',
-                    'v1.6.3.1 DEV · NO UMBRELLA REQUIRED')
 source.write_text(html)

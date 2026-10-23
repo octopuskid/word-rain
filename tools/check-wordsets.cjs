@@ -13,5 +13,6 @@ for(const name of ['src/index.html','index.html','test.html']){
   const hard=set.words.filter(w=>w.length>=6);assert(hard.length>1);assert(hard.every(w=>w.length<=7));
  }
 }
-assert.equal(fs.readFileSync(path.join(root,'index.html'),'utf8'),fs.readFileSync(path.join(root,'versions/word-rain-1.7.0-pre1.html'),'utf8'));
-console.log('PASS four 120-entry word sets, per-set uniqueness, Normal/Hard lengths, secret exclusion and matching semantic-prerelease snapshot.');
+const version=fs.readFileSync(path.join(root,'src/index.html'),'utf8').match(/v(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z.-]+)?)(?: DEV)? · NO UMBRELLA/)[1];
+assert.equal(fs.readFileSync(path.join(root,'index.html'),'utf8'),fs.readFileSync(path.join(root,'versions/word-rain-'+version+'.html'),'utf8'));
+console.log('PASS four 120-entry word sets, per-set uniqueness, Normal/Hard lengths, secret exclusion and matching version snapshot.');

@@ -14,7 +14,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.7.0-pre1**, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.6.8**. GitHub Pages development version: **1.7.0**, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -31,6 +31,8 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
 ## Smaller HTML development build
+
+Development **1.7.0** keeps all 480 word-set entries and features while reducing the standalone HTML from **88,361 to 83,106 bytes (5.95%)**. The synchronized test lab shrinks from **99,179 to 93,223 bytes (6.00%)**. It reuses identical cloud artwork, compacts word-list syntax, caches UI nodes and minifies test-only controls. Both builds stay self-contained for offline play; gzip transfer savings are smaller than these standalone-file savings.
 
 Stable 1.6.8 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
 
@@ -56,7 +58,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable **1.6.8** on itch.io and Android and development **1.7.0-pre1** on GitHub Pages, including mode, Overcast and speed score multipliers.
+These rules apply to stable **1.6.8** on itch.io and Android and development **1.7.0** on GitHub Pages, including mode, Overcast and speed score multipliers.
 
 ### Controls and word sets
 
