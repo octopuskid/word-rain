@@ -2,14 +2,14 @@
 
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
-## 1.7.0 — HTML development prerelease
+## 1.7.0 — Stable
 
-- Reduce standalone HTML from 88,361 to 83,106 bytes (5.95%) and the test page from 99,179 to 93,223 bytes (6.00%), compared with 1.7.0-pre1. Gzip transfer savings are smaller: 31,911 → 31,757 and 35,253 → 34,679 bytes respectively.
+- Reduce standalone HTML from 88,361 to 83,102 bytes (5.95%) and the test page from 99,179 to 93,219 bytes (6.00%), compared with 1.7.0-pre1. Gzip transfer savings are smaller: 31,911 → 31,755 and 35,253 → 34,676 bytes respectively.
 - Reuse complete SVG cloud groups with identical geometry, colors and layering; both textures render pixel-identically. Compact word-list syntax while preserving all 480 entries and their order.
 - Cache persistent game UI elements to avoid repeated DOM searches during HUD updates. Keep Android/lab extension bindings and saved-data keys unchanged.
 - Share safe minification options between the normal build and test lab; minify test-only code and await the lab build before reporting success.
 - Update optimization/word-set checks for versioned files in `versions/`, and refresh historical overlap score expectations to the current Hard ×2 and 140% starting speed.
-- HTML development release only, as requested by the owner's default rule. Stable Android/itch.io remain 1.6.8; no APK or issue/dashboard refresh.
+- Stable release, as explicitly specified by the owner. Publish the tested HTML to GitHub Releases, Pages and itch.io. Android synchronization remains blocked: the original production signing key is missing from the current workspace. Keep the existing 1.6.8 APK available; never substitute a new signing identity.
 
 ## 1.7.0-pre1 — HTML development prerelease
 

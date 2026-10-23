@@ -8,8 +8,8 @@ Security fixes target the latest stable release and the current development sour
 
 | Version / channel | Security maintenance |
 | --- | --- |
-| Latest stable release — currently **1.6.8** | Primary stable target for security fixes |
-| Current `main` / latest development prerelease — currently **1.7.0** | Reports accepted; fixes may appear here before a stable release |
+| Latest stable HTML — currently **1.7.0**; Android **1.6.8** pending signing-key recovery | Primary stable target for security fixes |
+| Current `main` / future development prereleases | Reports accepted; fixes may appear here before a stable release |
 | Older releases, archived HTML and retired Full/Lite editions | No guaranteed backports; update to the latest stable version |
 
 Version examples are a snapshot as of **23 October 2026**. Consult [Releases](https://github.com/octopuskid/word-rain/releases) for the current stable and prerelease versions. A development build is not a stable security upgrade merely because its version number is newer. A newly published stable release supersedes the previous stable version for ongoing maintenance.
