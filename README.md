@@ -18,6 +18,10 @@ Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatG
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
+## Player wiki
+
+Read the [Word Rain wiki](https://github.com/octopuskid/word-rain/wiki) for every block, shield rule, game state, scoring mechanic, mode, test tool and the roadmap.
+
 ## Add Word Rain to your website
 
 See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste iframe code, self-hosting steps, GitHub Pages setup and music credits.
