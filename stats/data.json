@@ -2,21 +2,21 @@
   "schemaVersion": 1,
   "github": {
     "visitors": 6,
-    "views": 94,
-    "clones": 453,
-    "uniqueCloners": 164,
-    "period": "last 14 days",
-    "checkedAt": "2026-10-21T10:28:32Z"
+    "views": 112,
+    "clones": 741,
+    "uniqueCloners": 228,
+    "period": "last 14 days (GitHub traffic chart displayed 8–21 October 2026)",
+    "checkedAt": "2026-10-23"
   },
   "itch": {
-    "views": 22,
-    "plays": 1,
-    "period": "analytics dashboard, Last 30 days selected",
-    "checkedAt": "2026-10-21T10:28:32Z"
+    "views": 23,
+    "plays": 2,
+    "period": "analytics dashboard, Last 30 days selected (24 September–23 October 2026)",
+    "checkedAt": "2026-10-23"
   },
   "downloads": {
-    "count": 27,
+    "count": 33,
     "period": "all currently published release assets, lifetime",
-    "checkedAt": "2026-10-21T10:28:32Z"
+    "checkedAt": "2026-10-23"
   }
 }
