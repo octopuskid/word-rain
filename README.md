@@ -14,7 +14,7 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.7.0**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.7.1**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -32,7 +32,7 @@ Stable releases include one HTML package and one APK. Full and Lite were merged 
 
 ## Smaller HTML build
 
-Stable **1.7.0** keeps all 480 word-set entries and features while reducing the standalone HTML from **88,361 to 83,102 bytes (5.95%)**. The synchronized test lab shrinks from **99,179 to 93,219 bytes (6.00%)**. It reuses identical cloud artwork, compacts word-list syntax, caches UI nodes and minifies test-only controls. Both builds stay self-contained for offline play; gzip transfer savings are smaller than these standalone-file savings.
+Stable **1.7.1** continues from **1.7.0-pre1**, retaining all 480 word-set entries. Landscape HTML has independent regular and handwriting Overcast artwork with proportional rendering. Clicking the title opens this GitHub repository. Android **build 40** uses the portrait playfield and retains once-per-launch update checking, optional music downloads and existing saves. The withdrawn 1.7.0 HTML remains archived under `versions/`.
 
 Stable 1.6.8 includes those optimizations, a short start-screen introduction, expandable Quick rules below the target word and purple paper wildcards. The shared HTML is 82,552 bytes.
 
@@ -58,7 +58,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable **1.7.0** on web and Android, including mode, Overcast and speed score multipliers.
+These rules apply to stable **1.7.1** on web and Android, including mode, Overcast and speed score multipliers.
 
 ### Controls and word sets
 
@@ -73,7 +73,7 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
-Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Stable 1.7.0 includes the expansion of each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
+Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Stable 1.7.1 includes the expansion of each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
 
 ### Automatic Android update checks
 

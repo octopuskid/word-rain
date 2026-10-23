@@ -3,6 +3,8 @@ from pathlib import Path
 
 def mobile_html(source: str) -> str:
     root=Path(__file__).resolve().parent
+    # Android always uses the portrait playfield; wide mode belongs to HTML.
+    source=source.replace('function isPhoneClient(){', 'function isPhoneClient(){return true;')
     style=(root/'mobile.css').read_text()
     script=(root/'mobile.js').read_text()
     assert '</header>' in source and '</main>' in source and '</style>' in source

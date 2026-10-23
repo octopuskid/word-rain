@@ -8,9 +8,8 @@ const read = name => fs.readFileSync(path.join(root, name), 'utf8');
 const scripts = text => [...text.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 for(const script of scripts(read('index.html')))new (require('node:vm').Script)(script);
 const delivered = read('index.html');
-const version=read('src/index.html').match(/v(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z.-]+)?)(?: DEV)? · NO UMBRELLA/)[1];
-assert.equal(delivered, read('versions/word-rain-' + version + '.html'));
-assert(Buffer.byteLength(delivered) < Buffer.byteLength(read('versions/word-rain-1.7.0-pre1.html')));
+assert.equal(delivered, read('word-rain-' + read('src/index.html').match(/v(\d+\.\d+\.\d+(?:\.\d+)?)(?: DEV)? · NO UMBRELLA/)[1] + '.html'));
+assert(Buffer.byteLength(delivered) < Buffer.byteLength(read('versions/word-rain-1.6.3.html')));
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'word-rain-web-'));
 try {
   const fixture = path.join(temp, 'mobile.html');

@@ -1,5 +1,8 @@
 # Word Rain — project handover
 
+> **Owner correction / 1.7.1:** Disregard the second session’s 1.7.0 implementation. The 1.7.0 stable release/tag are withdrawn; its standalone HTML remains in `versions/`. Work resumes from `v1.7.0-pre1` (960d53d). The next stable is **1.7.1**, Android **build 40**, with independent landscape HTML cloud textures (regular/paper), GitHub title links on all platforms, and portrait-only Android. Preserve auto-update, optional music downloads, signing identity and saves. Later sections describing 1.7.0 are historical, not the baseline.
+
+
 Handover prepared on **22 October 2026**, updated for **1.7.0 stable HTML and Android on 23 October 2026**. This is a maintainer reference, not a new game release. Read it with the current source and the latest instructions from the project owner; version numbers and platform state below are a dated snapshot.
 
 ## 1. The idea and who directs it

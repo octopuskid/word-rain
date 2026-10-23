@@ -1,7 +1,6 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const read=name=>fs.readFileSync(path.join(root,name),'utf8');
-async function buildTest(){
 let html=read('index.html');
 // The same origin hosts the real game: isolate every storage key used by it.
 for(const key of ['theme','settings-v1','rick-unlocked-v1','audio-v1'])
@@ -16,9 +15,5 @@ for(const [kind,min,max,step,label] of [['shield',0,2,1,'Test shield health'],['
 }
 html=html.replace('</span></div><div class="meters">','</span><label class="lab-hp">Test HP <input id="lab-hp" type="number" min="0" max="3" step="1" value="3" aria-label="Test hearts"></label></div><div class="meters">');
 html=html.replace('</body>','<script>'+read('tools/test-panel.js')+'</script></body>');
-html=(await require('html-minifier-terser').minify(html,require('./minify-options.cjs')())).trimEnd();
-fs.writeFileSync(path.join(root,'test.html'),html+'\n');
+fs.writeFileSync(path.join(root,'test.html'),html);
 console.log('Built separate test.html; no changes to the regular game or APK input.');
-}
-module.exports=buildTest;
-if(require.main===module)buildTest().catch(error=>{console.error(error);process.exitCode=1;});

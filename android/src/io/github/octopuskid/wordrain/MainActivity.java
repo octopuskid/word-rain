@@ -361,9 +361,7 @@ public final class MainActivity extends Activity {
     }
 
     private void applyDeviceOrientation() {
-        boolean phone = getResources().getConfiguration().smallestScreenWidthDp < 600;
-        setRequestedOrientation(phone ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-                                      : ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
     }
 
     @Override public void onConfigurationChanged(Configuration configuration) {

@@ -1,3 +1,5 @@
+> Owner decision: skip 1.7.0 stable. Its release/tag were withdrawn; keep only the archived HTML. 1.7.1 is based on v1.7.0-pre1, Android build 40.
+
 # Release policy
 
 Current stable: **1.6.8**.

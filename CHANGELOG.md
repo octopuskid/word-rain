@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.1 — 23 October 2026
+
+- Resume from 1.7.0-pre1; skip and withdraw 1.7.0 stable, preserving its archived HTML.
+- Separate wide Overcast cloud artwork in regular and handwriting styles for landscape HTML, preserving cloud proportions with cover/cropping. Portrait artwork is unchanged.
+- Click the Word Rain title to visit the GitHub repository in HTML and Android.
+- Android build 40 keeps the original signing identity, saved-data keys, music downloads and once-per-launch auto-update checking. Android uses portrait; landscape remains HTML-only.
+
+
 Release history is listed newest first. These entries describe changes at the time of release; [How to play](README.md#how-to-play) is the reference for current behavior.
 
 ## 1.7.0 — Stable
