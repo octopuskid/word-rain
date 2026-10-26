@@ -8,7 +8,7 @@ Security fixes target the latest stable release and the current development sour
 
 | Version / channel | Security maintenance |
 | --- | --- |
-| Latest stable release — currently **1.7.1**, HTML and Android | Primary stable target for security fixes |
+| Latest stable release, HTML and Android | Primary stable target for security fixes |
 | Current `main` / future development prereleases | Reports accepted; fixes may appear here before a stable release |
 | Older releases, archived HTML and retired Full/Lite editions | No guaranteed backports; update to the latest stable version |
 
