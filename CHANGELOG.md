@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0-dev1 DEV — 27 October 2026
+
+- Fix magnet switch activation: toggling it while paused now updates generation when play resumes, rather than silently waiting for a fresh run. Start/apply also read the checkbox directly. Saved preference and 1% random spawning are preserved.
+- Keep the 3.5-block-width pull, exclusion below the basket and existing magnet collision rules.
+- Begin 2.0 development, skipping 1.8. This release fixes the existing arcade mode; story mode, tutorial and redesigned UI are not implemented yet.
+- HTML-only DEV prerelease on GitHub and Pages; APK/itch.io remain 1.7.1 / build 40.
+
 ## 1.7.1.2 DEV — 27 October 2026
 
 - Magnet pickup excludes blocks whose centers are below the basket, even when they are inside the pull radius. Centers level with the basket remain eligible.

@@ -7,10 +7,15 @@ const block=(kind,x=240,y=200)=>({x,y,speed:100,letter:kind==='letter'?'Z':'',ma
 function boot(source,mode='normal'){const t=session({},false,source);t.el('difficulty').value=mode;t.el('apply-settings').onclick();t.run("words.splice(0,words.length,'RAIN','MOON');wordIndex=0;progress=0;x=target=240;items=[];spawn=Infinity;hud()");return t;}
 for(const source of [web,scripts])for(const mode of ['normal','hard']){
  const off=boot(source,mode);assert.equal(off.run('magnetEnabled'),false,'opt-in by default');
- off.el('magnet-mode').checked=true;off.el('magnet-mode').onchange();assert.equal(off.run('magnetEnabled'),false,'current run unchanged');
- off.run('pause();start()');assert.equal(off.run('magnetEnabled'),false,'resume unchanged');
+ off.el('magnet-mode').checked=true;off.el('magnet-mode').onchange();assert.equal(off.run('magnetEnabled'),true,'switch immediately enables generation');
+ off.run('pause();start()');assert.equal(off.run('magnetEnabled'),true,'resume keeps generation enabled');
  off.run("state='ready';start()");assert.equal(off.run('magnetEnabled'),true);
  assert.equal(JSON.parse(off.store['word-rain-settings-v1']).magnet,true);
+ off.el('magnet-mode').checked=false;off.el('magnet-mode').onchange();assert.equal(off.run('magnetEnabled'),false,'switch disables generation immediately');
+ off.el('magnet-mode').checked=true;off.el('apply-settings').onclick();assert.equal(off.run('magnetEnabled'),true,'apply reads checkbox without change event');
+ const resumed=boot(source,mode);resumed.run('pause()');resumed.el('magnet-mode').checked=true;resumed.el('magnet-mode').onchange();resumed.run('start()');
+ assert.equal(resumed.run('magnetEnabled'),true,'paused toggle works on resume');
+ resumed.run("(()=>{const old=Math.random;const rolls=[.9,0,.005,.5,.5];try{Math.random=()=>rolls.shift()??.5;spawnDrop();}finally{Math.random=old;}})()");assert(resumed.run('items[0].magnet'),'resumed run emits magnet through actual generator');
  const reload=session({...off.store},false,source);assert.equal(reload.run('pendingMagnet'),true);
  reload.el('handwriting-mode').checked=true;reload.el('handwriting-mode').onchange();assert.equal(JSON.parse(reload.store['word-rain-settings-v1']).magnet,true,'appearance preserves magnet preference');
  for(const enabled of [false,true]){
@@ -52,6 +57,6 @@ for(const source of [web,scripts])for(const mode of ['normal','hard']){
  // Both canvas renderers execute without external assets or image-load races.
  secret.run('items='+JSON.stringify([block('magnet')])+';draw();handwriting=true;draw()');
 }
-console.log('PASS magnet: opt-in/next-run/persistence, exact 1% odds in Normal/Hard, contact matrix both orders and edges, 3.5-width circle clipped at basket center, one-time selection, animated pull, normal catch/hazard scoring, restart/Rick rules and both renderers on web/mobile fixtures.');
+console.log('PASS magnet: opt-in/live-switch/resume/persistence, exact 1% odds in Normal/Hard, contact matrix both orders and edges, 3.5-width circle clipped at basket center, one-time selection, animated pull, normal catch/hazard scoring, restart/Rick rules and both renderers on web/mobile fixtures.');
 `;
 new Function('require','__dirname','process',helper+'\n'+checks)(require,__dirname,process);

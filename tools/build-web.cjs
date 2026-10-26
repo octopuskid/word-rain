@@ -18,7 +18,7 @@ const root = path.resolve(__dirname, '..');
       format: { comments: false, ascii_only: false, inline_script: true }
     }
   });
-  const version = source.match(/v(\d+\.\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z.-]+)?)(?: DEV)? · NO UMBRELLA/)[1];
+  const version = source.match(/v(\d+\.\d+(?:\.\d+){0,2}(?:-[0-9A-Za-z.-]+)?)(?: DEV)? · NO UMBRELLA/)[1];
   fs.mkdirSync(path.join(root, 'versions'), { recursive: true });
   for (const name of ['index.html', `versions/word-rain-${version}.html`])
     fs.writeFileSync(path.join(root, name), html + '\n');
