@@ -4,7 +4,7 @@
 
 Current stable: **1.7.1**, Android build **40**.
 
-Current HTML development version: **1.7.1.1 DEV** — optional magnet blocks. 1.7.0-pre1 remains archived and available.
+Current HTML development version: **1.7.1.2 DEV** — magnets exclude blocks centered below the basket. 1.7.0-pre1 remains archived and available.
 
 Unless the user mentions APK or stable, publish an HTML-only development prerelease to GitHub Releases and GitHub Pages. Do not build an APK or update itch.io. Dev versions append a sequence to current stable, such as 1.6.8.1.
 
@@ -17,3 +17,5 @@ Always rebuild and publish the browser test page alongside game updates. Test-pa
 The owner may request a semantic prerelease name such as `1.7.0-pre1`; use that exact version and mark it as a prerelease. Dev releases skip issue checks and dashboard updates.
 
 Do not upload a separate SHA256SUMS/checksum file in future releases; use GitHub’s built-in asset digests. Keep integrity checks for optional music downloads.
+
+Every development release must say **DEV** in its release title and game version label, with GitHub’s **Pre-release** flag enabled.

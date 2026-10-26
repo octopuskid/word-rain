@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.1.2 DEV — 27 October 2026
+
+- Magnet pickup excludes blocks whose centers are below the basket, even when they are inside the pull radius. Centers level with the basket remain eligible.
+- Keep the 1% optional spawning, one-time 3.5-block-width radius, artwork and collision rules.
+- HTML-only DEV release on GitHub and Pages, marked as a GitHub prerelease. APK and itch.io remain on 1.7.1.
+
 ## 1.7.1.1 DEV — 27 October 2026
 
 - Optional magnet switch, off by default and saved for the next new run. Normal and Hard emit magnets at 1% of successful drops while enabled.
