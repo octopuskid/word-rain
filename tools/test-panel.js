@@ -22,7 +22,7 @@ function labDrop(kind,count=1){
   if(kind==='next'){if(progress+1>=words[wordIndex].length){labStatus('No following letter on the final blank');return;}letter=words[wordIndex][progress+1];}
   if(kind==='letter')letter='ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*26)];
   const px=$('lab-stack').checked?center:Math.max(22,Math.min(fieldWidth-22,center+(i-(count-1)/2)*48));
-  items.push({x:px,y:-25,speed:labSpeed(),letter,bomb:kind==='bomb',shield:kind==='shield',wild:kind==='wild'});labDrops++;
+  items.push({x:px,y:-25,speed:labSpeed(),letter,bomb:kind==='bomb',shield:kind==='shield',wild:kind==='wild',magnet:kind==='magnet'});labDrops++;
  }
  labWaves++;labStatus();
 }
@@ -38,7 +38,7 @@ update=function(dt){
 };
 const labOriginalGameOver=checkGameOver;
 checkGameOver=function(){if($('lab-safe').checked){lives=3;return;}labOriginalGameOver();};
-for(const kind of ['target','next','letter','bomb','shield','wild'])$('lab-'+kind).onclick=()=>labDrop(kind);
+for(const kind of ['target','next','letter','bomb','shield','wild','magnet'])$('lab-'+kind).onclick=()=>labDrop(kind);
 $('lab-wave').onclick=()=>labDrop($('lab-type').value,labCount());
 $('lab-clear').onclick=()=>{items=[];particles=[];labClock=0;labStatus('Blocks cleared');};
 $('lab-restart').onclick=labReset;
@@ -81,9 +81,12 @@ hud();
 // Convenient test-panel mode selectors; use the shared new-game settings path.
 $('lab-difficulty').value=difficulty;
 $('lab-overcast').checked=pendingOvercast;
+$('lab-magnets').checked=pendingMagnet;
 $('lab-apply-modes').onclick=()=>{
  $('difficulty').value=$('lab-difficulty').value==='hard'?'hard':'normal';
  $('overcast-mode').checked=$('lab-overcast').checked===true;
  $('overcast-mode').onchange();
+ $('magnet-mode').checked=$('lab-magnets').checked===true;
+ $('magnet-mode').onchange();
  applyWordSettings();labReset();labStatus('Test modes applied');
 };

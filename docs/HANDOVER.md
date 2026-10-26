@@ -1,5 +1,8 @@
 # Word Rain — project handover
 
+> **Current dev: 1.7.1.1 (27 October 2026).** Stable Android/itch.io remain **1.7.1 / build 40**. Optional magnet generation is off by default, stored as `magnet` in the existing settings object and committed from `pendingMagnet` to `magnetEnabled` at a new run. Both modes use 1% of emitted blocks. Pickup makes a one-time radius selection (3.5 × 36 = 126 canvas units, center-to-center), then selected blocks home toward the moving basket; subsequent arrivals are unaffected. All blocks, including hazards and pickups, are eligible. Usual overlap/catch/scoring rules remain. A magnet touching any other block disappears; a shield or another magnet disappears too. Magnet contact includes touching edges; other overlap boundaries are unchanged. A magnet gives no direct score, HP or shield reward, preserves perfection and clears the manual Rick trigger. Regular/pencil canvas artwork uses white tiles and red/blue/silver magnets. Tests: `node android/tests/magnet-1711.cjs` plus focused existing regressions. The manual lab drop works with generation off. Do not publish separate checksum files; GitHub supplies asset digests.
+
+
 > **Owner correction / 1.7.1:** Disregard the second session’s 1.7.0 implementation. The 1.7.0 stable release/tag are withdrawn; its standalone HTML remains in `versions/`. Work resumes from `v1.7.0-pre1` (960d53d). The next stable is **1.7.1**, Android **build 40**, with independent landscape HTML cloud textures (regular/paper), GitHub title links on all platforms, and portrait-only Android. Preserve auto-update, optional music downloads, signing identity and saves. Later sections describing 1.7.0 are historical, not the baseline.
 
 
@@ -20,12 +23,12 @@ The project is open source and free. It is not built around ads, player accounts
 | Destination | URL / identity | State at this handover |
 | --- | --- | --- |
 | Repository | https://github.com/octopuskid/word-rain | Main source and maintenance documentation |
-| Browser game | https://octopuskid.github.io/word-rain/ | Stable HTML **1.7.0** |
+| Browser game | https://octopuskid.github.io/word-rain/ | HTML dev **1.7.1.1** |
 | Browser test lab | https://octopuskid.github.io/word-rain/test.html | Shared current game plus test-only controls; maintenance changes have no separate release |
 | Statistics | https://octopuskid.github.io/word-rain/stats/ | Public counters and dated private-analytics snapshots |
-| itch.io | https://octopuskid.itch.io/word-rain | Stable **1.7.0**, HTML and APK |
-| Stable release | https://github.com/octopuskid/word-rain/releases/tag/v1.7.0 | HTML and APK **1.7.0**, Android version code **38** |
-| Latest web dev release at handover | https://github.com/octopuskid/word-rain/releases/tag/v1.7.0-pre1 | Superseded by stable HTML 1.7.0 |
+| itch.io | https://octopuskid.itch.io/word-rain | Stable **1.7.1**, HTML and APK |
+| Stable release | https://github.com/octopuskid/word-rain/releases/tag/v1.7.1 | HTML and APK **1.7.1**, Android version code **40** |
+| Latest web dev release at handover | https://github.com/octopuskid/word-rain/releases/tag/v1.7.1.1 | Optional magnet blocks |
 | Bluesky | https://bsky.app/profile/octopuskid.bsky.social | Project promotion account |
 | YouTube | https://www.youtube.com/@octopuskid-arcade | Project channel |
 
@@ -271,7 +274,7 @@ Do not publish credentials for private traffic/itch.io analytics. Update only ag
 ## 10. Roadmap: wanted, but not yet implemented
 
 1. **Expanded word sets:** the first expansion is done in 1.6.8.1. Preserve all original words and appropriate Normal/Hard lengths when expanding further.
-2. **Magnet block:** the owner wants this as an addition, with earlier public roadmap wording describing optional magnet blocks. Attraction radius, duration, spawn probability, whether hazards are attracted, and interaction with shields/wildcards/overlaps have not been finalized. Do not treat an assistant’s suggested tradeoff as an approved design.
+2. **Magnet block:** implemented in HTML dev 1.7.1.1; see the current-dev note above. The pickup uses a one-time pull; there is no timed persistent aura. Stable promotion is a separate owner decision.
 3. **Story mode:** the owner’s core idea is **collect letters to complete words that spell out a story**. This goes beyond another random word set: completed words should build sentences and a readable narrative. Story selection, progression, reading pace, retries, persistence and how arcade pressure interacts with reading still require design decisions. Do not ship an invented complete story-mode specification as if approved.
 4. General gameplay improvements and feedback-driven changes remain possible. A public roadmap mentioned votes on major changes; do not claim a voting system exists without implementing it.
 

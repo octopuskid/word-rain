@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.1.1 DEV — 27 October 2026
+
+- Optional magnet switch, off by default and saved for the next new run. Normal and Hard emit magnets at 1% of successful drops while enabled.
+- One-time pickup pull selects all blocks within 3.5 block widths, including hazards, and attracts them toward the basket through the existing catch/overlap rules.
+- Contact destroys the falling magnet. Magnet + shield and magnet + magnet destroy both; other block types remain.
+- White tile and improved red/blue/silver U-magnet, with separate normal and handwriting drawing styles based on the owner’s sketch. Manual magnet drops and mode selector added to the test lab.
+- HTML-only prerelease on GitHub/Pages; no APK or itch.io update. No separate checksum asset.
+
+
 ## 1.7.1 — 23 October 2026
 
 - Resume from 1.7.0-pre1; skip and withdraw 1.7.0 stable, preserving its archived HTML.

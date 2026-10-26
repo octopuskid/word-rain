@@ -2,9 +2,9 @@
 
 # Release policy
 
-Current stable: **1.6.8**.
+Current stable: **1.7.1**, Android build **40**.
 
-Current HTML development version: **1.7.0-pre1** — 120 words per set; explicit owner-requested prerelease name.
+Current HTML development version: **1.7.1.1 DEV** — optional magnet blocks. 1.7.0-pre1 remains archived and available.
 
 Unless the user mentions APK or stable, publish an HTML-only development prerelease to GitHub Releases and GitHub Pages. Do not build an APK or update itch.io. Dev versions append a sequence to current stable, such as 1.6.8.1.
 
@@ -15,3 +15,5 @@ The separate browser test lab stays on GitHub Pages only, outside release APKs a
 Always rebuild and publish the browser test page alongside game updates. Test-page-only maintenance gets a notice on the test page and in CHANGELOG.md, without a new dev/stable release or version bump. Store versioned HTML snapshots under `versions/`.
 
 The owner may request a semantic prerelease name such as `1.7.0-pre1`; use that exact version and mark it as a prerelease. Dev releases skip issue checks and dashboard updates.
+
+Do not upload a separate SHA256SUMS/checksum file in future releases; use GitHub’s built-in asset digests. Keep integrity checks for optional music downloads.
