@@ -7,8 +7,8 @@ const storyText50='At dusk, Mira found a letter beneath her pillow. Its ink shim
 const storyText100='Beyond the garden, Mira discovered a bridge woven from moonlight. Halfway across, the stars vanished, leaving only her little lantern. A voice beneath the bridge asked why she carried such a tiny light. Mira answered that small lights could still show the next step. The voice belonged to a lost giant who feared the dark. Together they crossed slowly, sharing stories about their homes. With every word, another star returned. At the far bank, the giant lifted Mira high enough to hang her lantern in the sky. Its gentle glow guided every traveler safely home, even on the darkest nights.';
 const storyStages=[
  {title:'Ten scattered words',words:['GLOW','BICYCLE','PEPPER','CASTLE','VIOLIN','SOCK','PLANET','LADDER','LEMON','PUZZLE'],text:'',speed:76,hazards:0,intro:'Begin with ten unrelated words. There is no story to connect them: simply finish each word in order to complete Chapter 1.',ending:'Ten words collected. Now you are ready to turn falling letters into a complete story.'},
- {title:'The letter in the garden',text:storyText50,speed:94,hazards:.10,intro:'A mysterious letter leads Mira into a silent garden. Spell all fifty words in order to reveal the story, one finished word at a time.'},
- {title:'The lantern bridge',text:storyText100,speed:110,hazards:.16,intro:'Mira reaches a bridge made of moonlight. Spell all one hundred words to uncover the journey and bring the story home.'}
+ {title:'The letter in the garden',text:storyText50,speed:94,hazards:.10,intro:'A mysterious letter leads Mira into a silent garden. This story is already written. Follow its fifty words in order: finish the displayed word to move to the next.'},
+ {title:'The lantern bridge',text:storyText100,speed:110,hazards:.16,intro:'Mira reaches a bridge made of moonlight. Follow this prewritten hundred-word story. Finish each displayed word to move to the next word in the story.'}
 ];
 for(const chapter of storyStages)if(chapter.text){chapter.tokens=chapter.text.split(/\s+/);chapter.words=chapter.tokens.map(token=>token.replace(/[^A-Za-z]/g,'').toUpperCase());chapter.ending=chapter.text;}
 // The new curriculum has its own save; the earlier prototype save is retained.
@@ -45,7 +45,7 @@ function chooseStoryStage(index){
  if(!Number.isInteger(index)||index<0||index>=storyStages.length||index>storySave.completed||tutorialActive)return;
  storySelected=index;const stage=storyStages[index];
  $('dream-intro-number').textContent='CHAPTER 0'+(index+1);$('dream-intro-title').textContent=stage.title;$('dream-intro-copy').textContent=stage.intro;
- $('dream-intro-goal').textContent=(stage.text?'Restore a '+stage.words.length+' word story.':'Complete 10 unrelated words.')+(storySave.checkpoints[index]?' Continue from word '+(storySave.checkpoints[index]+1)+'.':'');routeDream('intro');
+ $('dream-intro-goal').textContent=(stage.text?'Follow a '+stage.words.length+' word story in order.':'Complete 10 unrelated words.')+(storySave.checkpoints[index]?' Continue from word '+(storySave.checkpoints[index]+1)+'.':'');routeDream('intro');
 }
 function beginStory(){
  if(tutorialActive||dreamScreen!=='intro')return;
@@ -60,9 +60,8 @@ function renderStoryHud(){
  $('dream-progress-fill').style.width=(r.word/stage.words.length*100)+'%';
  $('dream-target').innerHTML=[...word].map((c,i)=>'<span class="'+(i<r.letter?'done':i===r.letter?'current':'')+'">'+c+'</span>').join('');
  $('dream-pause-overlay').hidden=r.status!=='paused';
- $('dream-restored').hidden=!stage.text;
- $('dream-restored').textContent=stage.text?(stage.tokens.slice(0,r.word).join(' ')+(r.word<stage.words.length?' …':'')):'';
- $('dream-restored').scrollTop=$('dream-restored').scrollHeight||0;
+ $('dream-current-word').textContent=stage.text?(stage.tokens[r.word]||''):word;
+ $('dream-current-word').setAttribute('aria-label','Current word: '+(stage.text?(stage.tokens[r.word]||''):word));
 }
 function pauseStory(){if(storyRun&&storyRun.status==='playing'){storyRun.status='paused';storyPointer=null;renderStoryHud();syncAudio();}}
 function resumeStory(){if(tutorialActive||!storyRun||storyRun.status!=='paused')return;routeDream('play');storyRun.status='playing';renderStoryHud();unlockAudio();syncAudio();storyCanvas.focus({preventScroll:true});}
@@ -85,7 +84,7 @@ function catchStoryDrop(item){
  const stage=storyStages[r.stage];
  if(!item.hazard&&item.letter===stage.words[r.word][r.letter]){
   r.letter++;sound('correct');$('dream-feedback').textContent='A little more light.';
-  if(r.letter===stage.words[r.word].length){r.word++;r.letter=0;if(r.word<stage.words.length&&r.stage>=storySave.completed){storySave.checkpoints[r.stage]=r.word;saveStory();}r.items=[];r.spawn=.6;sound('completed');$('dream-feedback').textContent='Word restored.';if(r.word===stage.words.length){finishStory(true);return;}}
+  if(r.letter===stage.words[r.word].length){r.word++;r.letter=0;if(r.word<stage.words.length&&r.stage>=storySave.completed){storySave.checkpoints[r.stage]=r.word;saveStory();}r.items=[];r.spawn=.6;sound('completed');$('dream-feedback').textContent='Word complete. Follow the next word.';if(r.word===stage.words.length){finishStory(true);return;}}
  }else{r.hearts--;sound('loseHP');try{if(window.WordRainNative)window.WordRainNative.haptic('hp');}catch(_){}$('dream-feedback').textContent='One heart lost. Catch only the glowing letter.';if(r.hearts===0){finishStory(false);return;}}
  renderStoryHud();
 }
