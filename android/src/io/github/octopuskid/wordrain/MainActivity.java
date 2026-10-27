@@ -48,7 +48,7 @@ import java.nio.charset.StandardCharsets;
 
 /** Bundled offline game. Native HTTPS checks public stable releases and downloads approved music; WebView network stays blocked. */
 public final class MainActivity extends Activity {
-    private WebView game;
+    private HomeWebView game;
     private static final int MUSIC_PICKER = 132;
     private boolean choosingMusic;
     private boolean downloadingMusic;
@@ -140,6 +140,11 @@ public final class MainActivity extends Activity {
     private File downloadedMusic(String name) { return new File(new File(getFilesDir(), "optional-music"), name); }
 
     public final class GameBridge {
+        @JavascriptInterface public void setHomeScrollLocked(final boolean locked) {
+            runOnUiThread(new Runnable() { @Override public void run() {
+                if (game != null) game.setHomeScrollLocked(locked);
+            }});
+        }
         @JavascriptInterface public boolean hasMusic(String id) {
             String name = musicFile(id);
             return name != null && downloadedMusic(name).isFile();
@@ -220,7 +225,7 @@ public final class MainActivity extends Activity {
         super.onCreate(state);
         applyDeviceOrientation();
         getWindow().setBackgroundDrawableResource(android.R.color.black);
-        game = new WebView(this);
+        game = new HomeWebView(this);
         game.setBackgroundColor(Color.rgb(16, 28, 40));
         WebSettings settings = game.getSettings();
         settings.setJavaScriptEnabled(true);

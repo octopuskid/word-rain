@@ -35,3 +35,5 @@ body{font-family:'Dream Sans',sans-serif}#android-classic[hidden],.dream-shell[h
 :root[data-dream-screen="home"] .dream-home{position:absolute;top:50%;left:50%;width:calc(100% - 32px);max-width:430px;height:auto;min-height:0;margin:0;padding:12px 8px;transform:translate(-50%,-50%) scale(var(--home-fit,1));transform-origin:center center}
 .dream-home .dream-logo{width:clamp(72px,17svh,144px);height:clamp(72px,17svh,144px);flex-shrink:0}
 @media(max-height:640px){.dream-home .dream-menu{gap:8px;margin:10px 0}.dream-home .dream-menu-button{padding-top:12px;padding-bottom:12px}.dream-home h1{font-size:30px}.dream-home .dream-subtitle{margin-bottom:8px}.dream-home .dream-version{margin:6px 0}.dream-home>.dream-kicker{margin-bottom:4px}}
+
+:root[data-dream-screen="home"] .dream-home{touch-action:none}

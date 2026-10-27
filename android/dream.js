@@ -38,11 +38,20 @@ if(typeof ResizeObserver!=='undefined'){
  const homeResize=new ResizeObserver(fitDreamHome);homeResize.observe($('dream-shell'));homeResize.observe($('dream-home'));
 }
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitDreamHome);
+function syncHomeScrollLock(){
+ const locked=dreamScreen==='home'&&!tutorialActive;
+ try{if(window.WordRainNative&&window.WordRainNative.setHomeScrollLocked)window.WordRainNative.setHomeScrollLocked(locked);}catch(_){}
+ if(locked&&window.scrollTo)window.scrollTo(0,0);
+}
+function stopHomePan(e){if(dreamScreen==='home'&&!tutorialActive&&e.cancelable)e.preventDefault();}
+// Cancel scrolling gestures, but leave touchstart/end and click delivery intact.
+document.addEventListener('touchmove',stopHomePan,{passive:false});
+document.addEventListener('wheel',stopHomePan,{passive:false});
 function routeDream(screen){
  if(tutorialActive)return;
  if(dreamScreen==='classic'&&state==='playing')pause();
  if(dreamScreen==='play'&&storyRun&&storyRun.status==='playing')pauseStory();
- dreamScreen=screen;document.documentElement.dataset.dreamScreen=screen;
+ dreamScreen=screen;document.documentElement.dataset.dreamScreen=screen;syncHomeScrollLock();
  const classic=screen==='classic';$('android-classic').hidden=!classic;$('mobile-tabs').hidden=true;$('dream-shell').hidden=classic;
  for(const page of ['home','chapters','intro','play','result','records'])$('dream-'+page).hidden=page!==screen;
  if(screen==='home'||screen==='chapters')renderDreamChapters();
@@ -143,7 +152,7 @@ window.wordRainStoryPlaying=()=>dreamScreen==='play'&&Boolean(storyRun&&storyRun
 const storyOriginalSyncAudio=syncAudio;syncAudio=function(){storyOriginalSyncAudio();$('dream-music').textContent='♫ BGM '+(audioPrefs.bgm?'on':'off');$('dream-music').setAttribute('aria-pressed',String(audioPrefs.bgm));$('dream-sound').textContent='♪ SFX '+(audioPrefs.sfx?'on':'off');$('dream-sound').setAttribute('aria-pressed',String(audioPrefs.sfx));};
 $('dream-music').onclick=()=>{$('bgm-toggle').onclick();};$('dream-sound').onclick=()=>{$('sfx-toggle').onclick();};
 const dreamOriginalApplyTheme=applyTheme;applyTheme=function(theme){dreamOriginalApplyTheme(theme);$('theme-toggle').disabled=false;$('theme-toggle').textContent=theme==='light'?'☾ Dark':'☀ Light';$('theme-toggle').setAttribute('aria-label',theme==='light'?'Switch to dark mode':'Switch to light mode');};applyTheme(document.documentElement.dataset.theme);
-renderDreamChapters();
+renderDreamChapters();syncHomeScrollLock();
 // The first-launch walkthrough is shown above Home; finishing it reveals Home.
 if(tutorialActive){document.documentElement.dataset.dreamScreen='home';$('android-classic').hidden=true;$('mobile-tabs').hidden=true;$('dream-shell').inert=true;}else routeDream('home');
 const dreamOriginalCloseTutorial=closeTutorial;closeTutorial=function(){dreamOriginalCloseTutorial();$('dream-shell').inert=false;if(dreamScreen==='home')routeDream('home');};$('tutorial-skip').onclick=closeTutorial;

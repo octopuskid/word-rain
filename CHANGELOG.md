@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0-dev8 DEV — 28 October 2026
+
+- Follow up the reported dev7 Home scrolling failure with a native Android WebView scroll lock: reject native scrolling, flings and overscroll while Home is active, clear old offsets and hide native scrollbars.
+- Synchronize the lock on navigation and after the first-launch tutorial. Prevent Home touchmove/wheel panning while preserving button clicks. Other routes and the tutorial retain scrolling.
+- Retain viewport fitting, chapters, saved progress and Classic behavior. Signed APK build 47; GitHub DEV prerelease and Pages. HTML remains Classic-only; itch.io remains stable 1.7.1.
+
 ## 2.0-dev7 DEV — 27 October 2026
 
 - Make Android Home unscrollable: lock the document and shell to the usable viewport, remove the growing page minimum height, and fit the whole menu into the available height.
