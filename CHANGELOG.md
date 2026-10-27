@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0-dev5 DEV — 27 October 2026
+
+- Android Chapter 1: complete ten unrelated words without a connecting story.
+- Chapter 2: spell every word of an original 50-word story; Chapter 3 expands to an original 100-word story. Reveal completed words progressively, retaining original punctuation and reading order.
+- Save a checkpoint after every completed word. Retry or reopen a chapter at the next unfinished word with three hearts. Keep the previous prototype save separately; revised chapters start fresh.
+- Signed Android test APK build 44. GitHub DEV prerelease and Pages; HTML remains Classic-only, itch.io remains stable 1.7.1.
+
 ## 2.0-dev4 DEV — 27 October 2026
 
 - Move Android light/dark control to the upper-left of Home; retain saved preference and add a matching dark palette to the dreamy interface. Home theme selection stays available with Classic handwriting enabled.

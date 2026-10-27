@@ -7,36 +7,36 @@
     <h1><a href="https://github.com/octopuskid/word-rain" aria-label="Word Rain on GitHub">word rain <span>2</span></a></h1><p class="dream-subtitle">a sky full of unfinished stories</p>
     <div class="dream-menu">
       <button id="dream-classic" class="dream-menu-button"><span>Classic</span><small>Catch words. Chase your best.</small><b aria-hidden="true">↗</b></button>
-      <button id="dream-story" class="dream-menu-button story-choice"><span>Story mode</span><small id="dream-continue-label">The missing dawn · Chapter 01</small><b aria-hidden="true">☾</b></button>
+      <button id="dream-story" class="dream-menu-button story-choice"><span>Story mode</span><small id="dream-continue-label">Ten words, then two stories</small><b aria-hidden="true">☾</b></button>
       <button id="dream-stats" class="dream-menu-button"><span>Stats</span><small>Your words &amp; little milestones</small><b aria-hidden="true">✧</b></button>
     </div>
-    <p class="dream-version">2.0-dev4 DEV · made by octopuskid</p>
+    <p class="dream-version">2.0-dev5 DEV · made by octopuskid</p>
   </section>
   <section id="dream-chapters" class="dream-page" hidden>
-    <button id="dream-chapters-home" class="dream-back">← Home</button><p class="dream-kicker">STORY MODE</p><h1>The missing dawn</h1>
-    <p class="dream-subtitle">One night, the sky forgot how to wake up.<br>Bring its scattered words home.</p>
+    <button id="dream-chapters-home" class="dream-back">← Home</button><p class="dream-kicker">STORY MODE</p><h1>Words become stories.</h1>
+    <p class="dream-subtitle">Start with ten scattered words.<br>Then restore two stories, word by word.</p>
     <div class="dream-chapter-art" aria-hidden="true">☾<span>· ✧ ·</span></div>
     <div class="dream-stage-list">
-      <button id="dream-stage-0" class="dream-stage"><small>01 · A spark</small><strong>The sleeping sky</strong><span id="dream-stage-state-0"></span></button>
-      <button id="dream-stage-1" class="dream-stage"><small>02 · A path</small><strong>The cloud post</strong><span id="dream-stage-state-1"></span></button>
-      <button id="dream-stage-2" class="dream-stage"><small>03 · A morning</small><strong>A place called home</strong><span id="dream-stage-state-2"></span></button>
+      <button id="dream-stage-0" class="dream-stage"><small>CHAPTER 01 · 10 WORDS</small><strong>Ten scattered words</strong><span id="dream-stage-state-0"></span></button>
+      <button id="dream-stage-1" class="dream-stage"><small>CHAPTER 02 · 50 WORDS</small><strong>The letter in the garden</strong><span id="dream-stage-state-1"></span></button>
+      <button id="dream-stage-2" class="dream-stage"><small>CHAPTER 03 · 100 WORDS</small><strong>The lantern bridge</strong><span id="dream-stage-state-2"></span></button>
     </div><p id="dream-save-note" class="dream-note">Your chapter progress is saved on this device.</p>
   </section>
   <section id="dream-intro" class="dream-page dream-narrative" hidden>
     <button id="dream-intro-back" class="dream-back">← Chapter</button><p id="dream-intro-number" class="dream-kicker"></p><div class="dream-orb" aria-hidden="true">✧</div><h1 id="dream-intro-title"></h1><p id="dream-intro-copy" class="dream-prose"></p>
-    <div class="dream-objective"><small>YOUR LITTLE MISSION</small><p id="dream-intro-goal"></p><p>Drag to move. Catch the glowing letter in order. A wrong letter or × costs a heart. Missed blocks are harmless. Each stage begins with three hearts.</p></div>
+    <div class="dream-objective"><small>YOUR LITTLE MISSION</small><p id="dream-intro-goal"></p><p>Drag to move. Catch the glowing letter in order. A wrong letter or × costs a heart. Missed blocks are harmless. Each chapter begins with three hearts. Completed words are saved; a retry continues from your next word.</p></div>
     <button id="dream-begin" class="dream-primary">Enter the dream →</button>
   </section>
   <section id="dream-play" class="dream-page dream-play" hidden>
     <div class="dream-play-header"><button id="dream-play-home" class="dream-back">← Home</button><button id="dream-music" class="dream-back" aria-label="Story background music" aria-pressed="false">♫ BGM off</button><button id="dream-sound" class="dream-back" aria-label="Story sound effects" aria-pressed="true">♪ SFX on</button><button id="dream-pause" class="dream-back" aria-label="Pause story">Ⅱ</button></div>
     <p id="dream-play-stage" class="dream-kicker"></p><div class="dream-live-line"><span id="dream-word-count">0 / 3 words</span><span id="dream-hearts" aria-label="3 hearts">♥ ♥ ♥</span></div>
     <div class="dream-progress"><div id="dream-progress-fill"></div></div><p class="dream-target-caption">BRING THIS WORD HOME</p><div id="dream-target" class="dream-target"></div>
-    <div class="dream-arena"><canvas id="dream-canvas" width="360" height="430" tabindex="0" aria-label="Story playfield: drag to catch the highlighted letter; avoid wrong letters and cross blocks"></canvas>
+    <p id="dream-restored" class="dream-restored" aria-label="Story restored so far" hidden></p><div class="dream-arena"><canvas id="dream-canvas" width="360" height="430" tabindex="0" aria-label="Story playfield: drag to catch the highlighted letter; avoid wrong letters and cross blocks"></canvas>
       <div id="dream-pause-overlay" class="dream-pause-overlay" hidden><h2>A quiet moment.</h2><p>Your dream can wait.</p><button id="dream-resume" class="dream-primary">Keep dreaming →</button><button id="dream-abandon" class="dream-back">Return to chapter</button></div>
     </div><p id="dream-feedback" class="dream-note" role="status">Catch the glowing letter.</p>
   </section>
   <section id="dream-result" class="dream-page dream-narrative" hidden>
     <p id="dream-result-kicker" class="dream-kicker"></p><div class="dream-orb" aria-hidden="true">✦</div><h1 id="dream-result-title"></h1><p id="dream-result-copy" class="dream-prose"></p><button id="dream-result-next" class="dream-primary">Continue →</button><button id="dream-result-chapters" class="dream-back">Chapter selection</button>
   </section>
-  <section id="dream-records" class="dream-page" hidden><button id="dream-records-home" class="dream-back">← Home</button><p class="dream-kicker">YOUR LITTLE MILESTONES</p><h1>Words worth keeping.</h1><div class="dream-record-grid"><div><small>CLASSIC BEST</small><strong id="dream-best">0</strong></div><div><small>STORY STAGES</small><strong id="dream-finished">0 / 3</strong></div><div><small>WORDS MET</small><strong id="dream-met">0</strong></div><div><small>PERFECT WORDS</small><strong id="dream-perfect">0</strong></div></div><p class="dream-note">Classic records and story progress are saved separately. Replaying a story never changes your classic best.</p><button id="dream-full-records" class="dream-primary">Classic word records →</button></section>
+  <section id="dream-records" class="dream-page" hidden><button id="dream-records-home" class="dream-back">← Home</button><p class="dream-kicker">YOUR LITTLE MILESTONES</p><h1>Words worth keeping.</h1><div class="dream-record-grid"><div><small>CLASSIC BEST</small><strong id="dream-best">0</strong></div><div><small>STORY CHAPTERS</small><strong id="dream-finished">0 / 3</strong></div><div><small>WORDS MET</small><strong id="dream-met">0</strong></div><div><small>PERFECT WORDS</small><strong id="dream-perfect">0</strong></div></div><p class="dream-note">Classic records and story progress are saved separately. Replaying a story never changes your classic best.</p><button id="dream-full-records" class="dream-primary">Classic word records →</button></section>
 </section>

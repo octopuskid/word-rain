@@ -1,24 +1,29 @@
 'use strict';
 // Android-only routes and finite story runs. Classic code and records stay separate.
 let dreamScreen='home';
-const storyKey='word-rain-story-v1';
+const storyKey='word-rain-story-v2';
+// Original stories: each whitespace-separated token is one playable word.
+const storyText50='At dusk, Mira found a letter beneath her pillow. Its ink shimmered like stars. She followed the words into a silent garden, where a frightened cloud had forgotten its name. Mira read the letter aloud. The cloud smiled, remembered the rain, and watered every sleeping flower before the morning arrived.';
+const storyText100='Beyond the garden, Mira discovered a bridge woven from moonlight. Halfway across, the stars vanished, leaving only her little lantern. A voice beneath the bridge asked why she carried such a tiny light. Mira answered that small lights could still show the next step. The voice belonged to a lost giant who feared the dark. Together they crossed slowly, sharing stories about their homes. With every word, another star returned. At the far bank, the giant lifted Mira high enough to hang her lantern in the sky. Its gentle glow guided every traveler safely home, even on the darkest nights.';
 const storyStages=[
- {title:'The sleeping sky',words:['GLOW','STAR','DREAM'],speed:76,hazards:0,intro:'A small star lands on your windowsill. “The dawn has lost its words,” it whispers. Gather a glow, a star, and a dream to light the first cloud.',ending:'The little star warms in your hands. A silver path appears between the clouds. Somewhere beyond it, a letter is waiting.'},
- {title:'The cloud post',words:['WIND','LIGHT','DAWN'],speed:94,hazards:.10,intro:'At the cloud post, undelivered letters drift through the night. Follow the wind. Bring back the light. Watch for the dark knots marked ×.',ending:'The letters rise like tiny lanterns. Their light spells a direction: home. The sky begins to remember a pale blue morning.'},
- {title:'A place called home',words:['WISH','HEART','HOME'],speed:110,hazards:.16,intro:'The last cloud guards a quiet doorway. The star asks for a wish, a heart, and a place to belong. Carry these final words through the restless rain.',ending:'The doorway opens. Your star settles into the sunrise, and the first warm light falls across your window. The dawn remembers. So do you. Chapter one complete.'}
+ {title:'Ten scattered words',words:['GLOW','BICYCLE','PEPPER','CASTLE','VIOLIN','SOCK','PLANET','LADDER','LEMON','PUZZLE'],text:'',speed:76,hazards:0,intro:'Begin with ten unrelated words. There is no story to connect them: simply finish each word in order to complete Chapter 1.',ending:'Ten words collected. Now you are ready to turn falling letters into a complete story.'},
+ {title:'The letter in the garden',text:storyText50,speed:94,hazards:.10,intro:'A mysterious letter leads Mira into a silent garden. Spell all fifty words in order to reveal the story, one finished word at a time.'},
+ {title:'The lantern bridge',text:storyText100,speed:110,hazards:.16,intro:'Mira reaches a bridge made of moonlight. Spell all one hundred words to uncover the journey and bring the story home.'}
 ];
-let storySave={completed:0},storyStorageAvailable=true;
-try{const saved=JSON.parse(localStorage.getItem(storyKey));if(saved&&Number.isInteger(saved.completed)&&saved.completed>=0&&saved.completed<=storyStages.length)storySave.completed=saved.completed;}catch(_){storyStorageAvailable=false;}
+for(const chapter of storyStages)if(chapter.text){chapter.tokens=chapter.text.split(/\s+/);chapter.words=chapter.tokens.map(token=>token.replace(/[^A-Za-z]/g,'').toUpperCase());chapter.ending=chapter.text;}
+// The new curriculum has its own save; the earlier prototype save is retained.
+let storySave={completed:0,checkpoints:[0,0,0]},storyStorageAvailable=true;
+try{const saved=JSON.parse(localStorage.getItem(storyKey));if(saved&&Number.isInteger(saved.completed)&&saved.completed>=0&&saved.completed<=storyStages.length){storySave.completed=saved.completed;if(Array.isArray(saved.checkpoints))for(let i=0;i<3;i++){const word=saved.checkpoints[i];if(i<=saved.completed&&Number.isInteger(word)&&word>=0&&word<storyStages[i].words.length)storySave.checkpoints[i]=word;}}}catch(_){storyStorageAvailable=false;}
 let storyRun=null,storySelected=0,storyPointer=null,storyLast=0;
 const storyCanvas=$('dream-canvas'),storyCtx=storyCanvas.getContext('2d');
 function saveStory(){try{localStorage.setItem(storyKey,JSON.stringify(storySave));}catch(_){storyStorageAvailable=false;}}
 function renderDreamChapters(){
  for(let i=0;i<storyStages.length;i++){
   $('dream-stage-'+i).disabled=i>storySave.completed;
-  $('dream-stage-state-'+i).textContent=i<storySave.completed?'Restored · Play again':i===storySave.completed?'Ready to discover':'Finish the previous stage to unlock';
+  $('dream-stage-state-'+i).textContent=i<storySave.completed?'Complete · Play again':i===storySave.completed?(storySave.checkpoints[i]?'Continue · '+storySave.checkpoints[i]+' / '+storyStages[i].words.length+' words':'Ready · '+storyStages[i].words.length+' words'):'Finish the previous chapter to unlock';
  }
- $('dream-save-note').textContent=storyStorageAvailable?'Your chapter progress is saved on this device.':'Storage is unavailable. Progress lasts until you close the app.';
- $('dream-continue-label').textContent=storyRun&&storyRun.status==='paused'?'Resume your dream':storySave.completed===3?'Chapter 01 restored · Play again':'The missing dawn · '+storySave.completed+' / 3 stages restored';
+ $('dream-save-note').textContent=storyStorageAvailable?'Every completed word is saved on this device.':'Storage is unavailable. Progress lasts until you close the app.';
+ $('dream-continue-label').textContent=storyRun&&storyRun.status==='paused'?'Resume your dream':storySave.completed===3?'All chapters complete · Play again':storySave.completed+' / 3 chapters complete';
 }
 function routeDream(screen){
  if(tutorialActive)return;
@@ -39,32 +44,35 @@ function openDreamClassic(){routeDream('classic');selectMobileTab('game');}
 function chooseStoryStage(index){
  if(!Number.isInteger(index)||index<0||index>=storyStages.length||index>storySave.completed||tutorialActive)return;
  storySelected=index;const stage=storyStages[index];
- $('dream-intro-number').textContent='CHAPTER 01 · STAGE 0'+(index+1);$('dream-intro-title').textContent=stage.title;$('dream-intro-copy').textContent=stage.intro;
- $('dream-intro-goal').textContent='Restore '+stage.words.length+' words · '+stage.words.join(' / ');routeDream('intro');
+ $('dream-intro-number').textContent='CHAPTER 0'+(index+1);$('dream-intro-title').textContent=stage.title;$('dream-intro-copy').textContent=stage.intro;
+ $('dream-intro-goal').textContent=(stage.text?'Restore a '+stage.words.length+' word story.':'Complete 10 unrelated words.')+(storySave.checkpoints[index]?' Continue from word '+(storySave.checkpoints[index]+1)+'.':'');routeDream('intro');
 }
 function beginStory(){
  if(tutorialActive||dreamScreen!=='intro')return;
  const stage=storyStages[storySelected];
- storyRun={stage:storySelected,status:'playing',word:0,letter:0,hearts:3,x:180,target:180,items:[],spawn:.35,time:0};
+ storyRun={stage:storySelected,status:'playing',word:storySave.completed>storySelected?0:storySave.checkpoints[storySelected],letter:0,hearts:3,x:180,target:180,items:[],spawn:.35,time:0};
  routeDream('play');$('dream-feedback').textContent='Catch the glowing letter.';unlockAudio();syncAudio();renderStoryHud();storyCanvas.focus({preventScroll:true});
 }
 function renderStoryHud(){
  if(!storyRun)return;const r=storyRun,stage=storyStages[r.stage],word=stage.words[r.word]||'';
- $('dream-play-stage').textContent='CHAPTER 01 · '+stage.title.toUpperCase();$('dream-word-count').textContent=r.word+' / '+stage.words.length+' words';
+ $('dream-play-stage').textContent='CHAPTER 0'+(r.stage+1)+' · '+stage.title.toUpperCase();$('dream-word-count').textContent=r.word+' / '+stage.words.length+' words';
  $('dream-hearts').textContent='♥ '.repeat(r.hearts).trim();$('dream-hearts').setAttribute('aria-label',r.hearts+' hearts');
  $('dream-progress-fill').style.width=(r.word/stage.words.length*100)+'%';
  $('dream-target').innerHTML=[...word].map((c,i)=>'<span class="'+(i<r.letter?'done':i===r.letter?'current':'')+'">'+c+'</span>').join('');
  $('dream-pause-overlay').hidden=r.status!=='paused';
+ $('dream-restored').hidden=!stage.text;
+ $('dream-restored').textContent=stage.text?(stage.tokens.slice(0,r.word).join(' ')+(r.word<stage.words.length?' …':'')):'';
+ $('dream-restored').scrollTop=$('dream-restored').scrollHeight||0;
 }
 function pauseStory(){if(storyRun&&storyRun.status==='playing'){storyRun.status='paused';storyPointer=null;renderStoryHud();syncAudio();}}
 function resumeStory(){if(tutorialActive||!storyRun||storyRun.status!=='paused')return;routeDream('play');storyRun.status='playing';renderStoryHud();unlockAudio();syncAudio();storyCanvas.focus({preventScroll:true});}
 function finishStory(won){
  const r=storyRun;if(!r||r.status!=='playing')return;r.status=won?'won':'lost';r.items=[];
- if(won){storySave.completed=Math.max(storySave.completed,r.stage+1);saveStory();sound('completed');}
+ if(won){storySave.completed=Math.max(storySave.completed,r.stage+1);storySave.checkpoints[r.stage]=0;saveStory();sound('completed');}
  $('dream-result-kicker').textContent=won?'A LITTLE MORE LIGHT':'THE DREAM IS STILL HERE';
- $('dream-result-title').textContent=won?(r.stage===2?'Morning, at last.':'A word of light.'):'Rest, then try again.';
- $('dream-result-copy').textContent=won?storyStages[r.stage].ending:'The rain grew too restless this time. Your restored stages are safe. Take a breath and return to this page of the story.';
- $('dream-result-next').textContent=won?(r.stage===2?'Back to the sky →':'Next stage →'):'Try this stage →';routeDream('result');
+ $('dream-result-title').textContent=won?(r.stage===2?'Every word, restored.':'Chapter complete.'):'Rest, then try again.';
+ $('dream-result-copy').textContent=won?storyStages[r.stage].ending:'The rain grew too restless this time. Your completed words are safe. Take a breath and continue from the next word with three fresh hearts.';
+ $('dream-result-next').textContent=won?(r.stage===2?'Back to the sky →':'Next chapter →'):'Continue chapter →';routeDream('result');
 }
 function spawnStoryDrop(){
  const r=storyRun;if(!r||r.status!=='playing')return;
@@ -77,7 +85,7 @@ function catchStoryDrop(item){
  const stage=storyStages[r.stage];
  if(!item.hazard&&item.letter===stage.words[r.word][r.letter]){
   r.letter++;sound('correct');$('dream-feedback').textContent='A little more light.';
-  if(r.letter===stage.words[r.word].length){r.word++;r.letter=0;r.items=[];r.spawn=.6;sound('completed');$('dream-feedback').textContent='Word restored.';if(r.word===stage.words.length){finishStory(true);return;}}
+  if(r.letter===stage.words[r.word].length){r.word++;r.letter=0;if(r.word<stage.words.length&&r.stage>=storySave.completed){storySave.checkpoints[r.stage]=r.word;saveStory();}r.items=[];r.spawn=.6;sound('completed');$('dream-feedback').textContent='Word restored.';if(r.word===stage.words.length){finishStory(true);return;}}
  }else{r.hearts--;sound('loseHP');try{if(window.WordRainNative)window.WordRainNative.haptic('hp');}catch(_){}$('dream-feedback').textContent='One heart lost. Catch only the glowing letter.';if(r.hearts===0){finishStory(false);return;}}
  renderStoryHud();
 }

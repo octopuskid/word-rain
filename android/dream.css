@@ -24,3 +24,5 @@ body{font-family:'Dream Sans',sans-serif}#android-classic[hidden],.dream-shell[h
 :root[data-theme="dark"] .dream-target span{color:#8995b6}:root[data-theme="dark"] .dream-target span.done{color:#bcabdb}:root[data-theme="dark"] .dream-target span.current{color:#fff2d7}
 :root[data-theme="dark"] .dream-pause-overlay{background:#25283bee}:root[data-theme="dark"] .dream-pause-overlay h2{color:#e3d9f7}:root[data-theme="dark"] .dream-pause-overlay p{color:#c1bdd7}
 :root[data-theme="dark"] .dream-theme-toggle{background:#373b58;color:#eee9fb;border-color:#9a96b566}
+
+.dream-restored{font-size:13px;line-height:1.7;color:#626c89;max-height:100px;overflow-y:auto;padding:14px 16px;background:#ffffff75;border:1px solid #ffffffaa;border-radius:18px;margin:0 0 14px;white-space:normal}.dream-restored[hidden]{display:none!important}:root[data-theme="dark"] .dream-restored{background:#2d334cc9;border-color:#74779455;color:#d2d6eb}

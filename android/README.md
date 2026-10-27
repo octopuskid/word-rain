@@ -1,6 +1,6 @@
 # Word Rain for Android
 
-Current test APK: **2.0-dev4 DEV / build 43**, published as a GitHub prerelease by explicit request. itch.io remains stable 1.7.1. Install over the existing app to keep records. This update adds a dreamy Android-only Classic / Story / Stats home, W2 logo and icon, offline Nunito font, and a three-stage story chapter with separate saved progress. It retains the Android-only first-launch tutorial (skippable/replayable, saved locally) and settings shown only before runs and after game over. A future stable APK must use a version code above 43.
+Current test APK: **2.0-dev5 DEV / build 44**, published as a GitHub prerelease by explicit request. itch.io remains stable 1.7.1. Install over the existing app to keep records. This update adds a dreamy Android-only Classic / Story / Stats home, W2 logo and icon, offline Nunito font, and a three-stage story chapter with separate saved progress. It retains the Android-only first-launch tutorial (skippable/replayable, saved locally) and settings shown only before runs and after game over. A future stable APK must use a version code above 44.
 
 Current stable: **1.7.1**, version code **40**. One APK replaces either older Full or Lite in place. Install over the existing app to keep personal best, word records, settings and Rick unlocks. App ID, signing certificate, stable HTTPS WebView origin and storage keys are unchanged. Do not uninstall first.
 
@@ -27,7 +27,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output follows the manifest version, currently `android/build/word-rain-2.0-dev4.apk`. No separate checksum file is generated. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output follows the manifest version, currently `android/build/word-rain-2.0-dev5.apk`. No separate checksum file is generated. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
