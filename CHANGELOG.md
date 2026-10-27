@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0-dev7 DEV — 27 October 2026
+
+- Make Android Home unscrollable: lock the document and shell to the usable viewport, remove the growing page minimum height, and fit the whole menu into the available height.
+- Refit after viewport changes, font loading and saved chapter labels changing. Keep the theme switch, all three menu buttons and version visible on short screens. Other routes retain access to their longer content.
+- Signed Android test APK build 46; GitHub DEV prerelease and Pages. HTML remains Classic-only; itch.io remains stable 1.7.1.
+
 ## 2.0-dev6 DEV — 27 October 2026
 
 - Android story chapters follow prewritten stories: show the current full word before any letters are caught, then advance only when it is complete. Chapter 2 has exactly 50 words; Chapter 3 exactly 100.

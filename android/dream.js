@@ -25,6 +25,19 @@ function renderDreamChapters(){
  $('dream-save-note').textContent=storyStorageAvailable?'Every completed word is saved on this device.':'Storage is unavailable. Progress lasts until you close the app.';
  $('dream-continue-label').textContent=storyRun&&storyRun.status==='paused'?'Resume your dream':storySave.completed===3?'All chapters complete · Play again':storySave.completed+' / 3 chapters complete';
 }
+// Refit when the viewport or bundled font changes. Transforming the complete
+// Home preserves access to every control even on short screens or large fonts.
+function fitDreamHome(){
+ if(dreamScreen!=='home')return;
+ const home=$('dream-home'),shell=$('dream-shell');
+ const available=shell.clientHeight-16,needed=home.scrollHeight;
+ if(available>0&&needed>0)home.style.setProperty('--home-fit',String(Math.min(1,available/needed)));
+}
+window.addEventListener('resize',fitDreamHome);
+if(typeof ResizeObserver!=='undefined'){
+ const homeResize=new ResizeObserver(fitDreamHome);homeResize.observe($('dream-shell'));homeResize.observe($('dream-home'));
+}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitDreamHome);
 function routeDream(screen){
  if(tutorialActive)return;
  if(dreamScreen==='classic'&&state==='playing')pause();
@@ -33,6 +46,7 @@ function routeDream(screen){
  const classic=screen==='classic';$('android-classic').hidden=!classic;$('mobile-tabs').hidden=true;$('dream-shell').hidden=classic;
  for(const page of ['home','chapters','intro','play','result','records'])$('dream-'+page).hidden=page!==screen;
  if(screen==='home'||screen==='chapters')renderDreamChapters();
+ if(screen==='home')fitDreamHome();
  if(screen==='records'){
   $('dream-best').textContent=mobileRecords.highScore;$('dream-finished').textContent=storySave.completed+' / 3';
   $('dream-met').textContent=Object.values(mobileRecords.words).reduce((n,e)=>n+e.met,0);
