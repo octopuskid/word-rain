@@ -16,7 +16,7 @@ A behind-the-scenes video about building Word Rain, refining its rules, and publ
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.7.1**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
-**Android development edition:** 2.0-dev11 is a native Android rewrite using Views and Canvas, with no WebView or bundled HTML. It is a testing prerelease; stable remains 1.7.1. See [Android build notes](android/README.md).
+**Android development edition:** 2.0-dev12 is a native Android rewrite using Views and Canvas, with no WebView or bundled HTML. It is a testing prerelease; stable remains 1.7.1. See [Android build notes](android/README.md).
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -32,9 +32,11 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Latest development build: 2.0-dev11 DEV
+## Latest Android development build: 2.0-dev12 DEV
 
-Android **build 50** uses native Android Views and Canvas, with no WebView or bundled HTML/JavaScript. Home keeps its fixed layout, W2 artwork, Classic title font and offline Dream font. Stats now has an aligned **Word / Met / Perfect** table, formatted counts and row separators.
+Android **build 51** uses native Android Views and Canvas, with no WebView or bundled HTML/JavaScript. Home keeps its fixed layout, W2 artwork, Classic title font and offline Dream font. Stats now has an aligned **Word / Met / Perfect** table, formatted counts and row separators.
+
+**Story mode only** restores the dev7 dreamy look: Nunito typography, lavender chapter cards, a moonlit sky, narrative panels, separate reading-word and letter-progress displays, a rounded grid-free playfield and glowing target letters. Gameplay, story text, checkpoints and controls remain dev11. Classic, Home and Stats keep their existing design; the HTML/Pages game stays dev11.
 
 The Classic pickup switch selects **Magnet mode when on** or **Shield mode when off**. The selected pickup has a **1% chance per emitted block** in Normal and Hard; magnets and shields do not spawn together. Letters, × and wildcards retain their rules. Magnet mode hides the shield meter. These rules apply to both native Android and HTML.
 

@@ -4,7 +4,7 @@ import android.graphics.*;
 import java.util.ArrayList;
 
 /** Native portrait playfield. Input is delivered directly to this View. */
-final class GameView extends View {
+class GameView extends View {
  final MainActivity activity;final GameEngine engine;final Paint p=new Paint(3);final RectF field=new RectF();
  long last;int pointer=-1;final ArrayList<float[]> particles=new ArrayList<float[]>();
  GameView(MainActivity activity,GameEngine engine){super(activity);this.activity=activity;this.engine=engine;setFocusable(true);setFocusableInTouchMode(true);setContentDescription("Falling letters. Drag to move the basket and catch the highlighted letter.");}

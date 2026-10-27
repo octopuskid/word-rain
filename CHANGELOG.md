@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0-dev12 DEV — 28 October 2026
+
+- Android Story only: restore the dev7 dreamy design with offline Nunito typography, lavender chapter cards, moon/cloud/star sky, narrative panels, original-case reading word and separate highlighted letter progress.
+- Restore the rounded, grid-free Story arena, glowing target blocks, soft basket and dreamy pause/results screens using native Android Views/Canvas. No WebView.
+- Keep the dev11 engine, 10/50/100-word chapters, checkpoints, damage, timing, controls and separate Classic/Story runs. Classic, Home and Stats designs remain unchanged.
+- Signed Android test APK build 51, marked DEV prerelease. HTML/Pages game remains dev11; itch.io remains stable 1.7.1. Physical-device layout/touch verification remains unavailable.
+
 ## 2.0-dev11 DEV — 28 October 2026
 
 - Replace native word Stats lines with an aligned Word / Met / Perfect table, contrasting header, alternating rows, separators, formatted counts and totals. Preserve stored records.
