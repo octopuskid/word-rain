@@ -54,7 +54,7 @@ hud=function(){
 };
 const originalMobileStart=start;
 start=function(){
- if(tutorialActive||!$('mobile-stats-panel').hidden)return;
+ if(tutorialActive||(typeof dreamScreen!=='undefined'&&dreamScreen!=='classic')||!$('mobile-stats-panel').hidden)return;
  const resuming=state==='paused';if(!resuming)mobileNextWordPending=false;originalMobileStart();
  if(!resuming){recordWordMet();renderMobileRecords();}
 };
@@ -70,7 +70,7 @@ finishWord=function(){
 };
 const originalMobilePause=pause;
 pause=function(){
- if(tutorialActive||!$('mobile-stats-panel').hidden)return;
+ if(tutorialActive||(typeof dreamScreen!=='undefined'&&dreamScreen!=='classic')||!$('mobile-stats-panel').hidden)return;
  originalMobilePause();
 };
 function selectMobileTab(tab){

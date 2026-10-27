@@ -30,13 +30,15 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Latest development build: 2.0-dev2 DEV
+## Latest development build: 2.0-dev3 DEV
+
+Android **build 42** adds a new W2 home screen with Classic / Story mode / Stats, polished sketch-based logo and launcher icon, and an offline Nunito font (SIL OFL). The dreamy Android-only story prototype has one chapter with three finite stages, dialogue, unlocks, separate saved completion, pause/resume and retries. Story catches differ from Classic: catch highlighted letters in order; a wrong letter or × costs one heart; missed blocks are harmless. Each stage begins with three hearts. Classic records remain separate. HTML does not include story mode or the Android home screen.
 
 Optional **Magnet blocks** are available on GitHub Pages and in the HTML-only dev prerelease. Enable the switch in **Word set & difficulty** for a **1% chance per emitted block** in Normal or Hard. The saved choice takes effect when you start or resume play.
 
 Picking up a magnet makes a one-time selection of all blocks within **3.5 block widths** (126 canvas units, center-to-center) and pulls them toward the basket, including hazards and pickups. Blocks whose centers are below the basket are excluded. Later drops are unaffected; attracted blocks keep normal catch, scoring and overlap rules. The magnet itself gives no points or direct heart/shield changes. A falling magnet disappears when touching another block. A shield or another magnet disappears with it; other block types survive that contact.
 
-The red/blue/silver U-shaped magnet is redrawn from the creator’s sketch on a white tile, with clean and pencil-hatched variants. The test lab has a manual magnet drop and a magnet-generation selector. Stable remains **1.7.1 / build 40** on itch.io. **2.0-dev2 DEV / build 41** includes an explicitly requested Android test APK on GitHub; it uses the original app identity and signing certificate. Its first-launch tutorial is Android-only, skippable and replayable from setup. Install over the app to preserve records; do not uninstall first.
+The red/blue/silver U-shaped magnet is redrawn from the creator’s sketch on a white tile, with clean and pencil-hatched variants. The test lab has a manual magnet drop and a magnet-generation selector. Stable remains **1.7.1 / build 40** on itch.io. **2.0-dev3 DEV / build 42** includes an explicitly requested Android test APK on GitHub; it uses the original app identity and signing certificate. Its first-launch tutorial is Android-only, skippable and replayable from setup. Install over the app to preserve records; do not uninstall first.
 
 ## Smaller HTML build
 

@@ -1,6 +1,6 @@
 # Word Rain for Android
 
-Current test APK: **2.0-dev2 DEV / build 41**, published as a GitHub prerelease by explicit request. itch.io remains stable 1.7.1. Install over the existing app to keep records. This update introduces an Android-only first-launch tutorial (skippable/replayable, saved locally) and settings shown only before runs and after game over. A future stable APK must use a version code above 41.
+Current test APK: **2.0-dev3 DEV / build 42**, published as a GitHub prerelease by explicit request. itch.io remains stable 1.7.1. Install over the existing app to keep records. This update adds a dreamy Android-only Classic / Story / Stats home, W2 logo and icon, offline Nunito font, and a three-stage story chapter with separate saved progress. It retains the Android-only first-launch tutorial (skippable/replayable, saved locally) and settings shown only before runs and after game over. A future stable APK must use a version code above 42.
 
 Current stable: **1.7.1**, version code **40**. One APK replaces either older Full or Lite in place. Install over the existing app to keep personal best, word records, settings and Rick unlocks. App ID, signing certificate, stable HTTPS WebView origin and storage keys are unchanged. Do not uninstall first.
 
@@ -27,7 +27,7 @@ python3 android/build.py \
   --password-file /private/signing-password.txt
 ```
 
-Output follows the manifest version, currently `android/build/word-rain-2.0-dev2.apk`. No separate checksum file is generated. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
+Output follows the manifest version, currently `android/build/word-rain-2.0-dev3.apk`. No separate checksum file is generated. The build reads versionName from AndroidManifest.xml. The script compiles resources, compiles Java, converts classes to DEX, aligns the APK, signs it, and verifies the signature and alignment. It combines the root game’s HTML with Android-only `mobile.css` and `mobile.js` through `mobile.py`, then removes `target="_blank"` so native link handling can open the browser. The web versions are unaffected.
 
 The published release uses a private release key, not Android's shared debug key. Future updates to the same app must use that same private key and a higher manifest versionCode. The signing key is intentionally absent from this repository and release assets.
 
@@ -42,3 +42,5 @@ Cloud generation: `python tools/build_cloud_textures.py`; launcher generation: `
 1.6.8 (code 37) promotes the 1.6.4.1 scoring changes: ceil(base × mode × Overcast × current speed), with Hard and Overcast each multiplying by 2.
 
 1.7.1 (code 40) resumes from 1.7.0-pre1, links the title to GitHub and keeps Android portrait-only. Once-per-launch update checking and optional music downloading remain intact. Landscape clouds are exclusive to the HTML wide layout.
+
+Story implementation: `dream.html`, `dream.css`, `dream.js`; all story assets are embedded by `mobile.py` only for Android. Story records use `word-rain-story-v1`; Classic storage keys are unchanged. Nunito license is bundled as `assets/Nunito-OFL.txt`. Home pauses both modes; native update/background paths call `wordRainPauseAll`.

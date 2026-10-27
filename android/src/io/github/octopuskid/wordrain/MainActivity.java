@@ -119,7 +119,7 @@ public final class MainActivity extends Activity {
                 if (version == null || !foreground || isFinishing() || isDestroyed() || game == null) return;
                 if (version.equals(prefs.getString("offered-version", ""))) return;
                 prefs.edit().putString("offered-version", version).apply();
-                game.evaluateJavascript("if(typeof state!=='undefined'&&state==='playing')pause();", null);
+                game.evaluateJavascript("if(window.wordRainPauseAll)window.wordRainPauseAll();else if(typeof state!=='undefined'&&state==='playing')pause();", null);
                 new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Word Rain " + version + " is available")
                     .setMessage("Open GitHub to download the update? Install over this app to keep your records. Downloading uses your Wi-Fi or mobile data. The game will stay paused.")
@@ -371,7 +371,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onPause() {
         if (game != null) {
-            game.evaluateJavascript("if(typeof state!=='undefined'&&state==='playing')pause();", null);
+            game.evaluateJavascript("if(window.wordRainPauseAll)window.wordRainPauseAll();else if(typeof state!=='undefined'&&state==='playing')pause();", null);
             game.onPause();
         }
         super.onPause();

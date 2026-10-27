@@ -24,6 +24,7 @@ html=mobile_html(source)
 (out/'assets'/'index.html').write_text(html)
 shutil.copyfile(root.parent/'LICENSE',out/'assets'/'LICENSE')
 shutil.copyfile(root.parent/'MUSIC-LICENSES.md',out/'assets'/'MUSIC-LICENSES.md')
+shutil.copyfile(root/'assets'/'Nunito-OFL.txt',out/'assets'/'Nunito-OFL.txt')
 # Optional recordings stay in the repository; never bundle them in the APK.
 
 def run(*cmd):subprocess.run([str(c) for c in cmd],check=True)

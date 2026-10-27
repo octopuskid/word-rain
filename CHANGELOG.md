@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0-dev3 DEV — 27 October 2026
+
+- Android home redesigned from the owner’s sketch: Classic, Story mode and Stats. Smooth black/yellow W2 artwork also becomes the launcher icon.
+- New dreamy Android interface with moonlight, lilac clouds and an offline rounded Nunito font (SIL OFL).
+- Playable story prototype: The missing dawn, three stages with intro/end passages, sequential unlocks, retries and independently saved chapter progress. Catch highlighted letters; wrong letters or × cost a heart; missed blocks are harmless.
+- Pause/resume story on Home, lifecycle backgrounding and update prompts; retain Classic rules/records, first-launch tutorial, optional music and update checking.
+- Android test APK build 42, original signing key. GitHub DEV prerelease and Pages; HTML remains Classic-only, itch.io remains stable 1.7.1.
+
 ## 2.0-dev2 DEV — 27 October 2026
 
 - Open with a difficulty-first setup card; hide the playfield before the first run. Settings stay hidden during play and pause, and reopen at game over. Fresh starts apply the visible settings.

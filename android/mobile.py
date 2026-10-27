@@ -1,12 +1,23 @@
 """Inject Android-only UI and records into the shared HTML game."""
 from pathlib import Path
+import base64
 
 def mobile_html(source: str) -> str:
     root=Path(__file__).resolve().parent
     # Android always uses the portrait playfield; wide mode belongs to HTML.
     source=source.replace('function isPhoneClient(){', 'function isPhoneClient(){return true;')
-    style=(root/'mobile.css').read_text()
-    script=(root/'mobile.js').read_text()
+    # Let Android story runs use the existing audio transport without running Classic.
+    audio_marker='"playing"===state&&audioPrefs.bgm'
+    assert source.count(audio_marker)==4, 'Audio transport changed; review story integration'
+    source=source.replace(audio_marker,'androidAudioPlaying()&&audioPrefs.bgm')
+    source=source.replace('function syncAudio(){','function androidAudioPlaying(){return state==="playing"||Boolean(window.wordRainStoryPlaying&&window.wordRainStoryPlaying());}function syncAudio(){',1)
+    font='data:font/woff;base64,'+base64.b64encode((root/'assets/dream-font.woff').read_bytes()).decode()
+    logo='data:image/png;base64,'+base64.b64encode((root/'assets/word-rain-2-logo.png').read_bytes()).decode()
+    style=(root/'mobile.css').read_text()+(root/'dream.css').read_text().replace('__DREAM_FONT__',font)
+    script=(root/'mobile.js').read_text()+'\n'+(root/'dream.js').read_text()
+    dream=(root/'dream.html').read_text().replace('__DREAM_LOGO__',logo)
+    source=source.replace('<main>','<main id="android-classic" hidden>',1)
+    source=source.replace('<header>','<button type="button" id="classic-home">← Home</button><header>',1)
     assert '</header>' in source and '</main>' in source and '</style>' in source
     source=source.replace('</style>',style+'\n</style>',1)
     source=source.replace('</header>','</header><div class="mobile-panel" id="mobile-game-panel" role="tabpanel" aria-labelledby="mobile-game-tab">',1)
@@ -25,5 +36,5 @@ def mobile_html(source: str) -> str:
 <nav class="mobile-tabs" id="mobile-tabs" role="tablist" aria-label="Game and word statistics"><button type="button" role="tab" id="mobile-game-tab" aria-selected="true" aria-controls="mobile-game-panel" tabindex="0">☂ Game</button><button type="button" role="tab" id="mobile-stats-tab" aria-selected="false" aria-controls="mobile-stats-panel" tabindex="-1">▤ Word Stats</button></nav>'''
     source=source.replace('Drag the basket with your mouse, press ← → or A / D, or hold the on-screen arrows.','Drag your finger across the play area to move the basket.',1)
     source=source.replace('</main>',panel,1)
-    source=source.replace('</body>',(root/'tutorial.html').read_text()+'<script>\n'+script+'\n</script></body>',1)
+    source=source.replace('</body>',dream+(root/'tutorial.html').read_text()+'<script>\n'+script+'\n</script></body>',1)
     return source.replace(' target="_blank"','')

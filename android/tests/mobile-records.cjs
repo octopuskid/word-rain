@@ -7,6 +7,7 @@ function session(store={},blocked=false,sourceScripts=scripts,native=null,tutori
  const c=vm.createContext({Math,Set,Array,String,Object,Number,JSON,console,navigator:{userAgent:'Android Mobile'},screen:{width:412,height:915},document:{documentElement:{dataset:{}},querySelector:q=>el(q==='canvas'?'game':'meta'),getElementById:el,addEventListener(){}},window:{matchMedia:()=>({matches:false}),addEventListener(){}},localStorage:{getItem(k){if(blocked)throw Error('blocked');if(k==='word-rain-tutorial-v1'&&!tutorialFirstLaunch&&!Object.hasOwn(store,k))return 'done';return store[k]||null},setItem(k,v){if(blocked)throw Error('blocked');store[k]=v}},getComputedStyle:()=>({getPropertyValue:()=> '#ffffff06'}),setInterval(){},requestAnimationFrame(){}});
  if(native)c.window.WordRainNative=native;
  for(const s of sourceScripts)vm.runInContext(s,c);
+ if(!tutorialFirstLaunch&&vm.runInContext("typeof openDreamClassic==='function'",c))vm.runInContext('openDreamClassic()',c);
  return {c,el,store,run:s=>vm.runInContext(s,c)};
 }
 const a=session();assert.equal(a.run('Object.keys(mobileRecords.words).length'),0,'ready screen is not an encounter');
