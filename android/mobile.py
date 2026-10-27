@@ -10,6 +10,7 @@ def mobile_html(source: str) -> str:
     assert '</header>' in source and '</main>' in source and '</style>' in source
     source=source.replace('</style>',style+'\n</style>',1)
     source=source.replace('</header>','</header><div class="mobile-panel" id="mobile-game-panel" role="tabpanel" aria-labelledby="mobile-game-tab">',1)
+    source=source.replace('<p>Your settings return after game over. Saved records are kept.</p>','<button type="button" id="replay-tutorial">Replay tutorial</button><p>Your settings return after game over. Saved records are kept.</p>',1)
     marker='<div class="meters">'
     assert marker in source
     source=source.replace(marker,'<div class="mobile-high-score"><span>PERSONAL BEST</span><strong id="high-score">0</strong></div>'+marker,1)
@@ -24,5 +25,5 @@ def mobile_html(source: str) -> str:
 <nav class="mobile-tabs" id="mobile-tabs" role="tablist" aria-label="Game and word statistics"><button type="button" role="tab" id="mobile-game-tab" aria-selected="true" aria-controls="mobile-game-panel" tabindex="0">☂ Game</button><button type="button" role="tab" id="mobile-stats-tab" aria-selected="false" aria-controls="mobile-stats-panel" tabindex="-1">▤ Word Stats</button></nav>'''
     source=source.replace('Drag the basket with your mouse, press ← → or A / D, or hold the on-screen arrows.','Drag your finger across the play area to move the basket.',1)
     source=source.replace('</main>',panel,1)
-    source=source.replace('</body>','<script>\n'+script+'\n</script></body>',1)
+    source=source.replace('</body>',(root/'tutorial.html').read_text()+'<script>\n'+script+'\n</script></body>',1)
     return source.replace(' target="_blank"','')

@@ -30,13 +30,13 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Latest development build: 2.0-dev1 DEV
+## Latest development build: 2.0-dev2 DEV
 
 Optional **Magnet blocks** are available on GitHub Pages and in the HTML-only dev prerelease. Enable the switch in **Word set & difficulty** for a **1% chance per emitted block** in Normal or Hard. The saved choice takes effect when you start or resume play.
 
 Picking up a magnet makes a one-time selection of all blocks within **3.5 block widths** (126 canvas units, center-to-center) and pulls them toward the basket, including hazards and pickups. Blocks whose centers are below the basket are excluded. Later drops are unaffected; attracted blocks keep normal catch, scoring and overlap rules. The magnet itself gives no points or direct heart/shield changes. A falling magnet disappears when touching another block. A shield or another magnet disappears with it; other block types survive that contact.
 
-The red/blue/silver U-shaped magnet is redrawn from the creator’s sketch on a white tile, with clean and pencil-hatched variants. The test lab has a manual magnet drop and a magnet-generation selector. Android and itch.io stay on stable **1.7.1 / build 40**.
+The red/blue/silver U-shaped magnet is redrawn from the creator’s sketch on a white tile, with clean and pencil-hatched variants. The test lab has a manual magnet drop and a magnet-generation selector. Stable remains **1.7.1 / build 40** on itch.io. **2.0-dev2 DEV / build 41** includes an explicitly requested Android test APK on GitHub; it uses the original app identity and signing certificate. Its first-launch tutorial is Android-only, skippable and replayable from setup. Install over the app to preserve records; do not uninstall first.
 
 ## Smaller HTML build
 
@@ -81,7 +81,7 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
-Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Stable 1.7.1 includes the expansion of each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The options panel hides during active play.
+Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Stable 1.7.1 includes the expansion of each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The setup panel opens before a run, hides during play and pause, and returns after game over.
 
 ### Automatic Android update checks
 

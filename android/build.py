@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build a signed offline APK with Android SDK Build Tools 35 and Java 17+."""
-import argparse, hashlib, os, shutil, subprocess, zipfile
+import argparse, os, shutil, subprocess, zipfile
 import xml.etree.ElementTree as ET
 from mobile import mobile_html
 from pathlib import Path
@@ -39,5 +39,4 @@ run(tools/'zipalign','-f','-p','4',out/'unsigned.apk',out/'aligned.apk')
 run('java','-jar',tools/'lib'/'apksigner.jar','sign','--ks',args.keystore.resolve(),'--ks-key-alias','word-rain','--ks-pass','file:'+str(args.password_file.resolve()),'--out',apk,out/'aligned.apk')
 run('java','-jar',tools/'lib'/'apksigner.jar','verify','--verbose','--print-certs',apk)
 run(tools/'zipalign','-c','-p','4',apk)
-(out/'SHA256SUMS.txt').write_text(hashlib.sha256(apk.read_bytes()).hexdigest()+'  '+apk.name+'\n')
 print('Built:',apk)

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0-dev2 DEV — 27 October 2026
+
+- Open with a difficulty-first setup card; hide the playfield before the first run. Settings stay hidden during play and pause, and reopen at game over. Fresh starts apply the visible settings.
+- Android-only first-launch tutorial: six brief illustrated cards, Back/Next/Skip, replay from setup, saved completion and no score/record changes.
+- Explicitly requested Android test APK, build 41, signed with the original key. Preserve app identity, records, music downloads and once-per-launch update checks. Recognize installed dev versions so a matching/newer stable can be offered without downgrading.
+- Refresh legacy regression expectations for current scoring and handle incidental Rick triggers in expanded word sets.
+- GitHub DEV prerelease plus Pages; itch.io remains stable 1.7.1. No separate checksum asset.
+
 ## 2.0-dev1 DEV — 27 October 2026
 
 - Fix magnet switch activation: toggling it while paused now updates generation when play resumes, rather than silently waiting for a fresh run. Start/apply also read the checkbox directly. Saved preference and 1% random spawning are preserved.
