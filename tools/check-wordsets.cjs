@@ -13,5 +13,5 @@ for(const name of ['src/index.html','index.html','test.html']){
   const hard=set.words.filter(w=>w.length>=6);assert(hard.length>1);assert(hard.every(w=>w.length<=7));
  }
 }
-assert.equal(fs.readFileSync(path.join(root,'index.html'),'utf8'),fs.readFileSync(path.join(root,'versions/word-rain-2.0-dev3.html'),'utf8'));
+assert.equal(fs.readFileSync(path.join(root,'index.html'),'utf8'),fs.readFileSync(path.join(root,'versions/word-rain-2.0-dev4.html'),'utf8'));
 console.log('PASS four 120-entry word sets, per-set uniqueness, Normal/Hard lengths, secret exclusion and matching semantic-prerelease snapshot.');

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0-dev4 DEV — 27 October 2026
+
+- Move Android light/dark control to the upper-left of Home; retain saved preference and add a matching dark palette to the dreamy interface. Home theme selection stays available with Classic handwriting enabled.
+- Remove the persistent Game / Word Stats bar on all Android routes and its reserved bottom gap. Home / Stats navigation retains access to full Classic word records. Fix the flex rule overriding the hidden attribute.
+- Signed test APK build 43; GitHub DEV prerelease and Pages. HTML remains Classic-only with a version-label change; itch.io remains stable 1.7.1.
+
 ## 2.0-dev3 DEV — 27 October 2026
 
 - Android home redesigned from the owner’s sketch: Classic, Story mode and Stats. Smooth black/yellow W2 artwork also becomes the launcher icon.

@@ -9,3 +9,18 @@ body{font-family:'Dream Sans',sans-serif}#android-classic[hidden],.dream-shell[h
 :root[data-dream-screen] .dream-shell,:root[data-dream-screen] .dream-shell button,:root[data-dream-screen] .dream-shell h1,:root[data-dream-screen] .dream-shell h2{font-family:'Dream Sans',sans-serif}
 
 .dream-home h1 a{color:inherit;text-decoration:none}
+
+.dream-theme-toggle{position:absolute;top:0;left:0;z-index:2;border:1px solid #ffffffc9;border-radius:22px;background:#ffffff99;color:#60678c;font:800 12px 'Dream Sans',sans-serif;padding:11px 15px;min-height:42px}.dream-home>.dream-kicker{margin-top:42px}
+:root[data-theme="dark"][data-dream-screen]:not([data-dream-screen="classic"]) body{background:#17192d}
+:root[data-theme="dark"] .dream-shell{background:radial-gradient(ellipse at 85% 5%,#39304b 0,transparent 47%),linear-gradient(165deg,#191c35,#202d46 57%,#30283f);color:#e7e6f4;color-scheme:dark}
+:root[data-theme="dark"] .dream-shell h1{color:#eeedf9}:root[data-theme="dark"] .dream-home h1 span{color:#b9a8e3}
+:root[data-theme="dark"] .dream-subtitle,:root[data-theme="dark"] .dream-note,:root[data-theme="dark"] .dream-kicker,:root[data-theme="dark"] .dream-back,:root[data-theme="dark"] .dream-version,:root[data-theme="dark"] .dream-prose,:root[data-theme="dark"] .dream-live-line,:root[data-theme="dark"] .dream-target-caption{color:#b3b8d3}
+:root[data-theme="dark"] .dream-menu-button,:root[data-theme="dark"] .dream-stage,:root[data-theme="dark"] .dream-record-grid>div,:root[data-theme="dark"] .dream-objective{background:#2d334cc9;border-color:#74779455;color:#ededfa}
+:root[data-theme="dark"] .dream-menu-button.story-choice{background:linear-gradient(110deg,#514563,#3d3e60);border-color:#b19cc355}
+:root[data-theme="dark"] .dream-menu-button small,:root[data-theme="dark"] .dream-stage span,:root[data-theme="dark"] .dream-stage small,:root[data-theme="dark"] .dream-record-grid small{color:#b8bdd5}
+:root[data-theme="dark"] .dream-objective p:first-of-type,:root[data-theme="dark"] .dream-record-grid strong{color:#d5c5ec}
+:root[data-theme="dark"] .dream-moon{background:#e2d5ed14;box-shadow:0 0 90px #a097bc22}:root[data-theme="dark"] .dream-cloud{background:#a6afd512;box-shadow:40px -15px 0 #c3caf00d,-35px 12px 0 #a7afd50c}
+:root[data-theme="dark"] .dream-arena{background:linear-gradient(#29334d,#222b43);border-color:#8e92b155}
+:root[data-theme="dark"] .dream-target span{color:#8995b6}:root[data-theme="dark"] .dream-target span.done{color:#bcabdb}:root[data-theme="dark"] .dream-target span.current{color:#fff2d7}
+:root[data-theme="dark"] .dream-pause-overlay{background:#25283bee}:root[data-theme="dark"] .dream-pause-overlay h2{color:#e3d9f7}:root[data-theme="dark"] .dream-pause-overlay p{color:#c1bdd7}
+:root[data-theme="dark"] .dream-theme-toggle{background:#373b58;color:#eee9fb;border-color:#9a96b566}
