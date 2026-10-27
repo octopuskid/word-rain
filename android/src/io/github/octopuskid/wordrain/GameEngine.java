@@ -8,6 +8,7 @@ import java.util.Random;
 public final class GameEngine {
     public static final int READY=0, PLAYING=1, PAUSED=2, OVER=3, WON=4;
     public static final int LETTER=0, BOMB=1, SHIELD=2, WILD=3, MAGNET=4;
+    public static final double BASKET_BOTTOM=485;
     public static final String RICK="dQw4w9WgXcQ";
     public static class Events {
         public void sound(String id){} public void damage(boolean hp,boolean shield){}
@@ -19,7 +20,7 @@ public final class GameEngine {
         public boolean hard,overcast,magnet,handwriting; public int wordSet,palette;
     }
     public static final class Drop {
-        public double x,y,speed; public int kind; public char letter; public boolean pull,caught;
+        public double x,y,speed; public int kind; public char letter; public boolean pull,caught,missed;
         public Drop(double x,double y,double speed,int kind,char letter){this.x=x;this.y=y;this.speed=speed;this.kind=kind;this.letter=letter;}
     }
     private static final class Balance {
@@ -92,7 +93,7 @@ public final class GameEngine {
             return;
         }
         int beforeHP=hearts,beforeShield=shield;
-        if(d.kind==MAGNET){pulse=.5;int count=0;for(Drop other:drops)if(!other.caught&&other.y<=470&&Math.hypot(other.x-d.x,other.y-d.y)<=126){other.pull=true;count++;}events.sound("magnet");feedback="Magnet! Pulling "+count+" nearby blocks — hazards included.";}
+        if(d.kind==MAGNET){pulse=.5;int count=0;for(Drop other:drops)if(!other.caught&&!other.missed&&other.y<=BASKET_BOTTOM&&Math.hypot(other.x-d.x,other.y-d.y)<=126){other.pull=true;count++;}events.sound("magnet");feedback="Magnet! Pulling "+count+" nearby blocks — hazards included.";}
         else if(d.kind==SHIELD){events.sound("shield");int cost=shield==2?2:shield==1?1:0;hearts=Math.max(0,hearts-cost);shield=cost>0?(settings.hard&&shield==2?1:0):2;feedback=cost>0?"Shield overload! Lost "+cost+" hearts.":"Full shield equipped!";}
         else if(d.kind==BOMB){int old=shield;if(old!=1)breakPerfect();if(old!=2)hearts--;if(old==0)progress=0;shield=0;setSpeed(speed-.2);invulnerable=1;feedback=old==2?"Shield shattered; heart saved.":old==1?"Half shield shattered; perfection kept.":"Heart lost; word reset.";}
         else if(d.kind==WILD||d.letter==needed())correct(d.kind==WILD);else wrong();
@@ -115,7 +116,7 @@ public final class GameEngine {
                 else if(ka==BOMB&&kb==BOMB)merged=BOMB;
                 else if(ka==BOMB||kb==BOMB)keep=ka==BOMB?b:a;
                 else keep=ka==WILD?a:b;
-                if(keep!=null)drops.remove(keep==a?j:i);else{drops.remove(j);drops.remove(i);if(merged>=0){Drop d=new Drop((a.x+b.x)/2,(a.y+b.y)/2,(a.speed+b.speed)/2,merged,' ');d.pull=a.pull||b.pull;drops.add(d);}}
+                if(keep!=null)drops.remove(keep==a?j:i);else{drops.remove(j);drops.remove(i);if(merged>=0){Drop d=new Drop((a.x+b.x)/2,(a.y+b.y)/2,(a.speed+b.speed)/2,merged,' ');d.missed=a.missed||b.missed;d.pull=!d.missed&&(a.pull||b.pull);drops.add(d);}}
                 if(reward>0){rickInput="";if(reward==2)wordPerfect=true;int count=reward==2?word().length()-progress:1;for(int n=0;n<count;n++)correct(true);}
                 changed=true;break outer;
             }
@@ -129,8 +130,9 @@ public final class GameEngine {
     }
     public void spawnDrop(){
         boolean bomb=random.nextDouble()<.28;if(bomb&&random.nextDouble()>=.5)return;if(!bomb&&random.nextDouble()>=.65)return;
-        boolean magnet=settings.magnet&&random.nextDouble()<.01;if(magnet)bomb=false;
-        double pickup=bomb||magnet?1:random.nextDouble();int kind=magnet?MAGNET:bomb?BOMB:pickup<.03?SHIELD:wildcard&&pickup<.03+(settings.hard?.005:.01)?WILD:LETTER;
+        // Exactly one selected pickup: 1% of emitted blocks, independent of hazard roll.
+        boolean pickup=random.nextDouble()<.01;if(pickup)bomb=false;
+        int kind=pickup?(settings.magnet?MAGNET:SHIELD):bomb?BOMB:wildcard&&random.nextDouble()<(settings.hard?.005:.01)?WILD:LETTER;
         drops.add(new Drop(28+random.nextDouble()*424,-25,(130+Math.min(160,elapsed*2)+random.nextDouble()*45)*.6*speed,kind,kind==LETTER?randomLetter():' '));
     }
     public void update(double dt){
@@ -143,7 +145,7 @@ public final class GameEngine {
                 Drop d=new Drop((24+random.nextDouble()*312)*480/360,-24*530.0/430,(speeds[storyChapter]+random.nextDouble()*16)*530/430,hazard?BOMB:LETTER,c);drops.add(d);spawn+=1.05;
             }else{double roll=random.nextDouble();int count=roll<.03?3:roll<.18?2:1;for(int i=0;i<count;i++)spawnDrop();spawn+=Math.max(.28,.77-elapsed*.005)*1.21/1.05/frequency(speed);}
         }
-        for(Drop d:drops){if(d.pull){double dx=x-d.x,dy=470-d.y,dist=Math.hypot(dx,dy),step=Math.min(dist,Math.max(480,d.speed*2)*dt);if(dist>0){d.x+=dx/dist*step;d.y+=dy/dist*step;}}else d.y+=d.speed*dt;}
+        for(Drop d:drops){if(d.y>BASKET_BOTTOM){d.missed=true;d.pull=false;}if(d.pull){double dx=x-d.x,dy=470-d.y,dist=Math.hypot(dx,dy),step=Math.min(dist,Math.max(480,d.speed*2)*dt);if(dist>0){d.x+=dx/dist*step;d.y+=dy/dist*step;}}else d.y+=d.speed*dt;if(d.y>BASKET_BOTTOM){d.missed=true;d.pull=false;}}
         resolveOverlaps();
         for(int i=drops.size()-1;i>=0;i--){Drop d=drops.get(i);double min=story()?370*530.0/430:446,max=story()?412*530.0/430:489,width=story()?37*480.0/360:45;
             if(d.y>min&&d.y<max&&Math.abs(d.x-x)<width){drops.remove(i);int old=wordIndex;catchDrop(d);if(state!=PLAYING||rickNext>=0||(story()&&wordIndex!=old))break;}

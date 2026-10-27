@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),cp=require('child_process'),assert=require('assert'),vm=require('vm');
-const root=path.resolve(__dirname,'..'),apk=process.argv[2]||path.join(root,'build','word-rain-2.0-dev10.apk');
+const root=path.resolve(__dirname,'..'),apk=process.argv[2]||path.join(root,'build','word-rain-2.0-dev11.apk');
 const files=cp.execFileSync('python',['-c','import zipfile,sys;print("\\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))',apk],{encoding:'utf8'}).trim().split('\n');
 assert(!files.some(n=>/\.(html?|js|css)$/i.test(n)),'APK must not bundle a web app');
 for(const asset of ['dream.ttf','hand.ttf','word-rain-2-logo.png','audio/original.wav','audio/correct.wav','audio/wrong.wav','audio/loseHP.wav','Nunito-OFL.txt'])assert(files.includes('assets/'+asset),asset);
@@ -8,7 +8,7 @@ const sources=fs.readdirSync(path.join(root,'src/io/github/octopuskid/wordrain')
 assert(!/android\.webkit|evaluateJavascript|loadDataWithBaseURL|loadUrl\(/.test(sources),'native sources have no browser runtime');
 const dex=cp.execFileSync('python',['-c','import zipfile,sys;z=zipfile.ZipFile(sys.argv[1]);sys.stdout.buffer.write(b"".join(z.read(n) for n in z.namelist() if n.endswith(".dex")))',apk]);
 assert(!dex.includes(Buffer.from('Landroid/webkit/')),'compiled DEX has no WebView dependency');
-for(const name of ['GameEngine','GameView','NativeHome','NativeStore','NativeAudio','LegacyStore'])assert(dex.includes(Buffer.from('Lio/github/octopuskid/wordrain/'+name+';')),name+' compiled');
+for(const name of ['GameEngine','GameView','NativeHome','NativeStore','NativeAudio','LegacyStore','PlayPresentation','StatsTable'])assert(dex.includes(Buffer.from('Lio/github/octopuskid/wordrain/'+name+';')),name+' compiled');
 const main=fs.readFileSync(path.join(root,'src/io/github/octopuskid/wordrain/MainActivity.java'),'utf8');assert(main.includes('classicGame=new GameEngine')&&main.includes('storyGame=new GameEngine'),'independent paused engines');assert(main.includes('private void checkForUpdate()')&&main.includes('expectedHash')&&main.includes('ACTION_OPEN_DOCUMENT'),'update checking, verified downloads and local audio retained');
 assert(fs.readFileSync(path.join(root,'src/io/github/octopuskid/wordrain/NativeHome.java'),'utf8').includes('setOnClickListener'),'Home uses native click listeners');
 const native=fs.readFileSync(path.join(root,'src/io/github/octopuskid/wordrain/NativeStore.java'),'utf8');assert(native.includes('records.optDouble("highScore",0)'),'fresh high-score default');

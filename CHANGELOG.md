@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0-dev11 DEV — 28 October 2026
+
+- Replace native word Stats lines with an aligned Word / Met / Perfect table, contrasting header, alternating rows, separators, formatted counts and totals. Preserve stored records.
+- Android and HTML Classic: pickup switch chooses 1% magnets when on or 1% shields when off, measured per emitted block in both difficulties. Hide the shield meter in Magnet mode; retain letters, hazards and wildcard rules.
+- Native play: share target/progress state between the upper and background word, including resets and Rick. Enlarge score/hearts; purple hearts indicate wildcard mode, yellow/gold score indicates double scoring. Keep the original speed/perfect indicators in neutral text.
+- Crop the native Classic board to the requested area around the basket without changing drop scale, timing or catches. Stop drawing below its bottom edge.
+- Blocks whose centers pass the basket bottom (y > 485) are permanently ineligible for magnetic pull; release an existing pull and preserve that missed status through overlap merges.
+- Signed native Android test APK build 50; GitHub DEV prerelease and Pages. Story remains Android-only; itch.io stays stable 1.7.1.
+
 ## 2.0-dev10 DEV — 28 October 2026
 
 - Rewrite the Android edition with native Android Views, Canvas, direct touch input and a platform-independent Java game engine. No WebView or HTML/JavaScript/CSS payload in the APK. Home uses native buttons, a fixed layout and the Classic title font.

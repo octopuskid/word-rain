@@ -94,10 +94,11 @@ for(const source of [webScripts,scripts]){
   assert(t.run('wildcardUnlocked'),'shielded wrong catch preserves purple mode');assert.equal(t.run('speedMultiplier'),1.45);assert.equal(t.run('shieldHealth'),health-1);assert(t.run('wordPerfect'));assert(t.run('doubleScore'));
  }
  const unshielded=session({},false,source);unshielded.run('start();wildcardUnlocked=true');catchItem(unshielded,{letter:unshielded.run("'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(c=>c!==words[wordIndex][progress])")});assert(!unshielded.run('wildcardUnlocked'));
- // Exhaust the pickup-roll distribution: 3% shields and exactly 1% wildcards.
+ // Pickup selection is 1% shields when off; wildcard has its own ordinary-drop roll.
  const drops=session({},false,source);drops.run('start();wildcardUnlocked=true');
  const distribution=drops.run(`(()=>{const old=Math.random;let shield=0,wild=0;try{for(let i=0;i<1000;i++){const draws=[.9,0,(i+.5)/1000,.5,.5,.5,.5];Math.random=()=>draws.shift()??.5;items=[];spawnDrop();if(items[0].shield)shield++;if(items[0].wild)wild++;}}finally{Math.random=old;}return {shield,wild};})()`);
- assert.equal(distribution.shield,30);assert.equal(distribution.wild,10);
+ assert.equal(distribution.shield,10);assert.equal(distribution.wild,0);
+ const wildOdds=drops.run(`(()=>{const old=Math.random;let wild=0;try{for(let i=0;i<1000;i++){const draws=[.9,0,.5,(i+.5)/1000,.5,.5,.5];Math.random=()=>draws.shift()??.5;items=[];spawnDrop();if(items[0].wild)wild++;}}finally{Math.random=old;}return wild;})()`);assert.equal(wildOdds,10);
  // Reach the Easter egg by deliberately catching R-I-C-K outside the target word.
  const egg=session({},false,source);egg.run("start();words.splice(0,words.length,'PUNNY');wordIndex=0;progress=0;items=[{x:50,y:20,speed:10,letter:'Z'}];particles=[{life:.5}]");
  for(const letter of 'RICK')catchItem(egg,{letter});

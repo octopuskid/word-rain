@@ -16,7 +16,7 @@ A behind-the-scenes video about building Word Rain, refining its rules, and publ
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.7.1**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
-**Android development edition:** 2.0-dev10 is a native Android rewrite using Views and Canvas, with no WebView or bundled HTML. It is a testing prerelease; stable remains 1.7.1. See [Android build notes](android/README.md).
+**Android development edition:** 2.0-dev11 is a native Android rewrite using Views and Canvas, with no WebView or bundled HTML. It is a testing prerelease; stable remains 1.7.1. See [Android build notes](android/README.md).
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -32,19 +32,17 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Latest development build: 2.0-dev5 DEV
+## Latest development build: 2.0-dev11 DEV
 
-Android Story now has three chapters: ten unrelated words, an original 50-word story, and an original 100-word story. Spell every word in order; story text appears after each completed word, with punctuation restored automatically. Each completed word is a saved checkpoint, including across app restarts and retries. The revised curriculum uses a new save while preserving the previous prototype save separately.
+Android **build 50** uses native Android Views and Canvas, with no WebView or bundled HTML/JavaScript. Home keeps its fixed layout, W2 artwork, Classic title font and offline Dream font. Stats now has an aligned **Word / Met / Perfect** table, formatted counts and row separators.
 
-Android: light/dark control now lives at the upper-left of Home and applies to the dreamy screens. The bottom Game / Word Stats bar is removed; use Home → Stats → Classic word records for the full table.
+The Classic pickup switch selects **Magnet mode when on** or **Shield mode when off**. The selected pickup has a **1% chance per emitted block** in Normal and Hard; magnets and shields do not spawn together. Letters, × and wildcards retain their rules. Magnet mode hides the shield meter. These rules apply to both native Android and HTML.
 
-Android **build 44** adds a new W2 home screen with Classic / Story mode / Stats, polished sketch-based logo and launcher icon, and an offline Nunito font (SIL OFL). The dreamy Android-only story prototype has three chapters containing 10, 50 and 100 words, dialogue, unlocks, separate saved completion, pause/resume and retries. Story catches differ from Classic: catch highlighted letters in order; a wrong letter or × costs one heart; missed blocks are harmless. Each stage begins with three hearts. Classic records remain separate. HTML does not include story mode or the Android home screen.
+Magnet pickup selects nearby blocks once, within **3.5 block widths** (126 canvas units, center-to-center), including hazards. A block whose center has passed the basket bottom cannot be pulled back. Later drops are unaffected; normal catches, scoring and overlaps still apply. The magnet gives no direct points or heart/shield reward. Touching another block destroys a falling magnet; a shield or another magnet disappears with it.
 
-Optional **Magnet blocks** are available on GitHub Pages and in the HTML-only dev prerelease. Enable the switch in **Word set & difficulty** for a **1% chance per emitted block** in Normal or Hard. The saved choice takes effect when you start or resume play.
+Native play now synchronizes the upper and background word’s progress, enlarges score/hearts, uses purple hearts for wildcard mode and a yellow/gold score for double scoring, and crops the visible board around the basket without changing simulation timing. Story retains ten unrelated Chapter 1 words, a prewritten 50-word Chapter 2 and 100-word Chapter 3. Show each full word first; completing it advances to the next word and saves a checkpoint.
 
-Picking up a magnet makes a one-time selection of all blocks within **3.5 block widths** (126 canvas units, center-to-center) and pulls them toward the basket, including hazards and pickups. Blocks whose centers are below the basket are excluded. Later drops are unaffected; attracted blocks keep normal catch, scoring and overlap rules. The magnet itself gives no points or direct heart/shield changes. A falling magnet disappears when touching another block. A shield or another magnet disappears with it; other block types survive that contact.
-
-The red/blue/silver U-shaped magnet is redrawn from the creator’s sketch on a white tile, with clean and pencil-hatched variants. The test lab has a manual magnet drop and a magnet-generation selector. Stable remains **1.7.1 / build 40** on itch.io. **2.0-dev5 DEV / build 44** includes an explicitly requested Android test APK on GitHub; it uses the original app identity and signing certificate. Its first-launch tutorial is Android-only, skippable and replayable from setup. Install over the app to preserve records; do not uninstall first.
+Install the DEV APK over the existing app to keep its data; do not uninstall first. It uses the original app identity/signing certificate and includes read-only legacy-save import. Physical-device visual and migration checks remain unverified. Stable stays **1.7.1 / build 40** on itch.io; HTML stays Classic-only.
 
 ## Smaller HTML build
 
@@ -186,7 +184,7 @@ Automatic letter fills use the same points, scoring-pause recovery and word-comp
 
 ### Blue 🛡️ shield
 
-Each actual non-× drop has a **3% chance of being a shield**, without unlock conditions. A full shield has two health points; a half shield has one.
+In current development builds, Shield mode generates shields at **1% of emitted blocks**, without unlock conditions; Magnet mode replaces them with 1% magnets. Stable 1.7.1 retains its original 3% shield share among non-× drops. A full shield has two health points; a half shield has one.
 
 | Catch | Hearts and shield | Perfection |
 | --- | --- | --- |

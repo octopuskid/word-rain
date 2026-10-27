@@ -26,8 +26,9 @@ def mobile_html(source: str) -> str:
     source=source.replace('</style>',style+'\n</style>',1)
     source=source.replace('</header>','</header><div class="mobile-panel" id="mobile-game-panel" role="tabpanel" aria-labelledby="mobile-game-tab">',1)
     source=source.replace('<p>Your settings return after game over. Saved records are kept.</p>','<button type="button" id="replay-tutorial">Replay tutorial</button><p>Your settings return after game over. Saved records are kept.</p>',1)
-    marker='<div class="meters">'
-    assert marker in source
+    match=re.search(r'<div\b[^>]*class="meters"[^>]*>',source)
+    assert match, 'Meter container changed'
+    marker=match.group(0)
     source=source.replace(marker,'<div class="mobile-high-score"><span>PERSONAL BEST</span><strong id="high-score">0</strong></div>'+marker,1)
     panel='''</div><section class="mobile-panel" id="mobile-stats-panel" role="tabpanel" aria-labelledby="mobile-stats-tab" hidden>
 <h2>Word stats</h2><p class="mobile-stats-intro">Your words, across all games on this device. A word is met each time it becomes the target, including the first word of a new game. Resetting progress on the same word does not add an encounter.</p>

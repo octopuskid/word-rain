@@ -124,7 +124,7 @@ const tutorialPages=[
  {title:'Protect your hearts',copy:'You start with three hearts. Catching × without a shield costs one heart. Dodge unwanted letters too: three wrong letters in a row pause scoring until your next correct catch. Missing a block is harmless.',example:'<span class="tutorial-tile danger">×</span><span>♥ ♥ ♥</span>'},
  {title:'Shields need care',copy:'A blue shield protects you from ×. Wrong letters use half a shield. Picking up another shield while you already have one costs hearts, so avoid duplicates.',example:'<span class="tutorial-tile shield">🛡</span>'},
  {title:'Wildcards fill a blank',copy:'A purple wildcard fills the next missing letter. Completing a perfect word unlocks random wildcard drops. Six perfect words in a row unlock double base points and restore a heart.',example:'<span class="tutorial-tile wild">✦</span>'},
- {title:'Choose your forecast',copy:'Start with Normal. Overcast hides the middle of the board. Optional magnets have a 1% drop chance and pull nearby blocks, including hazards; blocks centered below the basket are excluded. Choose settings before each run—they stay hidden during play and pause, then return at game over.',example:'<span class="tutorial-word">☂ READY?</span>'}
+ {title:'Choose your forecast',copy:'Start with Normal. Overcast hides the middle of the board. The pickup switch selects 1% magnets when on or 1% shields when off. Magnets pull nearby blocks, including hazards; blocks past the basket bottom cannot be pulled back. Choose settings before each run—they stay hidden during play and pause, then return at game over.',example:'<span class="tutorial-word">☂ READY?</span>'}
 ];
 let tutorialPage=0;
 function renderTutorial(){

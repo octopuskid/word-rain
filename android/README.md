@@ -2,10 +2,13 @@
 
 From **2.0-dev10 DEV / build 49**, Android runs Java gameplay rules, Android Views and Canvas. It does not instantiate WebView, execute JavaScript, or package HTML/CSS. The web edition remains a separate Classic game built from `src/index.html`.
 
+Current testing release: **2.0-dev11 DEV / build 50** adds a Stats table, exclusive 1% magnet/shield pickups, shared target progress, large score/hearts with independent bonus colours, and a board cropped around the basket. Once a block center passes the basket bottom, magnets cannot retrieve it.
+
 ## Code
 
 - `GameEngine.java`: platform-independent Classic/story simulation, matching portrait coordinates, timing, balanced letter selection, scoring, shields, wildcard overlaps, magnets, combos, speed, hearts and Rick challenge.
 - `GameData.java`: four 120-word sets, ten unrelated Chapter 1 words, and prewritten 50/100-word stories. Story words advance in order; completed words checkpoint separately from Classic records.
+- `StatsTable.java`, `PlayPresentation.java`: aligned native word records, shared target/progress state and independent HUD bonus flags.
 - `MainActivity.java`, `NativeHome.java`, `GameView.java`: native menus, difficulty-first setup, fixed Home layout, direct drag/keyboard input, pause, results, chapter selection, records and first-run tutorial. Home title uses the Classic system font.
 - `NativeStore.java`, `LegacyStore.java`: local SharedPreferences and read-only migration of the previous app's Chromium local storage. Reads LevelDB logs and compacted tables, including Snappy-compressed blocks. Existing Chromium files stay untouched. Invalid/unreadable entries are skipped; actual device migration remains to be verified.
 - `NativeAudio.java`, `native-audio.cjs`: SoundPool effects, MediaPlayer music, original eight-bar Pocket Forecast synthesis, audio focus/lifecycle pause, verified optional downloads and session-only local audio.
