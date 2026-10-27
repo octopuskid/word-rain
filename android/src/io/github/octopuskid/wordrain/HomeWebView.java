@@ -17,7 +17,11 @@ public final class HomeWebView extends WebView {
         setVerticalScrollBarEnabled(!locked);
         setHorizontalScrollBarEnabled(!locked);
         setOverScrollMode(locked ? OVER_SCROLL_NEVER : OVER_SCROLL_IF_CONTENT_SCROLLS);
-        if (locked) super.scrollTo(0, 0);
+        if (locked) resetScrollIfNeeded();
+    }
+
+    private void resetScrollIfNeeded() {
+        if (getScrollX() != 0 || getScrollY() != 0) super.scrollTo(0, 0);
     }
 
     @Override public void scrollTo(int x, int y) {
@@ -26,12 +30,12 @@ public final class HomeWebView extends WebView {
 
     @Override protected boolean overScrollBy(int dx, int dy, int x, int y,
             int rangeX, int rangeY, int maxX, int maxY, boolean touch) {
-        if (homeScrollLocked) { super.scrollTo(0, 0); return false; }
+        if (homeScrollLocked) { resetScrollIfNeeded(); return false; }
         return super.overScrollBy(dx, dy, x, y, rangeX, rangeY, maxX, maxY, touch);
     }
 
     @Override protected void onOverScrolled(int x, int y, boolean clampedX, boolean clampedY) {
-        if (homeScrollLocked) super.scrollTo(0, 0);
+        if (homeScrollLocked) resetScrollIfNeeded();
         else super.onOverScrolled(x, y, clampedX, clampedY);
     }
 
@@ -40,7 +44,8 @@ public final class HomeWebView extends WebView {
     }
 
     @Override public void computeScroll() {
-        if (homeScrollLocked) super.scrollTo(0, 0);
-        else super.computeScroll();
+        // WebView needs its normal frame processing for gestures and clicks.
+        super.computeScroll();
+        if (homeScrollLocked) resetScrollIfNeeded();
     }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0-dev9 DEV — 28 October 2026
+
+- Correct dev8 Home tap handling: remove document touchmove/wheel cancellation, retain CSS/native scroll protection, and let WebView process normal frames. Reset native scroll only when an offset exists instead of every frame.
+- Match the Home wordmark font to Classic: system sans, bold weight and Classic letter spacing. Keep the Dream font for the remaining interface.
+- Signed Android test APK build 48; GitHub DEV prerelease and Pages. HTML remains Classic-only; itch.io stays stable 1.7.1.
+
 ## 2.0-dev8 DEV — 28 October 2026
 
 - Follow up the reported dev7 Home scrolling failure with a native Android WebView scroll lock: reject native scrolling, flings and overscroll while Home is active, clear old offsets and hide native scrollbars.

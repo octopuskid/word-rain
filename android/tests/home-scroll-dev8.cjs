@@ -5,20 +5,20 @@ const checks=String.raw`
 const locks=[];const native={setHomeScrollLocked:value=>locks.push(value)};
 const t=session({'word-rain-tutorial-v1':'done'},false,scripts,native,true);
 assert.equal(locks.at(-1),true,'Home locks native scroll');
-for(const event of ['touchmove','wheel']){
- assert.equal(t.events['document:'+event].options.passive,false);
- let prevented=false;t.events['document:'+event].handler({cancelable:true,preventDefault(){prevented=true;}});assert(prevented,'Home pan blocked');
-}
+assert.equal(t.events['document:touchmove'],undefined,'no global touch cancellation to suppress taps');
+assert.equal(t.events['document:wheel'],undefined,'no document wheel interception');
 for(const id of ['dream-classic','dream-story','dream-stats']){
  t.run('routeDream("home")');t.el(id).onclick();assert.equal(locks.at(-1),false,'menu button remains tappable and unlocks next page');
- let prevented=false;t.events['document:touchmove'].handler({cancelable:true,preventDefault(){prevented=true;}});assert.equal(prevented,false,'longer pages retain scroll');
+
 }
 t.run('routeDream("home")');assert.equal(locks.at(-1),true,'returning Home relocks');
 const firstLocks=[];const first=session({},false,scripts,{setHomeScrollLocked:v=>firstLocks.push(v)},true);
 assert(first.run('tutorialActive'));assert.equal(firstLocks.at(-1),false,'tutorial permits scrolling');
-let prevented=false;first.events['document:touchmove'].handler({cancelable:true,preventDefault(){prevented=true;}});assert.equal(prevented,false);
+
 first.el('tutorial-skip').onclick();assert.equal(firstLocks.at(-1),true,'closing tutorial locks Home');
 const htmlOnly=fs.readFileSync(require('path').join(__dirname,'../../index.html'),'utf8');assert(!htmlOnly.includes('setHomeScrollLocked'),'native scroll guard is Android-only');
-console.log('PASS dev8: native lock follows Home/tutorial/navigation, swipe prevention, tappable menu, other-page scroll and HTML isolation.');
+assert(html.includes('#android-classic header h1,:root[data-dream-screen] .dream-shell .dream-home h1{font-family:var(--wr-title-font);font-weight:700;letter-spacing:-1.3px}'),'Home and Classic share wordmark typography');
+assert(html.includes('--wr-title-font:system-ui,sans-serif'),'wordmark uses the Classic system font');
+console.log('PASS dev9: native lock follows Home/tutorial/navigation, no touch cancellation, menu routes and Classic wordmark font, other-page scroll and HTML isolation.');
 `;
 new Function('require','__dirname','process',helper+'\n'+checks)(require,__dirname,process);

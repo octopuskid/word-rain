@@ -37,3 +37,7 @@ body{font-family:'Dream Sans',sans-serif}#android-classic[hidden],.dream-shell[h
 @media(max-height:640px){.dream-home .dream-menu{gap:8px;margin:10px 0}.dream-home .dream-menu-button{padding-top:12px;padding-bottom:12px}.dream-home h1{font-size:30px}.dream-home .dream-subtitle{margin-bottom:8px}.dream-home .dream-version{margin:6px 0}.dream-home>.dream-kicker{margin-bottom:4px}}
 
 :root[data-dream-screen="home"] .dream-home{touch-action:none}
+
+/* The wordmark uses Classic's system sans face; Dream UI keeps its own font. */
+:root{--wr-title-font:system-ui,sans-serif}
+#android-classic header h1,:root[data-dream-screen] .dream-shell .dream-home h1{font-family:var(--wr-title-font);font-weight:700;letter-spacing:-1.3px}

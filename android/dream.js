@@ -43,10 +43,8 @@ function syncHomeScrollLock(){
  try{if(window.WordRainNative&&window.WordRainNative.setHomeScrollLocked)window.WordRainNative.setHomeScrollLocked(locked);}catch(_){}
  if(locked&&window.scrollTo)window.scrollTo(0,0);
 }
-function stopHomePan(e){if(dreamScreen==='home'&&!tutorialActive&&e.cancelable)e.preventDefault();}
-// Cancel scrolling gestures, but leave touchstart/end and click delivery intact.
-document.addEventListener('touchmove',stopHomePan,{passive:false});
-document.addEventListener('wheel',stopHomePan,{passive:false});
+// CSS touch-action and the native scroll guard handle Home panning. Do not
+// cancel touchmove: slight finger movement must not suppress WebView clicks.
 function routeDream(screen){
  if(tutorialActive)return;
  if(dreamScreen==='classic'&&state==='playing')pause();
