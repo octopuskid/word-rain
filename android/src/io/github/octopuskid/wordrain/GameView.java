@@ -18,7 +18,10 @@ class GameView extends View {
   canvas.clipRect(0,engine.story()?0:-28,480,engine.story()?530:490);
   boolean paper=!engine.story()&&engine.settings.handwriting,dark=activity.store.dark&&!paper;
   canvas.drawColor(Color.parseColor(paper?"#f7f3e8":engine.story()?(dark?"#222b43":"#eef3ff"):(dark?"#162934":"#e6efe9")));
-  p.setColor(paper?0x44746b65:dark?0x0fffffff:0x180d2830);p.setStrokeWidth(1);for(int y=paper?24:20;y<530;y+=paper?31:40)canvas.drawLine(0,y,480,y,p);if(!paper)for(int x=25;x<480;x+=40)canvas.drawLine(x,0,x,530,p);
+  // The original gentle rainfall replaces the grid in Classic, including paper style.
+  p.setColor(paper?0x28777165:dark?0x30b7dbd7:0x38315d47);p.setStrokeWidth(paper?1:1.5f);
+  for(int i=0;i<28;i++){float rainX=(i*83)%480,rainY=(float)((i*67+engine.elapsed*20)%530);canvas.drawLine(rainX,rainY,rainX-2,rainY+9,p);}
+
   if(!engine.story())drawBackgroundWord(canvas,dark,paper);
   if(engine.pulse>0){p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(2);p.setColor(0x99249fd2);canvas.drawCircle((float)engine.x,470,126*(1-(float)engine.pulse*.3f),p);p.setStyle(Paint.Style.FILL);}
   for(GameEngine.Drop d:engine.drops){if(d.caught)continue;canvas.save();canvas.translate((float)d.x,(float)d.y);if(paper)canvas.rotate((float)Math.sin(d.x*.07)*2);

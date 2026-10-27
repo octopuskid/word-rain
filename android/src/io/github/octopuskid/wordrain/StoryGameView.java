@@ -5,7 +5,7 @@ import android.graphics.*;
 /** Dev7's soft, grid-free story sky. Input and simulation still use dev11 coordinates. */
 final class StoryGameView extends GameView {
     final Typeface font;
-    StoryGameView(MainActivity activity,GameEngine engine){super(activity,engine);font=Typeface.create(activity.dreamFont,Typeface.BOLD);setContentDescription("Story playfield. Drag the basket to catch the glowing letter; avoid wrong letters and crosses.");}
+    StoryGameView(MainActivity activity,GameEngine engine){super(activity,engine);font=Typeface.DEFAULT_BOLD;setContentDescription("Story playfield. Drag the basket to catch the glowing letter; avoid wrong letters and crosses.");}
     @Override void burst(){for(int i=0;i<12;i++)particles.add(new float[]{(float)engine.x*.75f,391,(float)(Math.random()-.5)*100,(float)(Math.random()-.5)*100,.5f});}
     @Override protected void onDraw(Canvas canvas){
         long now=System.nanoTime();double dt=last==0?0:Math.min(.04,(now-last)/1e9);last=now;engine.update(dt);

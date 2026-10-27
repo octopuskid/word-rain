@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets;
 /** Native Android edition: Android Views, Canvas, pure Java rules, and native audio. */
 public final class MainActivity extends Activity {
     StoryUi storyUi;NativeStore store;NativeAudio audio;GameEngine game,classicGame,storyGame;GameView gameView;android.widget.ProgressBar speedBar,shieldBar;
-    android.graphics.Typeface dreamFont,handFont;android.widget.FrameLayout root;
+    android.graphics.Typeface dreamFont,handFont,storyFont;android.widget.FrameLayout root;
     android.widget.TextView hud,scoreLabel,heartLabel,targetLabel,feedback;android.widget.LinearLayout page;
     android.widget.Button pauseButton;android.widget.FrameLayout arena;
     android.view.View pauseOverlay;String screen="home",targetSignature="";boolean endPosted;
@@ -65,7 +65,7 @@ public final class MainActivity extends Activity {
       add(page,label("Color theme",13,true));boolean rick="true".equals(store.prefs.getString("word-rain-rick-unlocked-v1","false"));final android.widget.Spinner palette=spinner(rick?new String[]{"Lime","Mint","Blue","Coral","Rick · Copper"}:new String[]{"Lime","Mint","Blue","Coral"},s.palette);add(page,palette);
       final android.widget.Switch paper=toggle("Handwriting paper",s.handwriting),cloud=toggle("Overcast · double points",s.overcast),magnet=toggle(s.magnet?"Magnet mode · 1%":"Shield mode · 1%",s.magnet);magnet.setOnCheckedChangeListener((b,on)->magnet.setText(on?"Magnet mode · 1%":"Shield mode · 1%"));add(page,paper);add(page,cloud);add(page,magnet);add(page,label("On: magnets only. Off: shields only. The chosen pickup has a 1% chance per emitted block; letters, × and wildcards remain.",12,false));palette.setEnabled(!s.handwriting);paper.setOnCheckedChangeListener((b,on)->palette.setEnabled(!on));
       add(page,button("Start game →",v->{s.hard=difficulty.getSelectedItemPosition()==1;s.wordSet=set.getSelectedItemPosition();s.palette=palette.getSelectedItemPosition();s.handwriting=paper.isChecked();s.overcast=cloud.isChecked();s.magnet=magnet.isChecked();saveSettings(s);game.startClassic(s);playScreen();}));
-      add(page,button("Music & sound",v->music()));add(page,button("Replay tutorial",v->tutorial(0)));add(page,button("How to play",v->rules()));add(page,label("Native Android · 2.0-dev12 DEV · build 51",11,false));
+      add(page,button("Music & sound",v->music()));add(page,button("Replay tutorial",v->tutorial(0)));add(page,button("How to play",v->rules()));add(page,label("Native Android · 2.0.0 · build 52",11,false));
     }
     void rules(){new AlertDialog.Builder(this).setTitle("Catch words. Chase your best.").setMessage("Drag the basket or use A/D / arrow keys. Catch the underlined letter in order. Missed blocks are harmless. × costs one heart.\n\nCorrect +10; word +50; wrong +1 until three consecutive mistakes pause scoring. The next correct catch recovers without letter points. Awards multiply by speed, Hard ×2 and Overcast ×2, rounded up.\n\nTwo perfect words add 20% speed. Six unlock 2× points and restore one heart. Wrong letters subtract 5% speed; × subtracts 20%.\n\nA full shield saves a heart against × but breaks perfection. A half shield loses one heart but keeps perfection. Wrong letters use half a shield and preserve progress/perfection. Picking up a shield while protected costs hearts.\n\nLetters overlap into wildcards. Wildcard + × fills a letter; two wildcards perfect a word. Pickup mode selects magnets or shields, each at 1% of emitted blocks. Magnets pull all nearby blocks within 3.5 block widths, excluding centers below the bottom of the basket. Touching another block destroys a magnet; a shield disappears with it.").setPositiveButton("Got it",null).show();}
     void chapters(){storyUi.chapters();}
@@ -260,6 +260,7 @@ public final class MainActivity extends Activity {
         super.onCreate(state);applyDeviceOrientation();store=new NativeStore(this);
         try{dreamFont=android.graphics.Typeface.createFromAsset(getAssets(),"dream.ttf");}catch(Exception absent){dreamFont=android.graphics.Typeface.create("sans-serif-rounded",0);}
         try{handFont=android.graphics.Typeface.createFromAsset(getAssets(),"hand.ttf");}catch(Exception absent){handFont=android.graphics.Typeface.create("cursive",0);}
+        try{storyFont=android.graphics.Typeface.createFromAsset(getAssets(),"story-ui.ttf");}catch(Exception absent){storyFont=android.graphics.Typeface.create("sans-serif-rounded",android.graphics.Typeface.BOLD);}
         root=new android.widget.FrameLayout(this);root.setClipChildren(true);root.setClipToPadding(true);
         root.setOnApplyWindowInsetsListener((view,insets)->{
             if(Build.VERSION.SDK_INT>=30){Insets bars=insets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars()|WindowInsets.Type.displayCutout());view.setPadding(bars.left,bars.top+dp(6),bars.right,bars.bottom+dp(6));}

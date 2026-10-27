@@ -14,9 +14,9 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.7.1**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **2.0.0**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
-**Android development edition:** 2.0-dev12 is a native Android rewrite using Views and Canvas, with no WebView or bundled HTML. It is a testing prerelease; stable remains 1.7.1. See [Android build notes](android/README.md).
+**Android edition:** 2.0.0 / build 52 uses native Android Views and Canvas, with no WebView or bundled HTML. Both web and Android include Classic and Story. Android also provides local word Stats and the first-launch tutorial. See [Android build notes](android/README.md).
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -32,19 +32,15 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Latest Android development build: 2.0-dev12 DEV
+## Current stable: 2.0.0
 
-Android **build 51** uses native Android Views and Canvas, with no WebView or bundled HTML/JavaScript. Home keeps its fixed layout, W2 artwork, Classic title font and offline Dream font. Stats now has an aligned **Word / Met / Perfect** table, formatted counts and row separators.
+Choose **Classic** for an endless score challenge or **Story mode** for ten unrelated words, then prewritten 50-word and 100-word stories. Each full word is shown before you catch its letters. Completed words build the story below the playfield, preserving punctuation; word checkpoints are saved locally. Story uses its own rounded bold interface and dreamy sky. Classic returns to a gentle rainfall background.
 
-**Story mode only** restores the dev7 dreamy look: Nunito typography, lavender chapter cards, a moonlit sky, narrative panels, separate reading-word and letter-progress displays, a rounded grid-free playfield and glowing target letters. Gameplay, story text, checkpoints and controls remain dev11. Classic, Home and Stats keep their existing design; the HTML/Pages game stays dev11.
+The pickup switch chooses **1% magnets when on**, or **1% shields when off**, in Normal and Hard. Magnet mode hides the shield meter. Blocks whose centers pass the basket bottom remain ineligible for pull, including after merging. Dev11 scoring, movement, speed, overlaps and bonuses remain intact.
 
-The Classic pickup switch selects **Magnet mode when on** or **Shield mode when off**. The selected pickup has a **1% chance per emitted block** in Normal and Hard; magnets and shields do not spawn together. Letters, × and wildcards retain their rules. Magnet mode hides the shield meter. These rules apply to both native Android and HTML.
+The same web edition is on itch.io and GitHub Pages. The web game has **no player Stats screen**; the Android app retains its local Word / Met / Perfect table. The separate [project dashboard](https://octopuskid.github.io/word-rain/stats/) reports dated audience counters, not player scores. Test-page Story controls and checkpoints are isolated from the real game.
 
-Magnet pickup selects nearby blocks once, within **3.5 block widths** (126 canvas units, center-to-center), including hazards. A block whose center has passed the basket bottom cannot be pulled back. Later drops are unaffected; normal catches, scoring and overlaps still apply. The magnet gives no direct points or heart/shield reward. Touching another block destroys a falling magnet; a shield or another magnet disappears with it.
-
-Native play now synchronizes the upper and background word’s progress, enlarges score/hearts, uses purple hearts for wildcard mode and a yellow/gold score for double scoring, and crops the visible board around the basket without changing simulation timing. Story retains ten unrelated Chapter 1 words, a prewritten 50-word Chapter 2 and 100-word Chapter 3. Show each full word first; completing it advances to the next word and saves a checkpoint.
-
-Install the DEV APK over the existing app to keep its data; do not uninstall first. It uses the original app identity/signing certificate and includes read-only legacy-save import. Physical-device visual and migration checks remain unverified. Stable stays **1.7.1 / build 40** on itch.io; HTML stays Classic-only.
+Android **build 52** is fully native and signed with the original certificate. Install over the previous app to retain records, settings, story checkpoints and optional downloads; do not uninstall first. Physical-device layout/touch/audio and migration checks remain unverified here. Original music, optional verified music downloads and once-per-launch stable update checking remain.
 
 ## Smaller HTML build
 
@@ -74,7 +70,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These rules apply to stable **1.7.1** on web and Android, including mode, Overcast and speed score multipliers.
+These Classic rules apply to stable **2.0.0** on web and Android. Story has separate finite chapters and heart-only mistakes.
 
 ### Controls and word sets
 
@@ -89,7 +85,7 @@ The HTML edition uses a wide landscape playfield on PCs and tablets, with the ta
 - Use the header pause button or Space to pause/resume. Space also starts a game from the ready or game-over screen. Losing page focus pauses play.
 - **Give up** pauses the run and asks for confirmation. Cancelling lets you continue; confirming ends the run without deleting records.
 
-Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Stable 1.7.1 includes the expansion of each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Apply & start new game** ends the current run and starts with the new choices, keeping saved records. The setup panel opens before a run, hides during play and pause, and returns after game over.
+Open **Word set & difficulty** while ready, paused or finished to choose Classic, Nature, Space or Tricky. Stable 1.7.1 includes the expansion of each set to 120 words, while retaining all previous words. All sets are available. Normal uses 4–7 letter words; Hard uses 6–7 letter words. Words are shuffled. **Start game** begins with the visible choices, keeping saved Android records. The setup panel opens before a run, hides during play and pause, and returns after game over.
 
 ### Automatic Android update checks
 
@@ -161,7 +157,7 @@ Only these letter selections use evenly spaced weighted scheduling; hazards, pic
 
 ### Purple ✦ wildcard
 
-Completing one perfect word in **either Normal or Hard** unlocks wildcard mode, shown by purple hearts. While unlocked, each actual non-× drop has a **1% wildcard chance in Normal** or **0.5% in Hard**. Shields retain their separate 3% share. Collision-created wildcards work in both modes, regardless of whether purple mode is unlocked.
+Completing one perfect word in **either Normal or Hard** unlocks wildcard mode, shown by purple hearts. While unlocked, each actual non-× drop has a **1% wildcard chance in Normal** or **0.5% in Hard**. The selected pickup has its independent 1% share. Collision-created wildcards work in both modes, regardless of whether purple mode is unlocked.
 
 A caught wildcard fills the next blank and behaves like a correct letter, including scoring-pause recovery; it preserves the word’s current perfection status. An unshielded wrong letter removes wildcard mode. Shielded wrong catches keep it, including the catch that shatters the shield. Another perfect word restores a lost mode.
 
@@ -186,7 +182,7 @@ Automatic letter fills use the same points, scoring-pause recovery and word-comp
 
 ### Blue 🛡️ shield
 
-In current development builds, Shield mode generates shields at **1% of emitted blocks**, without unlock conditions; Magnet mode replaces them with 1% magnets. Stable 1.7.1 retains its original 3% shield share among non-× drops. A full shield has two health points; a half shield has one.
+In 2.0.0, Shield mode generates shields at **1% of emitted blocks**, without unlock conditions; Magnet mode replaces them with 1% magnets. A full shield has two health points; a half shield has one.
 
 | Catch | Hearts and shield | Perfection |
 | --- | --- | --- |
@@ -215,7 +211,7 @@ The header keeps the theme, **BGM** and **SFX** switches in one row. Music is in
 
 The single edition includes the original generated tune **Pocket Forecast** and synthesized effects for catches, word completion/perfection, wildcard activation, speed increases, healing, heart loss and shield shattering. Wrong-letter catches play a distinct descending two-tone cue when **SFX is on**, including shielded mistakes, the third consecutive wrong catch and catches while scoring is paused. Its higher pitch and stronger attack help it stand out on phone speakers. SFX off mutes it; BGM can remain off independently. Perfect words play the perfect cue instead of the ordinary completion cue. **Carefree** and **Monkeys Spinning Monkeys** by Kevin MacLeod are optional downloads from this GitHub repository. Selecting an undownloaded song pauses play and asks before using Wi-Fi/mobile data (about 2.1 MB or 1.3 MB). Cancel makes no request. Downloads are checked against their expected size and SHA-256. Android retains verified tracks in private app storage for offline playback and updates; browsers keep them for the current session. Failed downloads leave original music available and can be retried. No recording is included in the HTML/ZIP/APK. Previously saved but unavailable tracks fall back to Pocket Forecast without a silent download.
 
-Phone players can use **Choose local BGM** below the rules to select an audio file up to 24 MB for the current session. Nothing is uploaded. Select it again after reopening, or use **Use original BGM** to restore Pocket Forecast. Codec support depends on the browser/WebView. Actual heart loss and shield shattering request vibration on supported phones, independently of SFX.
+Phone players can use **Choose local BGM** below the rules to select an audio file up to 24 MB for the current session. Nothing is uploaded. Select it again after reopening, or use **Use original BGM** to restore Pocket Forecast. Codec support depends on the browser or native Android media support. Actual heart loss and shield shattering request vibration on supported phones, independently of SFX.
 
 ### Android records and Stats
 
@@ -227,7 +223,7 @@ Opening **Word Stats** pauses play and hides pause/resume, Give up, BGM and SFX.
 
 The shared game is in `index.html`; Android adds its records UI during packaging. There are no accounts, ads, analytics, tracking or databases. The browser stores appearance/audio settings and the Rick unlock locally; the APK also stores personal best and word records. Clearing app data or uninstalling removes device records.
 
-The original handwriting font is embedded for offline use. Rebuild it with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable asset. Reference photographs are not bundled or published. Android reads only audio selected through its document picker; no storage permission is requested. INTERNET and ACCESS_NETWORK_STATE support native update checks and player-approved optional music downloads, and VIBRATE supports haptics. The bundled game WebView still blocks network loads.
+The original handwriting font is embedded for offline use. Rebuild it with `python tools/build_hand_font.py` (requires fontTools); `assets/word-rain-hand.woff` is the reusable asset. Reference photographs are not bundled or published. Android reads only audio selected through its document picker; no storage permission is requested. INTERNET and ACCESS_NETWORK_STATE support native update checks and player-approved optional music downloads, and VIBRATE supports haptics. The Android game is native and has no WebView; optional network services remain separate from offline play.
 
 ## Credits and licenses
 

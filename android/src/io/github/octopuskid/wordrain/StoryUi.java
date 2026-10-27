@@ -11,18 +11,19 @@ import android.text.style.*;
  * This class reads the existing engine/save state; the engine remains the dev11 simulation. */
 final class StoryUi {
     final MainActivity a;
-    TextView chapter, count, hearts, current, letters, note;
+    TextView chapter, count, hearts, current, letters, note, completedWords;
+    ScrollView reading;int shownWords=-1;
     ProgressBar progress;
     Button music, sound;
     String signature="";
     StoryUi(MainActivity a){this.a=a;}
     int color(String light,String dark){return Color.parseColor(a.store.dark?dark:light);}
-    Typeface font(boolean bold){return Typeface.create(a.dreamFont,bold?Typeface.BOLD:Typeface.NORMAL);}
+    Typeface font(boolean bold){return a.storyFont;}
     TextView text(String value,int size,boolean bold){
         TextView t=new TextView(a);t.setText(value);t.setTextSize(size);t.setTextColor(a.ink());t.setTypeface(font(bold));
         t.setIncludeFontPadding(false);t.setLineSpacing(a.dp(3),1.1f);return t;
     }
-    TextView prose(String value){TextView t=text(value,16,false);t.setTextColor(color("#646d8b","#b3b8d3"));t.setLineSpacing(a.dp(5),1.25f);return t;}
+    TextView prose(String value){TextView t=text(value,16,false);t.setTypeface(Typeface.DEFAULT);t.setTextColor(color("#646d8b","#b3b8d3"));t.setLineSpacing(a.dp(5),1.25f);return t;}
     TextView kicker(String value){TextView t=text(value,10,true);t.setLetterSpacing(.18f);t.setTextColor(a.muted());return t;}
     GradientDrawable panel(int fill,int radius){GradientDrawable d=new GradientDrawable();d.setColor(fill);d.setCornerRadius(a.dp(radius));d.setStroke(a.dp(1),color("#ffffff","#555a76"));return d;}
     Button action(String value,View.OnClickListener click,boolean primary){
@@ -66,7 +67,7 @@ final class StoryUi {
         put(p,action(won?(index==2?"Back to the sky →":"Next chapter →"):"Continue chapter →",v->{if(won&&index==2)a.home();else a.intro(index+(won?1:0));},true),12);put(p,action("Chapter selection",v->a.chapters(),false),0);
     }
     void play(){
-        LinearLayout p=begin("play",false);a.endPosted=false;signature="";a.targetSignature="";
+        LinearLayout p=begin("play",false);a.endPosted=false;signature="";shownWords=-1;a.targetSignature="";
         LinearLayout header=new LinearLayout(a);Button back=action("← Home",v->a.home(),false);header.addView(back,new LinearLayout.LayoutParams(0,a.dp(44),1));
         music=action("",v->{a.audio.bgm=!a.audio.bgm;a.audio.save();a.audio.sync(a.game.state==GameEngine.PLAYING);frame();},false);header.addView(music,new LinearLayout.LayoutParams(0,a.dp(44),1));
         sound=action("",v->{a.audio.sfx=!a.audio.sfx;a.audio.save();frame();},false);header.addView(sound,new LinearLayout.LayoutParams(0,a.dp(44),1));
@@ -75,10 +76,16 @@ final class StoryUi {
         LinearLayout live=new LinearLayout(a);live.setGravity(Gravity.CENTER_VERTICAL);count=text("",13,false);count.setTextColor(a.muted());hearts=text("",24,true);hearts.setGravity(Gravity.END);hearts.setTextColor(color("#a27cac","#d1abd7"));
         live.addView(count,new LinearLayout.LayoutParams(0,a.dp(34),1));live.addView(hearts,new LinearLayout.LayoutParams(-2,a.dp(34)));put(p,live,8);
         progress=new ProgressBar(a,null,android.R.attr.progressBarStyleHorizontal);progress.setMax(a.game.words.size());progress.setProgressTintList(android.content.res.ColorStateList.valueOf(0xffa599c7));progress.setProgressBackgroundTintList(android.content.res.ColorStateList.valueOf(color("#dcdcec","#454b65")));progress.setContentDescription("Chapter progress");LinearLayout.LayoutParams bar=new LinearLayout.LayoutParams(-1,a.dp(6));bar.bottomMargin=a.dp(12);p.addView(progress,bar);
-        TextView caption=kicker("COMPLETE THIS WORD");center(caption);put(p,caption,6);current=text("",26,true);center(current);current.setMaxLines(1);current.setAutoSizeTextTypeUniformWithConfiguration(16,28,1,android.util.TypedValue.COMPLEX_UNIT_SP);put(p,current,4);
-        letters=text("",26,true);center(letters);letters.setLetterSpacing(.12f);letters.setMaxLines(1);letters.setAutoSizeTextTypeUniformWithConfiguration(14,28,1,android.util.TypedValue.COMPLEX_UNIT_SP);put(p,letters,10);
+        TextView caption=kicker("COMPLETE THIS WORD");center(caption);put(p,caption,6);current=text("",26,true);current.setTypeface(Typeface.DEFAULT_BOLD);center(current);current.setMaxLines(1);current.setAutoSizeTextTypeUniformWithConfiguration(16,28,1,android.util.TypedValue.COMPLEX_UNIT_SP);put(p,current,4);
+        letters=text("",26,true);letters.setTypeface(Typeface.DEFAULT_BOLD);center(letters);letters.setLetterSpacing(.12f);letters.setMaxLines(1);letters.setAutoSizeTextTypeUniformWithConfiguration(14,28,1,android.util.TypedValue.COMPLEX_UNIT_SP);put(p,letters,10);
         a.arena=new FrameLayout(a);a.arena.setBackground(panel(color("#eef3ff","#222b43"),26));a.arena.setClipToOutline(true);a.gameView=new StoryGameView(a,a.game);a.arena.addView(a.gameView,new FrameLayout.LayoutParams(-1,-1));p.addView(a.arena,new LinearLayout.LayoutParams(-1,0,1));
-        note=text("",12,false);note.setTextColor(a.muted());note.setPadding(0,a.dp(8),0,0);put(p,note,0);pause(a.game.state==GameEngine.PAUSED);frame();a.gameView.requestFocus();a.audio.sync(a.game.state==GameEngine.PLAYING);
+        note=text("",12,false);note.setTextColor(a.muted());note.setPadding(0,a.dp(8),0,0);put(p,note,0);
+        completedWords=null;reading=null;if(a.game.storyChapter>0){
+            TextView heading=kicker("YOUR STORY SO FAR");heading.setPadding(0,a.dp(8),0,a.dp(6));put(p,heading,0);
+            completedWords=prose("");completedWords.setTextSize(14);completedWords.setPadding(a.dp(12),a.dp(8),a.dp(12),a.dp(8));
+            reading=new ScrollView(a);reading.setBackground(panel(color("#99ffffff","#df2d334c"),16));reading.addView(completedWords);p.addView(reading,new LinearLayout.LayoutParams(-1,a.dp(90)));
+        }
+        pause(a.game.state==GameEngine.PAUSED);frame();a.gameView.requestFocus();a.audio.sync(a.game.state==GameEngine.PLAYING);
     }
     void resume(){a.game.resume();pause(false);a.gameView.last=0;a.gameView.invalidate();a.audio.sync(true);}
     void pause(boolean on){
@@ -90,6 +97,7 @@ final class StoryUi {
     void frame(){
         GameEngine g=a.game;if(!a.screen.equals("play")||!g.story())return;
         update(count,g.wordIndex+" / "+g.words.size()+" words");String hp="";for(int i=0;i<3;i++)hp+=i<g.hearts?"♥ ":"♡ ";update(hearts,hp.trim());hearts.setContentDescription(g.hearts+" hearts");progress.setProgress(g.wordIndex);
+        if(completedWords!=null&&shownWords!=g.wordIndex){shownWords=g.wordIndex;StringBuilder story=new StringBuilder();String[] tokens=GameData.STORY_TOKENS[g.storyChapter];for(int i=0;i<Math.min(g.wordIndex,tokens.length);i++){if(i>0)story.append(' ');story.append(tokens[i]);}completedWords.setText(story.length()==0?"Your completed words will appear here.":story.toString());reading.post(()->reading.fullScroll(View.FOCUS_DOWN));}
         update(music,"♫ "+(a.audio.bgm?"On":"Off"));music.setContentDescription("Story background music "+(a.audio.bgm?"on":"off"));update(sound,"♪ "+(a.audio.sfx?"On":"Off"));sound.setContentDescription("Story sound effects "+(a.audio.sfx?"on":"off"));
         String next=g.wordIndex+":"+g.progress;if(!next.equals(signature)){signature=next;current.setText(PlayPresentation.word(g));current.setContentDescription("Current word: "+PlayPresentation.word(g));String word=g.word();SpannableString span=new SpannableString(word);
             for(int i=0;i<word.length();i++){span.setSpan(new ForegroundColorSpan(i<g.progress?color("#776794","#bcabdb"):i==g.progress?color("#3c466c","#fff2d7"):color("#a5adc3","#8995b6")),i,i+1,0);if(i==g.progress)span.setSpan(new UnderlineSpan(),i,i+1,0);}letters.setText(span);letters.setContentDescription("Catch "+g.needed()+". "+g.progress+" of "+word.length()+" letters completed.");}

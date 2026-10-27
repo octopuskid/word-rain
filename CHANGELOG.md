@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0 stable — 28 October 2026
+
+- Bring the 10/50/100-word Story chapters to HTML with the dreamy Home/Story interface, saved word checkpoints and independent paused Classic/Story runs. Web has no player Stats screen; Android retains its table.
+- Show completed Chapter 2/3 words in original reading order and punctuation below the playfield, including checkpointed words after reopening. Chapter 1 remains ten unrelated words.
+- Restore the gentle rainfall background in Classic instead of the grid. Keep the native board crop and dev11 mechanics, including exclusive 1% pickups and the permanent basket-bottom magnet exclusion.
+- Use a dedicated rounded, heavy Nunito face for Story headings and interface only. Keep Classic typography and readable system text for story prose/word prompts.
+- Native Android build 52 uses the original package/signing identity, with no WebView. Preserve records, legacy migration, music and stable auto-update checking.
+- Update the web test lab with isolated Story checkpoints and chapter/catch/word controls; refresh the dashboard with dated GitHub/itch analytics and the issue check.
+- Publish matching HTML/ZIP and signed APK on GitHub and itch.io, with the browser edition on itch.io and GitHub Pages. Automated gameplay checks and browser verification are recorded separately from unverified physical-device Android checks.
+
 ## 2.0-dev12 DEV — 28 October 2026
 
 - Android Story only: restore the dev7 dreamy design with offline Nunito typography, lavender chapter cards, moon/cloud/star sky, narrative panels, original-case reading word and separate highlighted letter progress.

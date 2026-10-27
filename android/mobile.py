@@ -4,13 +4,14 @@ import base64, re
 
 def mobile_html(source: str) -> str:
     root=Path(__file__).resolve().parent
+    source=re.sub(r'<style id="web-story-style">.*?</style>', '', source, flags=re.S)
+    source=re.sub(r'<div id="web-story-root">.*?<div id="web-story-end"></div>', '', source, flags=re.S)
+    source=re.sub(r'<script id="web-story-script">.*?</script>', '', source, flags=re.S)
+    source=source.replace('<main id="web-classic" hidden><button id="classic-home" type="button">← Home</button>','<main>')
     # Android always uses the portrait playfield; wide mode belongs to HTML.
     source=source.replace('function isPhoneClient(){', 'function isPhoneClient(){return true;')
     # Let Android story runs use the existing audio transport without running Classic.
-    audio_marker='"playing"===state&&audioPrefs.bgm'
-    assert source.count(audio_marker)==4, 'Audio transport changed; review story integration'
-    source=source.replace(audio_marker,'androidAudioPlaying()&&audioPrefs.bgm')
-    source=source.replace('function syncAudio(){','function androidAudioPlaying(){return state==="playing"||Boolean(window.wordRainStoryPlaying&&window.wordRainStoryPlaying());}function syncAudio(){',1)
+    # Current shared transport already recognizes a visible Story run.
     font='data:font/woff;base64,'+base64.b64encode((root/'assets/dream-font.woff').read_bytes()).decode()
     logo='data:image/png;base64,'+base64.b64encode((root/'assets/word-rain-2-logo.png').read_bytes()).decode()
     style=(root/'mobile.css').read_text()+(root/'dream.css').read_text().replace('__DREAM_FONT__',font)

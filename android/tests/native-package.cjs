@@ -4,7 +4,7 @@ const version=fs.readFileSync(path.join(root,'AndroidManifest.xml'),'utf8').matc
 const apk=process.argv[2]||path.join(root,'build','word-rain-'+version+'.apk');
 const files=cp.execFileSync('python',['-c','import zipfile,sys;print("\\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))',apk],{encoding:'utf8'}).trim().split('\n');
 assert(!files.some(n=>/\.(html?|js|css)$/i.test(n)),'APK must not bundle a web app');
-for(const asset of ['dream.ttf','hand.ttf','word-rain-2-logo.png','audio/original.wav','audio/correct.wav','audio/wrong.wav','audio/loseHP.wav','Nunito-OFL.txt'])assert(files.includes('assets/'+asset),asset);
+for(const asset of ['dream.ttf','story-ui.ttf','hand.ttf','word-rain-2-logo.png','audio/original.wav','audio/correct.wav','audio/wrong.wav','audio/loseHP.wav','Nunito-OFL.txt'])assert(files.includes('assets/'+asset),asset);
 assert(!files.some(n=>/carefree\.mp3|monkeys.*\.mp3|signing|\.p12|password/i.test(n)),'optional recordings and signing material excluded');
 const sources=fs.readdirSync(path.join(root,'src/io/github/octopuskid/wordrain')).filter(n=>n.endsWith('.java')).map(n=>fs.readFileSync(path.join(root,'src/io/github/octopuskid/wordrain',n),'utf8')).join('\n');
 assert(!/android\.webkit|evaluateJavascript|loadDataWithBaseURL|loadUrl\(/.test(sources),'native sources have no browser runtime');

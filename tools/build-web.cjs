@@ -4,7 +4,7 @@ const path = require('node:path');
 const { minify } = require('html-minifier-terser');
 const root = path.resolve(__dirname, '..');
 (async () => {
-  const source = fs.readFileSync(path.join(root, 'src/index.html'), 'utf8');
+  const source = require('./story-web.cjs')(fs.readFileSync(path.join(root, 'src/index.html'), 'utf8'));
   const html = await minify(source, {
     collapseWhitespace: true,
     conservativeCollapse: true,
