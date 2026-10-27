@@ -16,6 +16,8 @@ A behind-the-scenes video about building Word Rain, refining its rules, and publ
 
 Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **1.7.1**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
+**Android development edition:** 2.0-dev10 is a native Android rewrite using Views and Canvas, with no WebView or bundled HTML. It is a testing prerelease; stable remains 1.7.1. See [Android build notes](android/README.md).
+
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
 ## Player wiki

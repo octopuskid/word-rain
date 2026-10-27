@@ -2,7 +2,6 @@
 """Build a signed offline APK with Android SDK Build Tools 35 and Java 17+."""
 import argparse, os, shutil, subprocess, zipfile
 import xml.etree.ElementTree as ET
-from mobile import mobile_html
 from pathlib import Path
 
 parser=argparse.ArgumentParser(description=__doc__)
@@ -18,10 +17,11 @@ out=root/'build'
 apk=out/('word-rain-'+version+'.apk')
 if out.exists():shutil.rmtree(out)
 for name in ['assets','classes','dex']: (out/name).mkdir(parents=True,exist_ok=True)
-# Shared game plus Android-only records UI; external links use the native browser.
-source=(root.parent/'index.html').read_text()
-html=mobile_html(source)
-(out/'assets'/'index.html').write_text(html)
+# Native Android edition: no HTML, JavaScript, CSS or browser engine payload.
+for asset in (root/'native-assets').iterdir():
+    if asset.is_file():shutil.copyfile(asset,out/'assets'/asset.name)
+subprocess.run(['node',str(root/'native-audio.cjs')],check=True)
+shutil.copyfile(root/'assets'/'word-rain-2-logo.png',out/'assets'/'word-rain-2-logo.png')
 shutil.copyfile(root.parent/'LICENSE',out/'assets'/'LICENSE')
 shutil.copyfile(root.parent/'MUSIC-LICENSES.md',out/'assets'/'MUSIC-LICENSES.md')
 shutil.copyfile(root/'assets'/'Nunito-OFL.txt',out/'assets'/'Nunito-OFL.txt')
@@ -32,7 +32,7 @@ tools=args.build_tools.resolve(); jar=args.android_jar.resolve()
 run(tools/'aapt2','compile','--dir',root/'res','-o',out/'resources.zip')
 run(tools/'aapt2','link','-o',out/'unsigned.apk','--manifest',root/'AndroidManifest.xml','-I',jar,'-A',out/'assets','--min-sdk-version','26','--target-sdk-version','35',out/'resources.zip')
 sources=sorted((root/'src').rglob('*.java'))
-run('java','-jar',args.ecj.resolve(),'-source','8','-target','8','-bootclasspath',jar,'-d',out/'classes',*sources)
+run('java','-jar',args.ecj.resolve(),'-source','8','-target','8','-classpath',jar,'-d',out/'classes',*sources)
 run('java','-cp',tools/'lib'/'d8.jar','com.android.tools.r8.D8','--release','--min-api','26','--lib',jar,'--output',out/'dex',*sorted((out/'classes').rglob('*.class')))
 with zipfile.ZipFile(out/'unsigned.apk','a',zipfile.ZIP_DEFLATED) as package_zip:
     for dex in sorted((out/'dex').glob('*.dex')):package_zip.write(dex,dex.name)

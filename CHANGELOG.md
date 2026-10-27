@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0-dev10 DEV — 28 October 2026
+
+- Rewrite the Android edition with native Android Views, Canvas, direct touch input and a platform-independent Java game engine. No WebView or HTML/JavaScript/CSS payload in the APK. Home uses native buttons, a fixed layout and the Classic title font.
+- Port Classic scoring, speed/timing, balanced drops, shields, wildcards, combos/regen, overlaps, Overcast, magnets and Rick. Keep all four 120-word sets, native records/settings, tutorial, native 10/50/100-word chapters, checkpoints and separate paused Classic/story runs.
+- Port original synthesized music/effects, native media looping/audio focus, consent-based verified optional downloads, session-only local music and stable update checking. Keep the original app ID/signing certificate.
+- Add read-only legacy local-save migration from LevelDB logs/tables with Snappy support. Preserve old storage files. Device migration and real touch/audio playback remain unverified; this is a DEV test build.
+- Android build 49, GitHub DEV prerelease and Pages. HTML remains a separate Classic-only edition; itch.io stays stable 1.7.1.
+
 ## 2.0-dev9 DEV — 28 October 2026
 
 - Correct dev8 Home tap handling: remove document touchmove/wheel cancellation, retain CSS/native scroll protection, and let WebView process normal frames. Reset native scroll only when an offset exists instead of every frame.
