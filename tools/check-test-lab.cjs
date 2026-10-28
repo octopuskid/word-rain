@@ -4,6 +4,8 @@ const helper=fs.readFileSync(path.join(root,'android/tests/mobile-records.cjs'),
 // Check the generated DOM as well as the simulation mocks: mocks auto-create
 // missing nodes and otherwise hide startup failures caused by HTML transforms.
 const labPage=fs.readFileSync(path.join(root,'test.html'),'utf8');
+const expectedVersion=fs.readFileSync(path.join(root,'index.html'),'utf8').match(/v(\d+\.\d+(?:\.\d+){0,2}(?:-[0-9A-Za-z.-]+)?)(?: DEV)? · NO UMBRELLA/)[1];
+assert(labPage.includes('Word Rain '+expectedVersion+' test lab'),'lab heading follows the shared version');
 const markup=labPage.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 const ids=[...markup.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
 const realIds=new Set(ids);assert.equal(realIds.size,ids.length,'generated lab IDs must be unique');
