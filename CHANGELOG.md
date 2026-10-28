@@ -1,3 +1,13 @@
+## 2.0.3 — 29 October 2026
+
+- Android save export/import through Home → Cheat code → `export` or `import`, using native system document pickers.
+- Versioned JSON backups include Classic records, Story checkpoints, settings, theme, unlocks and tutorial state. Validate the complete file before confirmation and replace only allowlisted gameplay preferences in one commit. Cancelled, malformed, unsupported and oversized files do not change saves. Music files and active runs are excluded.
+- Android build 55 retains package/signing identity, native rendering, optional music and once-per-launch update policy. No new handover for this release.
+
+## 2.0.2 — 29 October 2026
+
+- Enhanced rendering performance: reuse native Overcast drawing bounds and the dark color filter instead of allocating them each frame. Android build 54.
+
 ## 2.0.1 — 28 October 2026
 
 - Magnet pulses resolve together using current/next letters at pickup time: duplicate or out-of-order matches each fill a blank; unrelated letters award exactly +1 without penalties. Pulled × cost one heart per pulse; any pulled wildcard immediately perfects the current word. Stop fills at the current word boundary and prevent a second catch/overlap reward during the pull animation.

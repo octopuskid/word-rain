@@ -2,7 +2,7 @@
 
 From **2.0-dev10 DEV / build 49**, Android runs Java gameplay rules, Android Views and Canvas. It does not instantiate WebView, execute JavaScript, or package HTML/CSS. The web edition remains a separate Classic game built from `src/index.html`.
 
-Current stable: **2.0.1 / build 53**. Story uses `StoryUi`/`StoryGameView`, a dedicated static weight-800 `story-ui.ttf` for rounded heavy headings/UI, and readable system text for prose/word prompts. Chapters 2/3 show completed original tokens below the game. Classic uses gentle rainfall instead of its grid. 2.0.1 adds atomic magnet pulls, both 1% pickups, a larger multiline final score and opaque HTML cloud artwork; save/audio formats remain unchanged; the web edition now also has Story, with no player Stats UI.
+Current stable: **2.0.3 / build 55**. Story uses `StoryUi`/`StoryGameView`, a dedicated static weight-800 `story-ui.ttf` for rounded heavy headings/UI, and readable system text for prose/word prompts. Chapters 2/3 show completed original tokens below the game. Classic uses gentle rainfall instead of its grid. 2.0.1 adds atomic magnet pulls, both 1% pickups, a larger multiline final score and opaque HTML cloud artwork; save/audio formats remain unchanged; the web edition now also has Story, with no player Stats UI.
 
 Dev11's Stats table, exclusive 1% magnet/shield pickups, synchronized Classic target progress, large coloured HUD and basket-bottom magnet boundary remain in place.
 
@@ -41,3 +41,9 @@ Compile `GameData.java`, `GameEngine.java`, `LegacyStore.java`, `UpdatePolicy.ja
 Compilation, Java tests, migration fixtures and APK inspection do not establish physical-device behavior. Before stable release, install on a phone and check: actual Home buttons and absence of scrolling; drag catches; small displays/large text; migrated records/settings/story saves; pause/background/update prompts; local/downloaded/original music playback and loop wrap; audio focus and haptics. 2.0.0 is published as stable at the owner’s request; these physical-device checks remain unverified in this environment.
 
 2.0.1 pickup checks: `NativeMagnet201Test.java` and `magnet-201.cjs` supersede the historical dev11 exclusive-pickup tests. Story chapter rules remain unchanged. Native cloud PNGs are rendered from the existing HTML SVG artwork with Inkscape.
+
+2.0.2 enhances rendering performance by reusing Overcast drawing objects. Current maintainer handover: `../docs/HANDOVER-2.0.2.md`.
+
+2.0.3 adds Android Home → Cheat code → `export` / `import` for versioned JSON save backups, using system document pickers, bounded validation, confirmation and atomic allowlisted preference replacement. Music files and active runs are excluded.
+
+Backup regression command: `node android/tests/save-backup.cjs /path/to/ecj.jar /path/to/json-20240303.jar`. The test-only org.json runtime is available from Maven Central; it is not bundled in the APK, which uses Android org.json. Minimal SharedPreferences/Context doubles live in tests/support and are excluded from production compilation.

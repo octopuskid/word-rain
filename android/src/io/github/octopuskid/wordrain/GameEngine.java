@@ -35,6 +35,7 @@ public final class GameEngine {
     public final ArrayList<Drop> drops=new ArrayList<Drop>(); public final ArrayList<String> words=new ArrayList<String>();
     public int state=READY,score,hearts=3,shield,progress,wordIndex,wrongStreak,perfectWords,perfectRun;
     public int storyChapter=-1,rickNext=-1,rickCaught; public boolean rickMissed;
+    public boolean manualSpawns;
     public boolean wordPerfect=true,wildcard,doubleScore,scoringPaused;
     public double speed=1,x=240,target=240,elapsed,spawn=.4,pulse,invulnerable;
     public String feedback="Catch the highlighted letter.",rickInput="";
@@ -157,7 +158,7 @@ public final class GameEngine {
         if(state!=PLAYING)return;dt=Math.min(.04,Math.max(0,dt));pulse=Math.max(0,pulse-dt);invulnerable=Math.max(0,invulnerable-dt);
         x+=(target-x)*Math.min(1,(story()?16:18)*dt);spawn-=dt;
         if(rickNext>=0){updateRick(dt);return;}elapsed+=dt;
-        if(spawn<=0){
+        if(spawn<=0&&!manualSpawns){
             if(story()){double[] hazards={0,.10,.16},speeds={76,94,110};boolean hazard=random.nextDouble()<hazards[storyChapter];char c=hazard?'×':random.nextDouble()<.72?needed():(char)('A'+random.nextInt(26));
                 // Story retains its original 360x430 timing, mapped onto the Classic board.
                 Drop d=new Drop((24+random.nextDouble()*312)*480/360,-24*530.0/430,(speeds[storyChapter]+random.nextDouble()*16)*530/430,hazard?BOMB:LETTER,c);drops.add(d);spawn+=1.05;

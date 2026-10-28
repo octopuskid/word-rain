@@ -17,7 +17,16 @@ final class NativeStore {
    // Keep all Chromium files untouched, including if a partial/corrupt file was skipped.
    edit.putBoolean("legacy-import-v1",true).apply();
   }
+  reload();
+ }
+ void reload(){
   records=json("word-rain-mobile-records-v1");story=json("word-rain-story-v2");settings=json("word-rain-settings-v1");audio=json("word-rain-audio-v1");dark=!"light".equals(prefs.getString("word-rain-theme","dark"));
+ }
+ Map<String,String> snapshot(){Map<String,String> values=new java.util.LinkedHashMap<String,String>();for(String key:SaveBackup.KEYS)values.put(key,prefs.getString(key,SaveBackup.jsonKey(key)?"{}":key.endsWith("theme")?"dark":key.endsWith("rick-unlocked-v1")?"false":""));return values;}
+ void restore(Map<String,String> values)throws java.io.IOException{
+  Map<String,String> before=new java.util.LinkedHashMap<String,String>();for(String key:SaveBackup.KEYS)if(prefs.contains(key))before.put(key,prefs.getString(key,""));
+  SharedPreferences.Editor edit=prefs.edit();for(String key:SaveBackup.KEYS){if(values.containsKey(key))edit.putString(key,values.get(key));else edit.remove(key);}
+  if(!edit.commit()){SharedPreferences.Editor rollback=prefs.edit();for(String key:SaveBackup.KEYS){if(before.containsKey(key))rollback.putString(key,before.get(key));else rollback.remove(key);}rollback.commit();throw new java.io.IOException("Could not save imported data");}reload();
  }
  JSONObject json(String key){try{return new JSONObject(prefs.getString(key,"{}"));}catch(Exception bad){return new JSONObject();}}
  void put(String key,Object value){prefs.edit().putString(key,String.valueOf(value)).apply();}

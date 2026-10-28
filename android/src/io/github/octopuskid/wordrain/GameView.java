@@ -7,6 +7,8 @@ import java.util.ArrayList;
 class GameView extends View {
  final MainActivity activity;final GameEngine engine;final Paint p=new Paint(3);final RectF field=new RectF();
  Bitmap cloudTexture,paperCloudTexture;
+ final RectF cloudCover=new RectF(0,132.5f,480,397.5f);
+ final ColorMatrixColorFilter darkCloudFilter=new ColorMatrixColorFilter(new ColorMatrix(new float[]{.76f,0,0,0,0,0,.76f,0,0,0,0,0,.76f,0,0,0,0,0,1,0}));
  long last;int pointer=-1;final ArrayList<float[]> particles=new ArrayList<float[]>();
  GameView(MainActivity activity,GameEngine engine){super(activity);this.activity=activity;this.engine=engine;try{cloudTexture=BitmapFactory.decodeStream(activity.getAssets().open("clouds.png"));paperCloudTexture=BitmapFactory.decodeStream(activity.getAssets().open("clouds-handwriting.png"));}catch(java.io.IOException ex){throw new IllegalStateException("Missing cloud textures",ex);}setFocusable(true);setFocusableInTouchMode(true);setContentDescription("Falling letters. Drag to move the basket and catch the highlighted letter.");}
  int accent(){if(engine.story())return Color.rgb(167,148,203);if(engine.settings.handwriting)return Color.rgb(36,75,161);String[] colors={"#c6f077","#62ddb0","#78baff","#ffae98","#dc9855"};return Color.parseColor(colors[Math.min(4,Math.max(0,engine.settings.palette))]);}
@@ -38,9 +40,9 @@ class GameView extends View {
   if(!engine.story()&&engine.settings.overcast){
    // Same opaque SVG artwork as HTML, rasterized offline for native Canvas.
    p.setAlpha(255);p.setColor(dark?0xff8d98a0:paper?0xffeee9de:0xffbac8d3);
-   RectF cover=new RectF(0,132.5f,480,397.5f);canvas.drawRect(cover,p);
-   if(dark){ColorMatrix matrix=new ColorMatrix(new float[]{.76f,0,0,0,0,0,.76f,0,0,0,0,0,.76f,0,0,0,0,0,1,0});p.setColorFilter(new ColorMatrixColorFilter(matrix));}
-   canvas.drawBitmap(paper?paperCloudTexture:cloudTexture,null,cover,p);p.setColorFilter(null);
+   canvas.drawRect(cloudCover,p);
+   if(dark)p.setColorFilter(darkCloudFilter);
+   canvas.drawBitmap(paper?paperCloudTexture:cloudTexture,null,cloudCover,p);p.setColorFilter(null);
   }
   float basket=(float)engine.x,y=engine.story()?486:470;
   p.setColor(accent());p.setStrokeWidth(5);p.setStyle(Paint.Style.STROKE);Path basketPath=new Path();basketPath.moveTo(basket-39,y-14);basketPath.lineTo(basket-34,y+10);basketPath.quadTo(basket,y+15,basket+34,y+10);basketPath.lineTo(basket+39,y-14);canvas.drawPath(basketPath,p);p.setStyle(Paint.Style.FILL);canvas.drawRoundRect(basket-32,y+7,basket+32,y+15,5,5,p);

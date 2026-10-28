@@ -5,8 +5,8 @@ import android.graphics.*;
 
 /** One-screen native menu: every control is measured inside the usable screen. */
 final class NativeHome extends ViewGroup {
- final MainActivity activity;final float[][] bounds={{12,12,90,42},{12,67,336,24},{118,112,124,124},{12,254,336,54},{12,314,336,32},{20,376,320,80},{20,468,320,80},{20,560,320,80},{12,686,336,20}};
- final int[] sizes={12,10,0,36,13,20,20,20,10};float scale=1,ox,oy,lastStyled=-1;final Paint p=new Paint(3);
+ final MainActivity activity;final float[][] bounds={{12,12,90,42},{12,67,336,24},{118,112,124,124},{12,254,336,54},{12,314,336,32},{20,376,320,80},{20,468,320,80},{20,560,320,80},{12,686,336,20},{248,12,100,42}};
+ final int[] sizes={12,10,0,36,13,20,20,20,10,12};float scale=1,ox,oy,lastStyled=-1;final Paint p=new Paint(3);
  NativeHome(MainActivity activity){super(activity);this.activity=activity;setClipChildren(true);setContentDescription("Word Rain Home");
   addView(activity.button(activity.store.dark?"☀ Light":"☾ Dark",v->{activity.store.dark=!activity.store.dark;activity.store.put("word-rain-theme",activity.store.dark?"dark":"light");activity.home();}));
   TextView kicker=activity.label("A LITTLE POCKET DAYDREAM",10,true);kicker.setLetterSpacing(.19f);kicker.setGravity(Gravity.CENTER);addView(kicker);
@@ -14,7 +14,8 @@ final class NativeHome extends ViewGroup {
   TextView title=activity.label("word rain 2",36,true);title.setTypeface(Typeface.DEFAULT_BOLD);title.setLetterSpacing(-.035f);title.setGravity(Gravity.CENTER);title.setOnClickListener(v->activity.openLink("https://github.com/octopuskid/word-rain"));title.setContentDescription("Word Rain on GitHub");addView(title);
   TextView sub=activity.label("a sky full of unfinished stories",13,false);sub.setGravity(Gravity.CENTER);sub.setTextColor(activity.muted());addView(sub);
   addView(menu("Classic","Catch words. Chase your best.",v->activity.classic(),false));addView(menu("Story mode",activity.storyGame.state==GameEngine.PAUSED?"Resume your dream":"Ten words, then two stories",v->activity.story(),true));addView(menu("Stats","Your words & little milestones",v->activity.stats(),false));
-  TextView version=activity.label("2.0.1 · made by octopuskid",10,false);version.setGravity(Gravity.CENTER);version.setTextColor(activity.muted());addView(version);
+  TextView version=activity.label("2.0.3 · made by octopuskid",10,false);version.setGravity(Gravity.CENTER);version.setTextColor(activity.muted());addView(version);
+  addView(activity.button("Cheat code",v->activity.cheatCode()));
  }
  Button menu(String name,String detail,OnClickListener listener,boolean story){Button b=activity.button(name+"\n"+detail,listener);b.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);b.setTypeface(activity.dreamFont,Typeface.BOLD);b.setBackground(activity.rounded(story?(activity.store.dark?0xff514563:0xffd5ceef):(activity.store.dark?0xff2d334c:0xfff9faff),30));b.setContentDescription(name+". "+detail);return b;}
  @Override protected void onMeasure(int w,int h){int width=MeasureSpec.getSize(w),height=MeasureSpec.getSize(h);setMeasuredDimension(width,height);scale=Math.min(width/360f,height/720f);ox=(width-360*scale)/2;oy=(height-720*scale)/2;

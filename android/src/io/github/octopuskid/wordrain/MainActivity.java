@@ -35,12 +35,12 @@ import java.nio.charset.StandardCharsets;
 
 /** Native Android edition: Android Views, Canvas, pure Java rules, and native audio. */
 public final class MainActivity extends Activity {
-    StoryUi storyUi;NativeStore store;NativeAudio audio;GameEngine game,classicGame,storyGame;GameView gameView;android.widget.ProgressBar speedBar,shieldBar;
+    StoryUi storyUi;NativeStore store;NativeAudio audio;GameEngine game,classicGame,storyGame,testGame;GameView gameView;android.widget.ProgressBar speedBar,shieldBar;
     android.graphics.Typeface dreamFont,handFont,storyFont;android.widget.FrameLayout root;
     android.widget.TextView hud,scoreLabel,heartLabel,targetLabel,feedback;android.widget.LinearLayout page;
     android.widget.Button pauseButton;android.widget.FrameLayout arena;
     android.view.View pauseOverlay;String screen="home",targetSignature="";boolean endPosted;
-    private static final int MUSIC_PICKER=132;private boolean choosingMusic,downloadingMusic;
+    private static final int MUSIC_PICKER=132,SAVE_EXPORT=133,SAVE_IMPORT=134;private String pendingSaveExport;private boolean choosingMusic,downloadingMusic;
     private final Handler updates=new Handler(Looper.getMainLooper());
     private ConnectivityManager connectivity;private boolean foreground,checkingUpdate,launchUpdateAttempted;
     int dp(float n){return Math.round(n*getResources().getDisplayMetrics().density);}
@@ -54,6 +54,51 @@ public final class MainActivity extends Activity {
     void background(){root.setBackground(new android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TL_BR,store.dark?new int[]{0xff191c35,0xff202d46,0xff30283f}:new int[]{0xfff3f3ff,0xffe7effb,0xffece3f6}));}
     android.widget.LinearLayout begin(String route,boolean scrolling){screen=route;root.removeAllViews();background();page=new android.widget.LinearLayout(this);page.setOrientation(1);page.setPadding(dp(20),dp(12),dp(20),dp(12));if(scrolling){android.widget.ScrollView scroll=new android.widget.ScrollView(this);scroll.setFillViewport(true);scroll.addView(page);root.addView(scroll,new android.widget.FrameLayout.LayoutParams(-1,-1));}else root.addView(page,new android.widget.FrameLayout.LayoutParams(-1,-1));return page;}
     void home(){pauseGame();screen="home";root.removeAllViews();background();root.addView(new NativeHome(this),new android.widget.FrameLayout.LayoutParams(-1,-1));}
+    boolean testing(){return game==testGame&&testGame!=null;}
+    void cheatCode(){
+      final android.widget.EditText input=new android.widget.EditText(this);input.setSingleLine(true);input.setHint("Enter code");input.setInputType(android.text.InputType.TYPE_CLASS_TEXT|android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+      new AlertDialog.Builder(this).setTitle("Cheat code").setView(input).setNegativeButton("Cancel",null).setPositiveButton("Apply",(d,w)->{
+        String code=input.getText().toString().trim().toLowerCase(java.util.Locale.ROOT);
+        if(code.equals("story")){for(int chapter=0;chapter<3;chapter++)store.complete(chapter);storyGame=new GameEngine(new java.util.Random(),new GameEngine.Events(){@Override public void checkpoint(int c,int n){store.checkpoint(c,n);}@Override public void complete(int c){store.complete(c);}@Override public void sound(String id){audio.sound(id);}});storyGame.storyChapter=0;home();toast("All three Story chapters completed.");}
+        else if(code.equals("test")){startTest();}else if(code.equals("export")){exportSave();}else if(code.equals("import")){importSave();}else toast("Unknown code.");
+      }).show();
+    }
+    void exportSave(){
+      pauseGame();try{pendingSaveExport=SaveBackup.encode(store.snapshot());Intent picker=new Intent(Intent.ACTION_CREATE_DOCUMENT);picker.addCategory(Intent.CATEGORY_OPENABLE);picker.setType("application/json");picker.putExtra(Intent.EXTRA_TITLE,"word-rain-save-"+new java.text.SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.ROOT).format(new java.util.Date())+".json");startActivityForResult(picker,SAVE_EXPORT);}catch(Exception unavailable){pendingSaveExport=null;toast("Could not prepare a backup or open the document picker.");}
+    }
+    void importSave(){
+      if(downloadingMusic){toast("Wait for the music download to finish before importing.");return;}
+      pauseGame();try{Intent picker=new Intent(Intent.ACTION_OPEN_DOCUMENT);picker.addCategory(Intent.CATEGORY_OPENABLE);picker.setType("*/*");startActivityForResult(picker,SAVE_IMPORT);}catch(ActivityNotFoundException unavailable){toast("No document picker installed.");}
+    }
+    void saveDocumentResult(int request,int result,Intent data){
+      final String payload=pendingSaveExport;if(request==SAVE_EXPORT)pendingSaveExport=null;
+      if(result!=RESULT_OK||data==null||data.getData()==null)return;
+      final Uri uri=data.getData();
+      if(request==SAVE_EXPORT){if(payload==null){toast("Please enter export again to create a new backup.");return;}
+        new Thread(()->{boolean ok=false;try(java.io.OutputStream output=getContentResolver().openOutputStream(uri,"wt")){if(output==null)throw new java.io.IOException("No output");output.write(payload.getBytes(StandardCharsets.UTF_8));output.flush();ok=true;}catch(Exception failure){ok=false;}final boolean success=ok;runOnUiThread(()->{if(!isDestroyed())toast(success?"Save backup exported.":"Could not write the backup. Please try again.");});},"WordRainSaveExport").start();
+      }else new Thread(()->{try(InputStream input=getContentResolver().openInputStream(uri)){final java.util.Map<String,String> values=SaveBackup.decode(SaveBackup.read(input));runOnUiThread(()->{if(isDestroyed()||isFinishing())return;new AlertDialog.Builder(this).setTitle("Replace saved data?").setMessage("This replaces Classic records, Story progress, unlocks and saved settings with the backup. Current runs will be discarded. Export first if you want to keep the current saves. Music files are not imported.").setNegativeButton("Cancel",null).setPositiveButton("Import",(dialog,which)->{
+          if(downloadingMusic){toast("Wait for the music download to finish before importing.");return;}try{store.restore(values);}catch(Exception failure){toast("Could not apply the backup. Current saves were kept.");return;}audio.close();audio=new NativeAudio(this,store);classicGame=new GameEngine(new java.util.Random(),classicGame.events);storyGame=new GameEngine(new java.util.Random(),storyGame.events);storyGame.storyChapter=0;testGame=null;game=classicGame;home();toast("Save backup imported.");
+        }).show();});}catch(Exception bad){runOnUiThread(()->{if(!isDestroyed())toast("Invalid Word Rain backup or file over 1 MB. Saves unchanged.");});}},"WordRainSaveImport").start();
+    }
+    void startTest(){
+      pauseGame();testGame=new GameEngine(new java.util.Random(),new GameEngine.Events(){@Override public void sound(String id){audio.sound(id);}@Override public void damage(boolean hp,boolean shield){haptic(hp&&shield?"both":hp?"hp":"shield");}});
+      game=testGame;game.startClassic(settings());game.manualSpawns=true;playScreen();
+    }
+    void testControls(){
+      final boolean resume=game.state==GameEngine.PLAYING;pauseGame();
+      final String[] options={"Drop current letter","Drop next letter","Drop random letter","Drop ×","Drop shield","Drop wildcard","Drop magnet","Clear blocks","Toggle automatic waves","Set speed","Set hearts","New test run","Exit to Home"};
+      new AlertDialog.Builder(this).setTitle("TEST MODE · records are not saved").setItems(options,(d,which)->{
+        if(which==12){home();return;}if(which==11){startTest();return;}
+        if(which==9){new AlertDialog.Builder(this).setTitle("Falling speed").setItems(new String[]{"100% / Hard minimum","140%","180%","220%","260% / Normal maximum"},(q,i)->{game.setSpeed(new double[]{1,1.4,1.8,2.2,2.6}[i]);resumeTest(resume);}).setOnCancelListener(q->resumeTest(resume)).show();return;}
+        if(which==10){new AlertDialog.Builder(this).setTitle("Hearts").setItems(new String[]{"0","1","2","3"},(q,i)->{game.hearts=i;if(i==0)game.state=GameEngine.OVER;resumeTest(resume);}).setOnCancelListener(q->resumeTest(resume)).show();return;}
+        if(which==7)game.drops.clear();else if(which==8)game.manualSpawns=!game.manualSpawns;
+        else{int kind=which<3?GameEngine.LETTER:which==3?GameEngine.BOMB:which==4?GameEngine.SHIELD:which==5?GameEngine.WILD:GameEngine.MAGNET;
+          char letter=which==0?game.needed():which==1?game.word().charAt(Math.min(game.progress+1,game.word().length()-1)):(char)('A'+game.random.nextInt(26));
+          game.drops.add(new GameEngine.Drop(game.x,-25,100*game.speed,kind,letter));}
+        resumeTest(resume);
+      }).setNegativeButton("Close",(d,w)->resumeTest(resume)).setOnCancelListener(d->resumeTest(resume)).show();
+    }
+    void resumeTest(boolean resume){if(resume)game.resume();showPause(game.state==GameEngine.PAUSED);gameView.last=0;gameView.invalidate();audio.sync(game.state==GameEngine.PLAYING);frame();}
     void openLink(String url){try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));}catch(ActivityNotFoundException missing){toast("No browser installed");}}
     void saveSettings(GameEngine.Settings s){NativeStore.set(store.settings,"wordSet",GameData.SET_IDS[s.wordSet]);NativeStore.set(store.settings,"difficulty",s.hard?"hard":"normal");NativeStore.set(store.settings,"colorTheme",s.palette<4?GameData.SET_IDS[s.palette]:"rick");NativeStore.set(store.settings,"handwriting",s.handwriting);NativeStore.set(store.settings,"overcast",s.overcast);NativeStore.set(store.settings,"magnet",s.magnet);store.put("word-rain-settings-v1",store.settings);}
     GameEngine.Settings settings(){GameEngine.Settings s=new GameEngine.Settings();String id=store.settings.optString("wordSet","classic"),palette=store.settings.optString("colorTheme","classic");for(int i=0;i<4;i++){if(GameData.SET_IDS[i].equals(id))s.wordSet=i;if(GameData.SET_IDS[i].equals(palette))s.palette=i;}if("rick".equals(palette)&&"true".equals(store.prefs.getString("word-rain-rick-unlocked-v1","false")))s.palette=4;s.hard=store.settings.optString("difficulty").equals("hard");s.overcast=store.settings.optBoolean("overcast");s.magnet=store.settings.optBoolean("magnet");s.handwriting=store.settings.optBoolean("handwriting");return s;}
@@ -65,7 +110,7 @@ public final class MainActivity extends Activity {
       add(page,label("Color theme",13,true));boolean rick="true".equals(store.prefs.getString("word-rain-rick-unlocked-v1","false"));final android.widget.Spinner palette=spinner(rick?new String[]{"Lime","Mint","Blue","Coral","Rick · Copper"}:new String[]{"Lime","Mint","Blue","Coral"},s.palette);add(page,palette);
       final android.widget.Switch paper=toggle("Handwriting paper",s.handwriting),cloud=toggle("Overcast · double points",s.overcast);add(page,paper);add(page,cloud);add(page,label("Magnets and shields each appear in 1% of emitted blocks.",12,false));palette.setEnabled(!s.handwriting);paper.setOnCheckedChangeListener((b,on)->palette.setEnabled(!on));
       add(page,button("Start game →",v->{s.hard=difficulty.getSelectedItemPosition()==1;s.wordSet=set.getSelectedItemPosition();s.palette=palette.getSelectedItemPosition();s.handwriting=paper.isChecked();s.overcast=cloud.isChecked();saveSettings(s);game.startClassic(s);playScreen();}));
-      add(page,button("Music & sound",v->music()));add(page,button("Replay tutorial",v->tutorial(0)));add(page,button("How to play",v->rules()));add(page,label("Native Android · 2.0.1 · build 53",11,false));
+      add(page,button("Music & sound",v->music()));add(page,button("Replay tutorial",v->tutorial(0)));add(page,button("How to play",v->rules()));add(page,label("Native Android · 2.0.3 · build 55",11,false));
     }
     void rules(){new AlertDialog.Builder(this).setTitle("Catch words. Chase your best.").setMessage("Drag the basket or use A/D / arrow keys. Catch the underlined letter in order. Missed blocks are harmless. × costs one heart.\n\nCorrect +10; word +50; wrong +1 until three consecutive mistakes pause scoring. The next correct catch recovers without letter points. Awards multiply by speed, Hard ×2 and Overcast ×2, rounded up.\n\nTwo perfect words add 20% speed. Six unlock 2× points and restore one heart. Wrong letters subtract 5% speed; × subtracts 20%.\n\nA full shield saves a heart against × but breaks perfection. A half shield loses one heart but keeps perfection. Wrong letters use half a shield and preserve progress/perfection. Picking up a shield while protected costs hearts.\n\nLetters overlap into wildcards. Wildcard + × fills a letter; two wildcards perfect a word. Magnets and shields each appear in 1% of emitted blocks. Pulled L0/L1 letters each fill one blank; other letters give +1 without penalties. A pulse of hazards costs only one heart. A pulled wildcard immediately perfects the word. Magnets pull all nearby blocks within 3.5 block widths, excluding centers below the bottom of the basket. Touching another block destroys a magnet; a shield disappears with it.").setPositiveButton("Got it",null).show();}
     void chapters(){storyUi.chapters();}
@@ -83,7 +128,7 @@ public final class MainActivity extends Activity {
       android.widget.LinearLayout headline=new android.widget.LinearLayout(this);headline.setGravity(android.view.Gravity.CENTER_VERTICAL);
       scoreLabel=label("",game.story()?16:26,true);scoreLabel.setAutoSizeTextTypeUniformWithConfiguration(game.story()?14:18,game.story()?18:28,1,android.util.TypedValue.COMPLEX_UNIT_SP);
       heartLabel=label("",30,true);heartLabel.setGravity(android.view.Gravity.END);headline.addView(scoreLabel,new android.widget.LinearLayout.LayoutParams(0,dp(48),1));headline.addView(heartLabel,new android.widget.LinearLayout.LayoutParams(-2,dp(48)));add(page,headline);
-      hud=label("",12,false);add(page,hud);
+      hud=label("",12,false);add(page,hud);if(testing())add(page,button("TEST MODE · Controls",v->testControls()));
       android.widget.LinearLayout meters=new android.widget.LinearLayout(this);
       speedBar=new android.widget.ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);speedBar.setMax(game.story()?game.words.size():120);speedBar.setProgressTintList(android.content.res.ColorStateList.valueOf(game.story()?0xffa599c7:0xffef4444));speedBar.setContentDescription(game.story()?"Chapter progress":"Falling speed");
       shieldBar=new android.widget.ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);shieldBar.setMax(2);shieldBar.setProgressTintList(android.content.res.ColorStateList.valueOf(0xff58a6ff));shieldBar.setContentDescription("Shield health");
@@ -95,11 +140,11 @@ public final class MainActivity extends Activity {
     void showPause(boolean on){if(game.story()){storyUi.pause(on);return;}if(arena==null)return;if(pauseOverlay!=null){arena.removeView(pauseOverlay);pauseOverlay=null;}if(pauseButton!=null)pauseButton.setText(on?"Resume":"Pause");if(!on)return;android.widget.LinearLayout overlay=new android.widget.LinearLayout(this);overlay.setOrientation(1);overlay.setGravity(android.view.Gravity.CENTER);overlay.setPadding(dp(24),dp(24),dp(24),dp(24));overlay.setBackgroundColor(store.dark?0xf025283b:0xf0f2effb);add(overlay,label("A quiet moment.",25,true));add(overlay,button("Keep playing →",v->{game.resume();showPause(false);gameView.last=0;gameView.invalidate();audio.sync(true);}));add(overlay,button(game.story()?"Return to chapters":"Give up",v->{if(game.story()){game.state=GameEngine.OVER;chapters();}else new AlertDialog.Builder(this).setTitle("Give up this run?").setNegativeButton("Keep playing",null).setPositiveButton("Give up",(d,w)->{game.state=GameEngine.OVER;setup();}).show();}));pauseOverlay=overlay;arena.addView(overlay,new android.widget.FrameLayout.LayoutParams(-1,-1));}
     void frame(){if(!screen.equals("play"))return;if(game.story()){storyUi.frame();return;}
       String hp="";for(int i=0;i<3;i++)hp+=i<game.hearts?"♥ ":"♡ ";if(!heartLabel.getText().toString().equals(hp))heartLabel.setText(hp);heartLabel.setTextColor(PlayPresentation.purpleHearts(game)?0xffbe85ff:0xffff4d68);
-      String scoreText=game.story()?"CHAPTER 0"+(game.storyChapter+1):"SCORE "+game.score;if(!scoreLabel.getText().toString().equals(scoreText))scoreLabel.setText(scoreText);scoreLabel.setTextColor(PlayPresentation.yellowScore(game)?(store.dark?0xffffd54f:0xffa36c00):ink());
+      String scoreText=game.story()?"CHAPTER 0"+(game.storyChapter+1):(testing()?"TEST SCORE ":"SCORE ")+game.score;if(!scoreLabel.getText().toString().equals(scoreText))scoreLabel.setText(scoreText);scoreLabel.setTextColor(PlayPresentation.yellowScore(game)?(store.dark?0xffffd54f:0xffa36c00):ink());
       String h=game.story()?game.wordIndex+" / "+game.words.size()+" words":"Speed "+Math.round(game.speed*100)+"% · "+("Shield "+game.shield+"/2")+" · "+(game.doubleScore?"2× ACTIVE":game.perfectRun+"/6 perfect");if(!hud.getText().toString().equals(h))hud.setText(h);speedBar.setProgress(game.story()?game.wordIndex:(int)Math.round((game.speed-game.base())*100));shieldBar.setProgress(game.shield);
       String word=PlayPresentation.word(game);int at=PlayPresentation.progress(game);String signature=word+":"+at+":"+game.doubleScore;if(!signature.equals(targetSignature)){targetSignature=signature;android.text.SpannableString styled=new android.text.SpannableString(word);if(at<word.length()){styled.setSpan(new android.text.style.UnderlineSpan(),at,at+1,0);styled.setSpan(new android.text.style.ForegroundColorSpan(Color.parseColor("#a790d1")),0,at,0);}targetLabel.setText(styled);targetLabel.setBackground(game.doubleScore&&!game.story()?rounded(0x55ffe267,12):null);}
       if(!feedback.getText().toString().equals(game.feedback))feedback.setText(game.feedback);
-      if((game.state==GameEngine.OVER||game.state==GameEngine.WON)&&!endPosted){endPosted=true;audio.sync(false);updates.post(()->{if(screen.equals("play")){if(game.story())result();else setup();}});}
+      if((game.state==GameEngine.OVER||game.state==GameEngine.WON)&&!endPosted){endPosted=true;audio.sync(false);updates.post(()->{if(screen.equals("play")){if(game.story())result();else if(testing())home();else setup();}});}
     }
     void pauseGame(){if(game!=null)game.pause();if(audio!=null)audio.sync(false);if(screen.equals("play")&&arena!=null)showPause(true);}
     final String[] tutorialTitles={"Welcome to Word Rain","Catch the next letter","Keep your three hearts","Shields and wildcards","Perfect words and speed","Choose your forecast"};
@@ -279,7 +324,7 @@ public final class MainActivity extends Activity {
         };classicGame=new GameEngine(new java.util.Random(),events);storyGame=new GameEngine(new java.util.Random(),events);storyGame.storyChapter=0;game=classicGame;audio=new NativeAudio(this,store);storyUi=new StoryUi(this);
         if(!"done".equals(store.prefs.getString("word-rain-tutorial-v1","")))tutorial(0);else home();
     }
-    @Override protected void onActivityResult(int request,int result,final Intent data){super.onActivityResult(request,result,data);if(request!=MUSIC_PICKER)return;choosingMusic=false;if(result!=RESULT_OK||data==null||data.getData()==null)return;
+    @Override protected void onActivityResult(int request,int result,final Intent data){super.onActivityResult(request,result,data);if(request==SAVE_EXPORT||request==SAVE_IMPORT){saveDocumentResult(request,result,data);return;}if(request!=MUSIC_PICKER)return;choosingMusic=false;if(result!=RESULT_OK||data==null||data.getData()==null)return;
         new Thread(()->{final File selected=new File(getCacheDir(),"session-music");File partial=new File(getCacheDir(),"session-music.part");boolean success=false;
             try(InputStream input=getContentResolver().openInputStream(data.getData());FileOutputStream output=new FileOutputStream(partial)){if(input==null)throw new java.io.IOException("No audio");byte[] b=new byte[8192];int n,total=0;while((n=input.read(b))!=-1){total+=n;if(total>24*1024*1024)throw new java.io.IOException("Audio too large");output.write(b,0,n);}success=true;}catch(Exception bad){}
             final boolean ready=success&&partial.renameTo(selected);partial.delete();runOnUiThread(()->{if(audio!=null&&!isDestroyed()){if(ready){audio.local=selected;audio.select("local");toast("Local BGM ready for this session.");}else toast("Could not read audio. Choose a file under 24 MB.");}});
