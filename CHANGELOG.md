@@ -1,3 +1,10 @@
+## 2.0.1 — 28 October 2026
+
+- Magnet pulses resolve together using current/next letters at pickup time: duplicate or out-of-order matches each fill a blank; unrelated letters award exactly +1 without penalties. Pulled × cost one heart per pulse; any pulled wildcard immediately perfects the current word. Stop fills at the current word boundary and prevent a second catch/overlap reward during the pull animation.
+- Both magnets and shields spawn at 1% each in Classic Normal/Hard. Remove the selector and always show the shield meter. Story remains its separate chapter challenge.
+- Larger multiline final score. Android uses opaque regular/handwriting cloud textures from the HTML edition, covering the middle half of the arena. Native build 53 retains signing identity, saves, audio and stable update checks.
+- Web, test lab and Android share the updated Classic rules. No separate checksum asset.
+
 # Changelog
 
 ## Test-page maintenance — 28 October 2026

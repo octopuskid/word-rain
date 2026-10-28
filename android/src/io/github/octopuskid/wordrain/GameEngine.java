@@ -20,7 +20,7 @@ public final class GameEngine {
         public boolean hard,overcast,magnet,handwriting; public int wordSet,palette;
     }
     public static final class Drop {
-        public double x,y,speed; public int kind; public char letter; public boolean pull,caught,missed;
+        public double x,y,speed; public int kind; public char letter; public boolean pull,caught,missed,magnetResolved;
         public Drop(double x,double y,double speed,int kind,char letter){this.x=x;this.y=y;this.speed=speed;this.kind=kind;this.letter=letter;}
     }
     private static final class Balance {
@@ -93,7 +93,25 @@ public final class GameEngine {
             return;
         }
         int beforeHP=hearts,beforeShield=shield;
-        if(d.kind==MAGNET){pulse=.5;int count=0;for(Drop other:drops)if(!other.caught&&!other.missed&&other.y<=BASKET_BOTTOM&&Math.hypot(other.x-d.x,other.y-d.y)<=126){other.pull=true;count++;}events.sound("magnet");feedback="Magnet! Pulling "+count+" nearby blocks — hazards included.";}
+        if(d.magnetResolved)return;
+        if(d.kind==MAGNET){
+            pulse=.5;int count=0,letters=0,extra=0;boolean bomb=false,wild=false;
+            String eligible=word().substring(progress,Math.min(word().length(),progress+2));
+            ArrayList<Drop> selected=new ArrayList<Drop>();
+            for(Drop other:drops)if(other!=d&&!other.caught&&!other.magnetResolved&&!other.missed&&other.y<=BASKET_BOTTOM&&Math.hypot(other.x-d.x,other.y-d.y)<=126){
+                other.pull=true;other.magnetResolved=true;selected.add(other);count++;
+                if(other.kind==LETTER){if(eligible.indexOf(other.letter)>=0)letters++;else extra++;}
+                if(other.kind==BOMB)bomb=true;if(other.kind==WILD)wild=true;
+            }
+            // Resolve a pulse atomically: duplicates/order cannot alter its snapshot.
+            if(bomb){hearts=Math.max(0,hearts-1);invulnerable=1;}
+            if(wild){wordPerfect=true;int n=word().length()-progress;for(int i=0;i<n;i++)correct(true);}
+            else{int n=Math.min(letters,word().length()-progress);for(int i=0;i<n;i++)correct(false);}
+            if(extra>0)add(extra);
+            // Pickups in a pulse retain their normal behavior, once each.
+            for(Drop other:selected)if(other.kind==SHIELD){boolean done=other.magnetResolved;other.magnetResolved=false;catchDrop(other);other.magnetResolved=done;}
+            events.sound("magnet");feedback="Magnet! "+count+" blocks · "+(wild?"Perfect word!":letters+" letters")+" · +"+extra+(bomb?" · One heart lost":"");
+        }
         else if(d.kind==SHIELD){events.sound("shield");int cost=shield==2?2:shield==1?1:0;hearts=Math.max(0,hearts-cost);shield=cost>0?(settings.hard&&shield==2?1:0):2;feedback=cost>0?"Shield overload! Lost "+cost+" hearts.":"Full shield equipped!";}
         else if(d.kind==BOMB){int old=shield;if(old!=1)breakPerfect();if(old!=2)hearts--;if(old==0)progress=0;shield=0;setSpeed(speed-.2);invulnerable=1;feedback=old==2?"Shield shattered; heart saved.":old==1?"Half shield shattered; perfection kept.":"Heart lost; word reset.";}
         else if(d.kind==WILD||d.letter==needed())correct(d.kind==WILD);else wrong();
@@ -101,7 +119,7 @@ public final class GameEngine {
         if(hearts<=0){hearts=0;state=OVER;}
         if(state==PLAYING){if(d.kind!=LETTER)rickInput="";else{rickInput=(rickInput+d.letter);if(rickInput.length()>4)rickInput=rickInput.substring(rickInput.length()-4);if(rickInput.equals("RICK")){rickNext=0;rickCaught=0;rickMissed=false;spawn=.45;drops.clear();rickInput="";feedback="Catch d Q w 4 w 9 W g X c Q — no points.";}}}
     }
-    public boolean overlap(Drop a,Drop b){boolean magnet=a.kind==MAGNET||b.kind==MAGNET;return !a.caught&&!b.caught&&a.y>=0&&b.y>=0&&a.y<489&&b.y<489&&(magnet?Math.abs(a.x-b.x)<=36&&Math.abs(a.y-b.y)<=40:Math.abs(a.x-b.x)<36&&Math.abs(a.y-b.y)<40);}
+    public boolean overlap(Drop a,Drop b){boolean magnet=a.kind==MAGNET||b.kind==MAGNET;return !a.magnetResolved&&!b.magnetResolved&&!a.caught&&!b.caught&&a.y>=0&&b.y>=0&&a.y<489&&b.y<489&&(magnet?Math.abs(a.x-b.x)<=36&&Math.abs(a.y-b.y)<=40:Math.abs(a.x-b.x)<36&&Math.abs(a.y-b.y)<40);}
     public void resolveOverlaps(){
         if(story()||rickNext>=0||state!=PLAYING)return;
         boolean changed=true;while(changed){changed=false;
@@ -130,9 +148,9 @@ public final class GameEngine {
     }
     public void spawnDrop(){
         boolean bomb=random.nextDouble()<.28;if(bomb&&random.nextDouble()>=.5)return;if(!bomb&&random.nextDouble()>=.65)return;
-        // Exactly one selected pickup: 1% of emitted blocks, independent of hazard roll.
-        boolean pickup=random.nextDouble()<.01;if(pickup)bomb=false;
-        int kind=pickup?(settings.magnet?MAGNET:SHIELD):bomb?BOMB:wildcard&&random.nextDouble()<(settings.hard?.005:.01)?WILD:LETTER;
+        // Separate 1% shares of emitted blocks, independent of hazard roll.
+        double pickup=random.nextDouble();if(pickup<.02)bomb=false;
+        int kind=pickup<.01?MAGNET:pickup<.02?SHIELD:bomb?BOMB:wildcard&&random.nextDouble()<(settings.hard?.005:.01)?WILD:LETTER;
         drops.add(new Drop(28+random.nextDouble()*424,-25,(130+Math.min(160,elapsed*2)+random.nextDouble()*45)*.6*speed,kind,kind==LETTER?randomLetter():' '));
     }
     public void update(double dt){

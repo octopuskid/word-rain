@@ -1,11 +1,10 @@
 <aside class="sandbox" aria-label="Gameplay test controls">
 <h2>Word Rain 2.0.0 test lab</h2><button id="lab-story-home" type="button">Open Story tests →</button>
 <p>Sandbox only · Separate settings and records · Never included in the APK.</p>
-<p role="status"><strong>Test page notice:</strong> Startup fixed on 28 October 2026; Start game and the lab controls work again. Set Test HP beside the hearts; drag the shield and speed bars to adjust the live test run. Changing HP turns off keep-hearts protection. This page is rebuilt alongside the game; test-page maintenance does not create a game release.</p>
+<p role="status"><strong>Test page notice:</strong> 2.0.1: shared magnet batch rules and both 1% pickups; lab saves remain isolated. Set Test HP beside the hearts; drag the shield and speed bars to adjust the live test run. Changing HP turns off keep-hearts protection. This page is rebuilt alongside the game; test-page maintenance does not create a game release.</p>
 <div class="sandbox-fields">
 <label>Test difficulty<select id="lab-difficulty"><option value="normal">Normal</option><option value="hard">Hard</option></select></label>
 <label><span><input id="lab-overcast" type="checkbox"> Test Overcast</span></label>
-<label><span><input id="lab-magnets" type="checkbox"> Magnet mode (off: Shield mode)</span></label>
 </div>
 <button type="button" id="lab-apply-modes">Apply modes &amp; reset run</button>
 <p>Mode selections apply to a fresh test run. Hard uses 6–7 letter preset words and 140–260% speed. Overcast adds clouds and doubles points. Custom test words remain available.</p>
@@ -27,6 +26,6 @@
 <textarea id="lab-words" rows="2" spellcheck="false">RAIN CLOUD SHIELD WILDCARD</textarea>
 <button id="lab-apply-words" type="button">Apply words &amp; reset run</button>
 <p id="lab-status" role="status">Automatic waves off. Drop blocks manually or set an interval.</p>
-<p>Fixed speed overrides acceleration and penalties in this lab. Hz means scheduled waves per second; random game waves can skip drops. Pausing freezes the timer. Manual drops resume play. Gameplay collision and scoring rules are active. Magnet drops trigger the shared one-time pull, including hazards; Drop magnet works even with automatic magnet generation off. Optional music still requires consent.</p>
+<p>Fixed speed overrides acceleration and penalties in this lab. Hz means scheduled waves per second; random game waves can skip drops. Pausing freezes the timer. Manual drops resume play. Gameplay collision and scoring rules are active. Magnet drops trigger the shared one-time pull, including hazards; Magnets and shields each have a 1% share of random emissions. Optional music still requires consent.</p>
 <p><a href="./">Return to the regular game</a></p>
 </details></aside>

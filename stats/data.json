@@ -2,26 +2,26 @@
   "schemaVersion": 1,
   "github": {
     "visitors": 7,
-    "views": 181,
-    "clones": 1119,
-    "uniqueCloners": 308,
-    "period": "last 14 days (GitHub traffic chart displayed 13–26 October 2026)",
-    "checkedAt": "2026-10-27T22:00:38.459594+00:00"
+    "views": 218,
+    "clones": 1232,
+    "uniqueCloners": 333,
+    "period": "last 14 days (GitHub traffic chart displayed 14\u201327 October 2026)",
+    "checkedAt": "2026-10-28T08:03:17.109977+00:00"
   },
   "itch": {
     "views": 24,
     "plays": 2,
-    "period": "analytics dashboard, Last 30 days selected (28 September–27 October 2026)",
-    "checkedAt": "2026-10-27T22:00:38.459594+00:00"
+    "period": "analytics dashboard, Last 30 days selected (29 September\u201328 October 2026)",
+    "checkedAt": "2026-10-28T08:03:17.109977+00:00"
   },
   "downloads": {
-    "count": 50,
+    "count": 52,
     "period": "all currently published release assets, lifetime",
-    "checkedAt": "2026-10-27T22:00:38.459594+00:00"
+    "checkedAt": "2026-10-28T08:03:48.622696+00:00"
   },
   "maintenance": {
-    "release": "2.0.0",
+    "release": "2.0.1",
     "openIssues": 0,
-    "issuesCheckedAt": "2026-10-27T22:00:38.459594+00:00"
+    "issuesCheckedAt": "2026-10-28T08:03:17.109977+00:00"
   }
 }

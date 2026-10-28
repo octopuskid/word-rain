@@ -81,12 +81,9 @@ hud();
 // Convenient test-panel mode selectors; use the shared new-game settings path.
 $('lab-difficulty').value=difficulty;
 $('lab-overcast').checked=pendingOvercast;
-$('lab-magnets').checked=pendingMagnet;
 $('lab-apply-modes').onclick=()=>{
  $('difficulty').value=$('lab-difficulty').value==='hard'?'hard':'normal';
  $('overcast-mode').checked=$('lab-overcast').checked===true;
  $('overcast-mode').onchange();
- $('magnet-mode').checked=$('lab-magnets').checked===true;
- $('magnet-mode').onchange();
  applyWordSettings();labReset();labStatus('Test modes applied');
 };

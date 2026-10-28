@@ -6,8 +6,9 @@ import java.util.ArrayList;
 /** Native portrait playfield. Input is delivered directly to this View. */
 class GameView extends View {
  final MainActivity activity;final GameEngine engine;final Paint p=new Paint(3);final RectF field=new RectF();
+ Bitmap cloudTexture,paperCloudTexture;
  long last;int pointer=-1;final ArrayList<float[]> particles=new ArrayList<float[]>();
- GameView(MainActivity activity,GameEngine engine){super(activity);this.activity=activity;this.engine=engine;setFocusable(true);setFocusableInTouchMode(true);setContentDescription("Falling letters. Drag to move the basket and catch the highlighted letter.");}
+ GameView(MainActivity activity,GameEngine engine){super(activity);this.activity=activity;this.engine=engine;try{cloudTexture=BitmapFactory.decodeStream(activity.getAssets().open("clouds.png"));paperCloudTexture=BitmapFactory.decodeStream(activity.getAssets().open("clouds-handwriting.png"));}catch(java.io.IOException ex){throw new IllegalStateException("Missing cloud textures",ex);}setFocusable(true);setFocusableInTouchMode(true);setContentDescription("Falling letters. Drag to move the basket and catch the highlighted letter.");}
  int accent(){if(engine.story())return Color.rgb(167,148,203);if(engine.settings.handwriting)return Color.rgb(36,75,161);String[] colors={"#c6f077","#62ddb0","#78baff","#ffae98","#dc9855"};return Color.parseColor(colors[Math.min(4,Math.max(0,engine.settings.palette))]);}
  void text(Canvas c,String value,float x,float y,float size,int color,Typeface font){p.setColor(color);p.setTextSize(size);p.setTypeface(font);p.setTextAlign(Paint.Align.CENTER);p.setStyle(Paint.Style.FILL);c.drawText(value,x,y,p);}
  void burst(){for(int i=0;i<12;i++)particles.add(new float[]{(float)engine.x,470,(float)(Math.random()-.5)*190,(float)(Math.random()-.5)*190,.5f});}
@@ -34,7 +35,13 @@ class GameView extends View {
    else text(canvas,d.kind==GameEngine.BOMB?"×":d.kind==GameEngine.WILD?"✦":String.valueOf(d.letter),0,8,paper?30:25,0xff17332b,paper?activity.handFont:Typeface.DEFAULT_BOLD);
    canvas.restore();
   }
-  if(!engine.story()&&engine.settings.overcast){p.setColor(dark?0xe2152631:0xe2eef2f0);canvas.drawRect(0,132,480,397,p);p.setColor(dark?0x24678190:0x44ffffff);canvas.drawOval(-90,125,330,240,p);canvas.drawOval(170,300,600,415,p);}
+  if(!engine.story()&&engine.settings.overcast){
+   // Same opaque SVG artwork as HTML, rasterized offline for native Canvas.
+   p.setAlpha(255);p.setColor(dark?0xff8d98a0:paper?0xffeee9de:0xffbac8d3);
+   RectF cover=new RectF(0,132.5f,480,397.5f);canvas.drawRect(cover,p);
+   if(dark){ColorMatrix matrix=new ColorMatrix(new float[]{.76f,0,0,0,0,0,.76f,0,0,0,0,0,.76f,0,0,0,0,0,1,0});p.setColorFilter(new ColorMatrixColorFilter(matrix));}
+   canvas.drawBitmap(paper?paperCloudTexture:cloudTexture,null,cover,p);p.setColorFilter(null);
+  }
   float basket=(float)engine.x,y=engine.story()?486:470;
   p.setColor(accent());p.setStrokeWidth(5);p.setStyle(Paint.Style.STROKE);Path basketPath=new Path();basketPath.moveTo(basket-39,y-14);basketPath.lineTo(basket-34,y+10);basketPath.quadTo(basket,y+15,basket+34,y+10);basketPath.lineTo(basket+39,y-14);canvas.drawPath(basketPath,p);p.setStyle(Paint.Style.FILL);canvas.drawRoundRect(basket-32,y+7,basket+32,y+15,5,5,p);
   for(int i=particles.size()-1;i>=0;i--){float[] v=particles.get(i);if(engine.state==GameEngine.PLAYING){v[4]-=dt;v[0]+=v[2]*dt;v[1]+=v[3]*dt;}if(v[4]<=0){particles.remove(i);continue;}p.setColor(accent());p.setAlpha((int)(Math.max(0,v[4])*510));canvas.drawRect(v[0],v[1],v[0]+4,v[1]+4,p);}p.setAlpha(255);

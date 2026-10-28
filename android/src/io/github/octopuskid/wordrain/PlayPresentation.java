@@ -8,7 +8,7 @@ public final class PlayPresentation {
         return game.word();
     }
     public static int progress(GameEngine game){return game.rickNext>=0?game.rickNext:game.progress;}
-    public static boolean shieldVisible(GameEngine game){return !game.story()&&!game.settings.magnet;}
+    public static boolean shieldVisible(GameEngine game){return !game.story();}
     public static boolean purpleHearts(GameEngine game){return !game.story()&&game.wildcard;}
     public static boolean yellowScore(GameEngine game){return !game.story()&&game.doubleScore;}
     private PlayPresentation(){}

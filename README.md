@@ -14,9 +14,9 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **2.0.0**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **2.0.1**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
-**Android edition:** 2.0.0 / build 52 uses native Android Views and Canvas, with no WebView or bundled HTML. Both web and Android include Classic and Story. Android also provides local word Stats and the first-launch tutorial. See [Android build notes](android/README.md).
+**Android edition:** 2.0.1 / build 53 uses native Android Views and Canvas, with no WebView or bundled HTML. Both web and Android include Classic and Story. Android also provides local word Stats and the first-launch tutorial. See [Android build notes](android/README.md).
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -32,15 +32,15 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Current stable: 2.0.0
+## Current stable: 2.0.1
 
 Choose **Classic** for an endless score challenge or **Story mode** for ten unrelated words, then prewritten 50-word and 100-word stories. Each full word is shown before you catch its letters. Completed words build the story below the playfield, preserving punctuation; word checkpoints are saved locally. Story uses its own rounded bold interface and dreamy sky. Classic returns to a gentle rainfall background.
 
-The pickup switch chooses **1% magnets when on**, or **1% shields when off**, in Normal and Hard. Magnet mode hides the shield meter. Blocks whose centers pass the basket bottom remain ineligible for pull, including after merging. Dev11 scoring, movement, speed, overlaps and bonuses remain intact.
+Magnets and shields each appear in **1% of emitted blocks** in Normal and Hard, with no pickup switch. The shield meter remains visible. Magnet pulls resolve as one batch: L0/L1 copies each fill a blank regardless of order, other letters give exactly +1 without changing perfection/speed/shields, all pulled × together cost one heart, and a pulled wildcard immediately perfects the current word. Counts stop at the current word boundary. Blocks whose centers pass the basket bottom remain ineligible for pull, including after merging. Ordinary catches keep their existing rules; selected magnet blocks cannot merge or score twice while animating to the basket.
 
 The same web edition is on itch.io and GitHub Pages. The web game has **no player Stats screen**; the Android app retains its local Word / Met / Perfect table. The separate [project dashboard](https://octopuskid.github.io/word-rain/stats/) reports dated audience counters, not player scores. Test-page Story controls and checkpoints are isolated from the real game.
 
-Android **build 52** is fully native and signed with the original certificate. Install over the previous app to retain records, settings, story checkpoints and optional downloads; do not uninstall first. Physical-device layout/touch/audio and migration checks remain unverified here. Original music, optional verified music downloads and once-per-launch stable update checking remain.
+Android **build 53** is fully native and signed with the original certificate. Install over the previous app to retain records, settings, story checkpoints and optional downloads; do not uninstall first. Physical-device layout/touch/audio and migration checks remain unverified here. Original music, optional verified music downloads and once-per-launch stable update checking remain.
 
 ## Smaller HTML build
 
@@ -70,7 +70,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These Classic rules apply to stable **2.0.0** on web and Android. Story has separate finite chapters and heart-only mistakes.
+These Classic rules apply to stable **2.0.1** on web and Android. Story has separate finite chapters and heart-only mistakes.
 
 ### Controls and word sets
 
@@ -182,7 +182,7 @@ Automatic letter fills use the same points, scoring-pause recovery and word-comp
 
 ### Blue 🛡️ shield
 
-In 2.0.0, Shield mode generates shields at **1% of emitted blocks**, without unlock conditions; Magnet mode replaces them with 1% magnets. A full shield has two health points; a half shield has one.
+Shields and magnets each generate at **1% of emitted blocks**, without a switch or unlock conditions. A full shield has two health points; a half shield has one.
 
 | Catch | Hearts and shield | Perfection |
 | --- | --- | --- |
