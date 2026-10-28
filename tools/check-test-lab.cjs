@@ -1,6 +1,18 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const helper=fs.readFileSync(path.join(root,'android/tests/mobile-records.cjs'),'utf8').split('const a=session();')[0];
+// Check the generated DOM as well as the simulation mocks: mocks auto-create
+// missing nodes and otherwise hide startup failures caused by HTML transforms.
+const labPage=fs.readFileSync(path.join(root,'test.html'),'utf8');
+const markup=labPage.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
+const ids=[...markup.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+const realIds=new Set(ids);assert.equal(realIds.size,ids.length,'generated lab IDs must be unique');
+const shared=fs.readFileSync(path.join(root,'src/index.html'),'utf8');
+for(const id of new Set([...shared.matchAll(/\$\(['"]([\w-]+)['"]\)/g)].map(m=>m[1])))
+  assert(realIds.has(id),'generated lab is missing shared game node: '+id);
+for(const id of ['lab-hp','lab-shield-slider','lab-speed-slider','lab-story-home'])
+  assert(realIds.has(id),'generated lab control missing: '+id);
+
 const checks=String.raw`
 const labHtml=fs.readFileSync(require('path').join(__dirname,'../../test.html'),'utf8');
 const labScripts=[...labHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);

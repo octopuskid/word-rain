@@ -13,7 +13,9 @@ for(const [kind,min,max,step,label] of [['shield',0,2,1,'Test shield health'],['
  const pattern=new RegExp('<div class="track" id="'+kind+'-meter"[^>]*><div[^>]*></div></div>');
  html=html.replace(pattern,match=>'<div class="lab-meter-control">'+match+'<input id="lab-'+kind+'-slider" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+min+'" aria-label="'+label+'"></div>');
 }
-html=html.replace('</span></div><div class="meters" id="meters">','</span><label class="lab-hp">Test HP <input id="lab-hp" type="number" min="0" max="3" step="1" value="3" aria-label="Test hearts"></label></div><div class="meters">');
+const hpAnchor='</span></div><div class="meters" id="meters">';
+if(!html.includes(hpAnchor))throw Error('Test HP insertion anchor changed; preserve the shared meter container');
+html=html.replace(hpAnchor,'</span><label class="lab-hp">Test HP <input id="lab-hp" type="number" min="0" max="3" step="1" value="3" aria-label="Test hearts"></label></div><div class="meters" id="meters">');
 html=html.replace('</body>','<script>'+read('tools/test-panel.js')+'</script><script id="lab-story-script">'+read('tools/test-story.js')+'</script></body>');
 fs.writeFileSync(path.join(root,'test.html'),html);
 console.log('Built separate test.html; no changes to the regular game or APK input.');

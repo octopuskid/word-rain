@@ -1,5 +1,11 @@
 # Changelog
 
+## Test-page maintenance — 28 October 2026
+
+- Preserve the shared meter container ID when inserting Test HP. The missing ID caused startup and Start game to fail in the 2.0.0 lab.
+- Check the generated HTML for all shared game nodes, required lab controls and duplicate IDs before running simulation checks; the old mocks silently created missing elements.
+- Test-page maintenance only; no game version, release or APK change.
+
 ## 2.0.0 stable — 28 October 2026
 
 - Bring the 10/50/100-word Story chapters to HTML with the dreamy Home/Story interface, saved word checkpoints and independent paused Classic/Story runs. Web has no player Stats screen; Android retains its table.
