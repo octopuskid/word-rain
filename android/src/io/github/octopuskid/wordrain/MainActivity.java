@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets;
 
 /** Native Android edition: Android Views, Canvas, pure Java rules, and native audio. */
 public final class MainActivity extends Activity {
-    StoryUi storyUi;NativeStore store;NativeAudio audio;GameEngine game,classicGame,storyGame,testGame;GameView gameView;android.widget.ProgressBar speedBar,shieldBar;
+    NativeSandbox testSession;StoryUi storyUi;NativeStore store;NativeAudio audio;GameEngine game,classicGame,storyGame,testGame;GameView gameView;android.widget.ProgressBar speedBar,shieldBar;
     android.graphics.Typeface dreamFont,handFont,storyFont;android.widget.FrameLayout root;
     android.widget.TextView hud,scoreLabel,heartLabel,targetLabel,feedback;android.widget.LinearLayout page;
     android.widget.Button pauseButton;android.widget.FrameLayout arena;
@@ -80,15 +80,20 @@ public final class MainActivity extends Activity {
           if(downloadingMusic){toast("Wait for the music download to finish before importing.");return;}try{store.restore(values);}catch(Exception failure){toast("Could not apply the backup. Current saves were kept.");return;}audio.close();audio=new NativeAudio(this,store);classicGame=new GameEngine(new java.util.Random(),classicGame.events);storyGame=new GameEngine(new java.util.Random(),storyGame.events);storyGame.storyChapter=0;testGame=null;game=classicGame;home();toast("Save backup imported.");
         }).show();});}catch(Exception bad){runOnUiThread(()->{if(!isDestroyed())toast("Invalid Word Rain backup or file over 1 MB. Saves unchanged.");});}},"WordRainSaveImport").start();
     }
-    void startTest(){
-      pauseGame();testGame=new GameEngine(new java.util.Random(),new GameEngine.Events(){@Override public void sound(String id){audio.sound(id);}@Override public void damage(boolean hp,boolean shield){haptic(hp&&shield?"both":hp?"hp":"shield");}});
-      game=testGame;game.startClassic(settings());game.manualSpawns=true;playScreen();
+    void startTest(){startTest(settings(),true);}
+    void startTest(GameEngine.Settings chosen,boolean manual){
+      pauseGame();testSession=new NativeSandbox(chosen,new java.util.Random(),new GameEngine.Events(){@Override public void sound(String id){audio.sound(id);}@Override public void damage(boolean hp,boolean shield){haptic(hp&&shield?"both":hp?"hp":"shield");}});
+      testGame=testSession.engine;game=testGame;game.manualSpawns=manual;playScreen();
     }
     void testControls(){
       final boolean resume=game.state==GameEngine.PLAYING;pauseGame();
-      final String[] options={"Drop current letter","Drop next letter","Drop random letter","Drop ×","Drop shield","Drop wildcard","Drop magnet","Clear blocks","Toggle automatic waves","Set speed","Set hearts","New test run","Exit to Home"};
+      final String[] options={"Drop current letter","Drop next letter","Drop random letter","Drop ×","Drop shield","Drop wildcard","Drop magnet","Clear blocks","Toggle automatic waves","Set speed","Set hearts","Overcast: "+(game.settings.overcast?"On":"Off"),"Difficulty: "+(game.settings.hard?"Hard":"Normal")+" · new test run","New test run","Exit to Home"};
       new AlertDialog.Builder(this).setTitle("TEST MODE · records are not saved").setItems(options,(d,which)->{
-        if(which==12){home();return;}if(which==11){startTest();return;}
+        if(which==14){home();return;}if(which==13){startTest(game.settings,game.manualSpawns);return;}
+        if(which==11){testSession.setOvercast(!game.settings.overcast);resumeTest(resume);return;}
+        if(which==12){new AlertDialog.Builder(this).setTitle("Difficulty · starts a new test run").setSingleChoiceItems(new String[]{"Normal · 4–7 letters","Hard · 6–7 letters"},game.settings.hard?1:0,(q,i)->{
+          testSession.setDifficulty(i==1);resumeTest(resume);q.dismiss();
+        }).setNegativeButton("Cancel",(q,w)->resumeTest(resume)).setOnCancelListener(q->resumeTest(resume)).show();return;}
         if(which==9){new AlertDialog.Builder(this).setTitle("Falling speed").setItems(new String[]{"100% / Hard minimum","140%","180%","220%","260% / Normal maximum"},(q,i)->{game.setSpeed(new double[]{1,1.4,1.8,2.2,2.6}[i]);resumeTest(resume);}).setOnCancelListener(q->resumeTest(resume)).show();return;}
         if(which==10){new AlertDialog.Builder(this).setTitle("Hearts").setItems(new String[]{"0","1","2","3"},(q,i)->{game.hearts=i;if(i==0)game.state=GameEngine.OVER;resumeTest(resume);}).setOnCancelListener(q->resumeTest(resume)).show();return;}
         if(which==7)game.drops.clear();else if(which==8)game.manualSpawns=!game.manualSpawns;
@@ -110,7 +115,7 @@ public final class MainActivity extends Activity {
       add(page,label("Color theme",13,true));boolean rick="true".equals(store.prefs.getString("word-rain-rick-unlocked-v1","false"));final android.widget.Spinner palette=spinner(rick?new String[]{"Lime","Mint","Blue","Coral","Rick · Copper"}:new String[]{"Lime","Mint","Blue","Coral"},s.palette);add(page,palette);
       final android.widget.Switch paper=toggle("Handwriting paper",s.handwriting),cloud=toggle("Overcast · double points",s.overcast);add(page,paper);add(page,cloud);add(page,label("Magnets and shields each appear in 1% of emitted blocks.",12,false));palette.setEnabled(!s.handwriting);paper.setOnCheckedChangeListener((b,on)->palette.setEnabled(!on));
       add(page,button("Start game →",v->{s.hard=difficulty.getSelectedItemPosition()==1;s.wordSet=set.getSelectedItemPosition();s.palette=palette.getSelectedItemPosition();s.handwriting=paper.isChecked();s.overcast=cloud.isChecked();saveSettings(s);game.startClassic(s);playScreen();}));
-      add(page,button("Music & sound",v->music()));add(page,button("Replay tutorial",v->tutorial(0)));add(page,button("How to play",v->rules()));add(page,label("Native Android · 2.0.3 · build 55",11,false));
+      add(page,button("Music & sound",v->music()));add(page,button("Replay tutorial",v->tutorial(0)));add(page,button("How to play",v->rules()));add(page,label("Native Android · 2.0.4 · build 56",11,false));
     }
     void rules(){new AlertDialog.Builder(this).setTitle("Catch words. Chase your best.").setMessage("Drag the basket or use A/D / arrow keys. Catch the underlined letter in order. Missed blocks are harmless. × costs one heart.\n\nCorrect +10; word +50; wrong +1 until three consecutive mistakes pause scoring. The next correct catch recovers without letter points. Awards multiply by speed, Hard ×2 and Overcast ×2, rounded up.\n\nTwo perfect words add 20% speed. Six unlock 2× points and restore one heart. Wrong letters subtract 5% speed; × subtracts 20%.\n\nA full shield saves a heart against × but breaks perfection. A half shield loses one heart but keeps perfection. Wrong letters use half a shield and preserve progress/perfection. Picking up a shield while protected costs hearts.\n\nLetters overlap into wildcards. Wildcard + × fills a letter; two wildcards perfect a word. Magnets and shields each appear in 1% of emitted blocks. Pulled L0/L1 letters each fill one blank; other letters give +1 without penalties. A pulse of hazards costs only one heart. A pulled wildcard immediately perfects the word. Magnets pull all nearby blocks within 3.5 block widths, excluding centers below the bottom of the basket. Touching another block destroys a magnet; a shield disappears with it.").setPositiveButton("Got it",null).show();}
     void chapters(){storyUi.chapters();}

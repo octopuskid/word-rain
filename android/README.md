@@ -47,3 +47,9 @@ Compilation, Java tests, migration fixtures and APK inspection do not establish 
 2.0.3 adds Android Home → Cheat code → `export` / `import` for versioned JSON save backups, using system document pickers, bounded validation, confirmation and atomic allowlisted preference replacement. Music files and active runs are excluded.
 
 Backup regression command: `node android/tests/save-backup.cjs /path/to/ecj.jar /path/to/json-20240303.jar`. The test-only org.json runtime is available from Maven Central; it is not bundled in the APK, which uses Android org.json. Minimal SharedPreferences/Context doubles live in tests/support and are excluded from production compilation.
+
+## Prepared 2.0.4 / build 56
+
+Android test controls add Overcast on/off and Normal/Hard selection. Difficulty starts a fresh sandbox run; Overcast changes the current sandbox immediately. Both stay isolated from saved settings and real runs. Restart keeps sandbox difficulty, appearance and wave selection. A top-left TEST MODE watermark remains visible over clouds and blocks.
+
+Stable publication is pending runtime verification on Android. Install the original-signed APK over 2.0.3, open Home → Cheat code → test, and check both difficulties, Overcast, watermark visibility, pause/cancel/restart and return to the real run. Verify saved preferences and records remain unchanged after exiting/relaunching.
