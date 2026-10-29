@@ -47,6 +47,11 @@ class GameView extends View {
   float basket=(float)engine.x,y=engine.story()?486:470;
   p.setColor(accent());p.setStrokeWidth(5);p.setStyle(Paint.Style.STROKE);Path basketPath=new Path();basketPath.moveTo(basket-39,y-14);basketPath.lineTo(basket-34,y+10);basketPath.quadTo(basket,y+15,basket+34,y+10);basketPath.lineTo(basket+39,y-14);canvas.drawPath(basketPath,p);p.setStyle(Paint.Style.FILL);canvas.drawRoundRect(basket-32,y+7,basket+32,y+15,5,5,p);
   for(int i=particles.size()-1;i>=0;i--){float[] v=particles.get(i);if(engine.state==GameEngine.PLAYING){v[4]-=dt;v[0]+=v[2]*dt;v[1]+=v[3]*dt;}if(v[4]<=0){particles.remove(i);continue;}p.setColor(accent());p.setAlpha((int)(Math.max(0,v[4])*510));canvas.drawRect(v[0],v[1],v[0]+4,v[1]+4,p);}p.setAlpha(255);
+  // Draw last so clouds and falling blocks never hide the sandbox watermark.
+  if(engine==activity.testGame){
+   p.setColor(dark?0xcc162934:0xdde6efe9);canvas.drawRoundRect(10,-18,142,16,8,8,p);
+   text(canvas,"TEST MODE",76,5,19,dark?0xffeeedf9:0xff303658,Typeface.DEFAULT_BOLD);
+  }
   canvas.restore();activity.frame();if(engine.state==GameEngine.PLAYING)postInvalidateOnAnimation();
  }
  void drawBackgroundWord(Canvas canvas,boolean dark,boolean paper){
