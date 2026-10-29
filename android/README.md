@@ -2,7 +2,7 @@
 
 From **2.0-dev10 DEV / build 49**, Android runs Java gameplay rules, Android Views and Canvas. It does not instantiate WebView, execute JavaScript, or package HTML/CSS. The web edition remains a separate Classic game built from `src/index.html`.
 
-Current stable: **2.0.3 / build 55**. Story uses `StoryUi`/`StoryGameView`, a dedicated static weight-800 `story-ui.ttf` for rounded heavy headings/UI, and readable system text for prose/word prompts. Chapters 2/3 show completed original tokens below the game. Classic uses gentle rainfall instead of its grid. 2.0.1 adds atomic magnet pulls, both 1% pickups, a larger multiline final score and opaque HTML cloud artwork; save/audio formats remain unchanged; the web edition now also has Story, with no player Stats UI.
+Current stable: **2.0.4 / build 56**. Story uses `StoryUi`/`StoryGameView`, a dedicated static weight-800 `story-ui.ttf` for rounded heavy headings/UI, and readable system text for prose/word prompts. Chapters 2/3 show completed original tokens below the game. Classic uses gentle rainfall instead of its grid. 2.0.1 adds atomic magnet pulls, both 1% pickups, a larger multiline final score and opaque HTML cloud artwork; save/audio formats remain unchanged; the web edition now also has Story, with no player Stats UI.
 
 Dev11's Stats table, exclusive 1% magnet/shield pickups, synchronized Classic target progress, large coloured HUD and basket-bottom magnet boundary remain in place.
 
@@ -48,8 +48,8 @@ Compilation, Java tests, migration fixtures and APK inspection do not establish 
 
 Backup regression command: `node android/tests/save-backup.cjs /path/to/ecj.jar /path/to/json-20240303.jar`. The test-only org.json runtime is available from Maven Central; it is not bundled in the APK, which uses Android org.json. Minimal SharedPreferences/Context doubles live in tests/support and are excluded from production compilation.
 
-## Prepared 2.0.4 / build 56
+## 2.0.4 / build 56
 
 Android test controls add Overcast on/off and Normal/Hard selection. Difficulty starts a fresh sandbox run; Overcast changes the current sandbox immediately. Both stay isolated from saved settings and real runs. Restart keeps sandbox difficulty, appearance and wave selection. A top-left TEST MODE watermark remains visible over clouds and blocks.
 
-Stable publication is pending runtime verification on Android. Install the original-signed APK over 2.0.3, open Home → Cheat code → test, and check both difficulties, Overcast, watermark visibility, pause/cancel/restart and return to the real run. Verify saved preferences and records remain unchanged after exiting/relaunching.
+Owner reported Android testplay passed on 30 October 2026. The original-signed APK installs over 2.0.3; keep the existing app data. Automated checks cover isolated sandbox toggles/restarts, pause and wave selection, Normal/Hard word lengths and speed limits.

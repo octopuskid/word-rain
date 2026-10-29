@@ -14,9 +14,9 @@ Catch letters, spell words, and survive with shields and wildcards.
 
 A behind-the-scenes video about building Word Rain, refining its rules, and publishing it with AI.
 
-Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **2.0.3**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
+Designed by [octopuskid](https://github.com/octopuskid) and developed with ChatGPT. Built with HTML, CSS and JavaScript. Current stable version: **2.0.4**, for HTML and Android, with 120 words in each of the four sets (480 total entries). See [CHANGELOG.md](CHANGELOG.md) for release history.
 
-**Android edition:** 2.0.3 / build 55 uses native Android Views and Canvas, with no WebView or bundled HTML. Both web and Android include Classic and Story. Android also provides local word Stats and the first-launch tutorial. See [Android build notes](android/README.md).
+**Android edition:** 2.0.4 / build 56 uses native Android Views and Canvas, with no WebView or bundled HTML. Both web and Android include Classic and Story. Android also provides local word Stats and the first-launch tutorial. See [Android build notes](android/README.md).
 
 **Let AI continue development? Read the [project handover](docs/HANDOVER.md)** for the design, current state, code map, testing, publishing rules and roadmap.
 
@@ -32,7 +32,9 @@ See [the website hosting and embedding tutorial](HOSTING.md) for copy-and-paste 
 
 Stable releases include one HTML package and one APK. Full and Lite were merged in 1.6.3; neither optional recording is bundled. Unless a version is specified, stable updates increment the patch number. Development updates are HTML only and use the current stable version plus a sequence, such as `1.6.3.1`, `1.6.3.2`. Development builds are marked unverified if runtime testing is unavailable.
 
-## Current stable: 2.0.3
+## Current stable: 2.0.4
+
+Android sandbox adds Overcast on/off, Normal/Hard selection and a persistent TEST MODE watermark. Difficulty starts a fresh sandbox run; sandbox preferences stay separate from saved settings and real games. Owner-reported Android testplay passed on 30 October 2026.
 
 Android save backups: open **Home → Cheat code** and enter `export` to save a JSON backup with the system file picker. Enter `import` to choose a Word Rain backup, validate it and confirm replacing saved data. Backups include Classic best/word records, Story chapter progress, settings, theme, Rick unlock and tutorial state. Active runs and music files are excluded; export before importing if you want to preserve your current saves. Invalid files or files over 1 MB are rejected before any data is applied. File-picker access requires no broad storage permission. The web edition does not have these Android commands.
 
@@ -42,7 +44,7 @@ Magnets and shields each appear in **1% of emitted blocks** in Normal and Hard, 
 
 The same web edition is on itch.io and GitHub Pages. The web game has **no player Stats screen**; the Android app retains its local Word / Met / Perfect table. The separate [project dashboard](https://octopuskid.github.io/word-rain/stats/) reports dated audience counters, not player scores. Test-page Story controls and checkpoints are isolated from the real game.
 
-Android **build 55** is fully native and signed with the original certificate. Install over the previous app to retain records, settings, story checkpoints and optional downloads; do not uninstall first. Physical-device layout/touch/audio and migration checks remain unverified here. Original music, optional verified music downloads and once-per-launch stable update checking remain.
+Android **build 56** is fully native and signed with the original certificate. Install over the previous app to retain records, settings, story checkpoints and optional downloads; do not uninstall first. Physical-device layout/touch/audio and migration checks remain unverified here. Original music, optional verified music downloads and once-per-launch stable update checking remain.
 
 ## Smaller HTML build
 
@@ -72,7 +74,7 @@ Versioned standalone HTML snapshots are organized in [`versions/`](versions/); t
 
 The start screen gives a short introduction. Open **Quick rules**, directly below the target word, for a reminder about mistakes, shields and perfection. Full rules remain below the game. Handwriting wildcards have a purple tile with pencil hatching and a dark ✦ symbol.
 
-These Classic rules apply to stable **2.0.3** on web and Android. Story has separate finite chapters and heart-only mistakes.
+These Classic rules apply to stable **2.0.4** on web and Android. Story has separate finite chapters and heart-only mistakes.
 
 ### Controls and word sets
 

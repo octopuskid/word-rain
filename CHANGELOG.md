@@ -1,9 +1,9 @@
-## 2.0.4 — prepared 29 October 2026; Android runtime verification pending
+## 2.0.4 — 30 October 2026
 
 - Android sandbox now switches Overcast on/off and selects Normal/Hard. Difficulty starts a fresh test run, retaining the sandbox appearance, automatic/manual waves and pause state.
 - Added a persistent TEST MODE watermark at the upper-left of the native playfield, drawn above clouds and blocks.
 - Sandbox settings are copied and never change saved settings or the paused real Classic/Story engines. Android build 56 retains the original signing identity and save/update/music services.
-- Automated native sandbox, gameplay, migration, backup, parity and package checks pass. Stable publishing is held until the actual Android controls and watermark are testplayed.
+- Automated native sandbox, gameplay, migration, backup, parity and package checks pass. Owner-reported Android testplay passed on 30 October 2026.
 
 ## 2.0.3 — 29 October 2026
 
